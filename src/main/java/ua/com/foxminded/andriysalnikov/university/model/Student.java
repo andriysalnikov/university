@@ -1,4 +1,4 @@
-package ua.com.foxminded.andriysalnikov.university.domain.model;
+package ua.com.foxminded.andriysalnikov.university.model;
 
 public class Student extends User {
 

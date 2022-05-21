@@ -1,4 +1,4 @@
-package ua.com.foxminded.andriysalnikov.university.domain.model;
+package ua.com.foxminded.andriysalnikov.university.model;
 
 import java.util.Objects;
 
@@ -41,6 +41,11 @@ public class ClassRoom {
     @Override
     public int hashCode() {
         return Objects.hash(name);
+    }
+
+    @Override
+    public String toString() {
+        return "ClassRoom{" + "id=" + id + ", name='" + name + '\'' + '}';
     }
 
 }

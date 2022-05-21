@@ -1,7 +1,7 @@
-package ua.com.foxminded.andriysalnikov.university.domain.service;
+package ua.com.foxminded.andriysalnikov.university.service;
 
-import ua.com.foxminded.andriysalnikov.university.domain.model.TimeTable;
-import ua.com.foxminded.andriysalnikov.university.domain.model.User;
+import ua.com.foxminded.andriysalnikov.university.model.TimeTable;
+import ua.com.foxminded.andriysalnikov.university.model.User;
 
 import java.time.LocalDate;
 

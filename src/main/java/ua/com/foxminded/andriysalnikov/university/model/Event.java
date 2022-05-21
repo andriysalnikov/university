@@ -1,4 +1,4 @@
-package ua.com.foxminded.andriysalnikov.university.domain.model;
+package ua.com.foxminded.andriysalnikov.university.model;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -87,6 +87,17 @@ public class Event {
     @Override
     public int hashCode() {
         return Objects.hash(dayOfEvent, startTime, endTime, course);
+    }
+
+    @Override
+    public String toString() {
+        return "Event{" +
+                "id=" + id +
+                ", dayOfEvent=" + dayOfEvent +
+                ", startTime=" + startTime +
+                ", endTime=" + endTime +
+                ", course=" + course +
+                '}';
     }
 
 }

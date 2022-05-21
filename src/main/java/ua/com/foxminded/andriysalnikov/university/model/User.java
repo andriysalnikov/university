@@ -1,4 +1,4 @@
-package ua.com.foxminded.andriysalnikov.university.domain.model;
+package ua.com.foxminded.andriysalnikov.university.model;
 
 import java.util.Objects;
 
@@ -53,6 +53,11 @@ public abstract class User {
     @Override
     public int hashCode() {
         return Objects.hash(firstName, lastName);
+    }
+
+    @Override
+    public String toString() {
+        return "User{" + "id=" + id + ", firstName='" + firstName + '\'' + ", lastName='" + lastName + '\'' + '}';
     }
 
 }

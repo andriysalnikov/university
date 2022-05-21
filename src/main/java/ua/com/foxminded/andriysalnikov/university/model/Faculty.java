@@ -1,4 +1,4 @@
-package ua.com.foxminded.andriysalnikov.university.domain.model;
+package ua.com.foxminded.andriysalnikov.university.model;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,13 +8,18 @@ public class Faculty {
 
     private Integer id;
     private String fullName;
-    private List<Course> courses = new ArrayList<>();
-    private List<Student> students = new ArrayList<>();
-    private List<ClassRoom> classRooms = new ArrayList<>();
+    private List<Course> courses;
+    private List<Student> students;
+    private List<ClassRoom> classRooms;
 
-    public Faculty() { }
+    public Faculty() {
+        this.courses = new ArrayList<>();
+        this.students = new ArrayList<>();
+        this.classRooms = new ArrayList<>();
+    }
 
     public Faculty(Integer id, String fullName) {
+        this();
         this.id = id;
         this.fullName = fullName;
     }
@@ -70,6 +75,11 @@ public class Faculty {
     @Override
     public int hashCode() {
         return Objects.hash(fullName);
+    }
+
+    @Override
+    public String toString() {
+        return "Faculty{" + "id=" + id + ", fullName='" + fullName + '\'' + '}';
     }
 
 }

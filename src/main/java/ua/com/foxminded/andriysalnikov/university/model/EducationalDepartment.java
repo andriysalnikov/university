@@ -1,11 +1,15 @@
-package ua.com.foxminded.andriysalnikov.university.domain.model;
+package ua.com.foxminded.andriysalnikov.university.model;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class EducationalDepartment {
 
-    private List<Teacher> teachers = new ArrayList<>();
+    private List<Teacher> teachers;
+
+    public EducationalDepartment() {
+        this.teachers = new ArrayList<>();
+    }
 
     public List<Teacher> getTeachers() {
         return teachers;
