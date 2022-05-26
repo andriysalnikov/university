@@ -96,8 +96,8 @@ public class Event {
                 ", dayOfEvent=" + dayOfEvent +
                 ", startTime=" + startTime +
                 ", endTime=" + endTime +
+                ", classRoom=" + classRoom +
                 ", course=" + course +
                 '}';
     }
-
 }
