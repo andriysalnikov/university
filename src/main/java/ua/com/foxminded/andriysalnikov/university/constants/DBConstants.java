@@ -140,6 +140,25 @@ public final class DBConstants {
               "JOIN university.classrooms cl ON e.classroom_id = cl.id " +
               "JOIN university.courses c ON e.course_id = c.id";
 
+    public static final String SQL_GET_ALL_EVENTS_FROM_STARTDATE_TO_ENDDATE_BY_COURSE_ID
+            = "SELECT e.id, e.date_of_event, e.start_time, e.end_time, cl.name classroom, c.name course " +
+              "FROM university.events e " +
+              "JOIN university.classrooms cl ON e.classroom_id = cl.id " +
+              "JOIN university.courses c ON e.course_id = c.id " +
+              "WHERE e.date_of_event >= ? AND e.date_of_event <= ? AND c.id = ?";
+
+    public static final String SQL_GET_TEACHER_COURSES_BY_TEACHER_ID
+            = "SELECT c.id, name, description FROM university.teachers t " +
+              "JOIN university.courses c " +
+              "ON t.id = c.teacher_id " +
+              "WHERE t.id = ?";
+
+    public static final String SQL_GET_STUDENT_COURSES_BY_STUDENT_ID
+            = "SELECT c.id, name, description FROM university.students_courses sc " +
+              "JOIN university.courses c " +
+              "ON sc.course_id = c.id " +
+              "WHERE sc.student_id = ?";
+
     private DBConstants() { }
 
 }

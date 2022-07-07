@@ -2,10 +2,17 @@ package ua.com.foxminded.andriysalnikov.university;
 
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import ua.com.foxminded.andriysalnikov.university.config.SpringJdbcConfig;
+import ua.com.foxminded.andriysalnikov.university.controller.TimeTableManager;
 import ua.com.foxminded.andriysalnikov.university.dao.*;
 import ua.com.foxminded.andriysalnikov.university.dao.impl.*;
 import ua.com.foxminded.andriysalnikov.university.model.*;
+import ua.com.foxminded.andriysalnikov.university.service.EventService;
+import ua.com.foxminded.andriysalnikov.university.service.StudentService;
+import ua.com.foxminded.andriysalnikov.university.service.TeacherService;
+import ua.com.foxminded.andriysalnikov.university.service.impl.StudentServiceImpl;
+import ua.com.foxminded.andriysalnikov.university.service.impl.TeacherServiceImpl;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public class UniversityApplication {
@@ -17,12 +24,30 @@ public class UniversityApplication {
 
         context = new AnnotationConfigApplicationContext(SpringJdbcConfig.class);
 
+        StudentService studentService = context.getBean(StudentServiceImpl.class);
+        TeacherService teacherService = context.getBean(TeacherServiceImpl.class);
+        TimeTableManager timeTableManager = context.getBean(TimeTableManager.class);
+
+        Student student = studentService.getStudentById(1);
+        TimeTable studentTimeTable = timeTableManager.getTimeTableFromStartDateToEndDateByUser(
+                LocalDate.of(2022, 5, 30), LocalDate.of(2022, 6, 3), student);
+        System.out.println(student);
+        printAll(studentTimeTable.getEvents());
+
+        System.out.println("-----------------");
+        Teacher teacher = teacherService.getTeacherById(1);
+        TimeTable teacherTimeTable = timeTableManager.getTimeTableFromStartDateToEndDateByUser(
+                LocalDate.of(2022, 5, 30), LocalDate.of(2022, 6, 3), teacher);
+        System.out.println(teacher);
+        printAll(teacherTimeTable.getEvents());
+
+
 //        showHowTeacherDAOWorks();
 //        showHowFacultyDAOWorks();
 //        showHowCourseDAOWorks();
 //        showHowClassRoomDAOWorks();
 //        showHowStudentDAOWorks();
-        showHowEventsDAOWorks();
+//        showHowEventsDAOWorks();
 
         context.close();
 

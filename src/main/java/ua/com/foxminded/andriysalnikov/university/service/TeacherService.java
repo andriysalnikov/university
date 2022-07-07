@@ -1,21 +1,13 @@
-package ua.com.foxminded.andriysalnikov.university.dao;
+package ua.com.foxminded.andriysalnikov.university.service;
 
 import ua.com.foxminded.andriysalnikov.university.model.Course;
 import ua.com.foxminded.andriysalnikov.university.model.Teacher;
 
 import java.util.List;
 
-public interface TeacherDAO {
-
-    List<Teacher> getAllTeachers();
+public interface TeacherService {
 
     Teacher getTeacherById(Integer id);
-
-    Teacher createTeacher(Teacher teacher);
-
-    Teacher deleteTeacherById(Integer id);
-
-    Teacher updateTeacher(Teacher teacher);
 
     List<Course> getTeacherCoursesByTeacherId(Integer id);
 
