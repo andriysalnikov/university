@@ -1,11 +1,11 @@
-package ua.com.foxminded.andriysalnikov.university.dao;
+package ua.com.foxminded.andriysalnikov.university.service;
 
 import ua.com.foxminded.andriysalnikov.university.model.Event;
 
 import java.time.LocalDate;
 import java.util.List;
 
-public interface EventDAO {
+public interface EventService {
 
     List<Event> getAllEvents();
 
