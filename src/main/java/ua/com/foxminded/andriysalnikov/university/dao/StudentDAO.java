@@ -15,7 +15,7 @@ public interface StudentDAO {
 
     Student deleteStudentById(Integer id);
 
-    Student updateStudent(Student Student);
+    Student updateStudent(Student student);
 
     List<Course> getStudentCoursesByStudentId(Integer id);
 

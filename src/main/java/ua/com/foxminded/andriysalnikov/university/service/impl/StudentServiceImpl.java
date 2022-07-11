@@ -1,8 +1,13 @@
 package ua.com.foxminded.andriysalnikov.university.service.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ua.com.foxminded.andriysalnikov.university.constants.Messages;
 import ua.com.foxminded.andriysalnikov.university.dao.StudentDAO;
+import ua.com.foxminded.andriysalnikov.university.exceptions.DBException;
+import ua.com.foxminded.andriysalnikov.university.exceptions.ServiceException;
 import ua.com.foxminded.andriysalnikov.university.model.Course;
 import ua.com.foxminded.andriysalnikov.university.model.Student;
 import ua.com.foxminded.andriysalnikov.university.service.StudentService;
@@ -11,6 +16,9 @@ import java.util.List;
 
 @Service
 public class StudentServiceImpl implements StudentService {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(StudentServiceImpl.class);
+
 
     private final StudentDAO studentDAO;
 
@@ -21,24 +29,47 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public Student getStudentById(Integer id) {
+        LOGGER.debug(Messages.TRY_GET_ENTITY_BY_ID, Student.class.getSimpleName(), id);
         if (id == null) {
-            throw new IllegalArgumentException("'id' cannot be null");
+            LOGGER.error(Messages.ERROR_ARGUMENT_NULL);
+            throw new ServiceException(Messages.ERROR_ARGUMENT_NULL);
         }
         if (id <= 0) {
-            throw new IllegalArgumentException("'id' cannot be less or equals 0");
+            LOGGER.error(Messages.ERROR_ARGUMENT_LESS_OR_EQUALS_ZERO);
+            throw new ServiceException(Messages.ERROR_ARGUMENT_LESS_OR_EQUALS_ZERO);
         }
-        return studentDAO.getStudentById(id);
+        Student student;
+        try {
+            student = studentDAO.getStudentById(id);
+        } catch (DBException dbException) {
+            LOGGER.error(Messages.ERROR_GET_STUDENT_BY_ID);
+            throw new ServiceException(Messages.ERROR_GET_STUDENT_BY_ID, dbException);
+        }
+        LOGGER.debug(Messages.ENTITY_GOTTEN_BY_ID, Student.class.getSimpleName(), student);
+        return student;
     }
 
     @Override
     public List<Course> getStudentCoursesByStudentId(Integer id) {
+        LOGGER.debug(Messages.TRY_GET_ENTITY_COURSES_BY_ENTITY_ID,
+                Student.class.getSimpleName(), Student.class.getSimpleName(), id);
         if (id == null) {
-            throw new IllegalArgumentException("'id' cannot be null");
+            LOGGER.error(Messages.ERROR_ARGUMENT_NULL);
+            throw new ServiceException(Messages.ERROR_ARGUMENT_NULL);
         }
         if (id <= 0) {
-            throw new IllegalArgumentException("'id' cannot be less or equals 0");
+            LOGGER.error(Messages.ERROR_ARGUMENT_LESS_OR_EQUALS_ZERO);
+            throw new ServiceException(Messages.ERROR_ARGUMENT_LESS_OR_EQUALS_ZERO);
         }
-        return studentDAO.getStudentCoursesByStudentId(id);
+        List<Course> courses;
+        try {
+            courses = studentDAO.getStudentCoursesByStudentId(id);
+        } catch (DBException dbException) {
+            LOGGER.error(Messages.ERROR_GET_STUDENT_COURSES_BY_STUDENT_ID);
+            throw new ServiceException(Messages.ERROR_GET_STUDENT_COURSES_BY_STUDENT_ID, dbException);
+        }
+        LOGGER.debug(Messages.ENTITY_COURSES_GOTTEN, Student.class.getSimpleName(), id, courses);
+        return courses;
     }
 
 }
