@@ -11,6 +11,7 @@ import ua.com.foxminded.andriysalnikov.university.model.ClassRoom;
 
 import javax.sql.DataSource;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class ClassRoomDAOImpl implements ClassRoomDAO {
@@ -28,25 +29,29 @@ public class ClassRoomDAOImpl implements ClassRoomDAO {
     }
 
     @Override
-    public ClassRoom getClassRoomById(Integer id) {
-        return Assembler.assembleClassRoom(jdbcTemplate.queryForRowSet(DBConstants.SQL_GET_CLASSROOM_BY_ID, id));
+    public Optional<ClassRoom> getClassRoomById(Integer id) {
+        return Optional.ofNullable(Assembler.assembleClassRoom(
+                jdbcTemplate.queryForRowSet(DBConstants.SQL_GET_CLASSROOM_BY_ID, id)));
     }
 
     @Override
-    public ClassRoom createClassRoom(ClassRoom classRoom) {
-        return Assembler.assembleClassRoom(jdbcTemplate.queryForRowSet(DBConstants.SQL_CREATE_CLASSROOM,
-                0, classRoom.getName()));
+    public Optional<ClassRoom> createClassRoom(ClassRoom classRoom) {
+        return Optional.ofNullable(Assembler.assembleClassRoom(
+                jdbcTemplate.queryForRowSet(DBConstants.SQL_CREATE_CLASSROOM,
+                        0, classRoom.getName())));
     }
 
     @Override
-    public ClassRoom deleteClassRoomById(Integer id) {
-        return Assembler.assembleClassRoom(jdbcTemplate.queryForRowSet(DBConstants.SQL_DELETE_CLASSROOM_BY_ID, id));
+    public Optional<ClassRoom> deleteClassRoomById(Integer id) {
+        return Optional.ofNullable(Assembler.assembleClassRoom(
+                jdbcTemplate.queryForRowSet(DBConstants.SQL_DELETE_CLASSROOM_BY_ID, id)));
     }
 
     @Override
-    public ClassRoom updateClassRoom(ClassRoom classRoom) {
-        return Assembler.assembleClassRoom(jdbcTemplate.queryForRowSet(DBConstants.SQL_UPDATE_CLASSROOM,
-                classRoom.getName(), classRoom.getId()));
+    public Optional<ClassRoom> updateClassRoom(ClassRoom classRoom) {
+        return Optional.ofNullable(Assembler.assembleClassRoom(
+                jdbcTemplate.queryForRowSet(DBConstants.SQL_UPDATE_CLASSROOM,
+                        classRoom.getName(), classRoom.getId())));
     }
 
 }

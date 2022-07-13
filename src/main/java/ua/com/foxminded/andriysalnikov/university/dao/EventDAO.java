@@ -8,7 +8,6 @@ import java.util.List;
 public interface EventDAO {
 
     List<Event> getAllEvents();
-
     List<Event> getAllEventsFromStartDateToEndDateByCourseId(
             LocalDate startDate, LocalDate endDate, Integer id);
 
