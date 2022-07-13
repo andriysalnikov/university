@@ -14,6 +14,9 @@ public final class Messages {
     public static final String ERROR_ARGUMENT_LESS_OR_EQUALS_ZERO =
             "'id' cannot be less or equals 0";
 
+    public static final String ERROR_ARGUMENT_USER =
+            "'User' or 'User.id' cannot be null";
+
     public static final String ERROR_DATE_NULL =
             "'StartDate' or 'EndDate' or both cannot be null";
 
@@ -32,6 +35,12 @@ public final class Messages {
     public static final String OK_GET_ALL_EVENTS_FROM_STARTDATE_TO_ENDDATE_BY_COURSE_ID =
             "All 'Events' from '{}' to '{}' by 'Course id'={} obtained: {}";
 
+    public static final String TRY_GET_TIMETABLE_FROM_STARTDATE_TO_ENDDATE_BY_USER =
+            "Trying to get 'Timetable' from '{}' to '{}' for {}";
+
+    public static final String OK_GET_TIMETABLE_FROM_STARTDATE_TO_ENDDATE_BY_USER =
+            "'Timetable' from '{}' to '{}' for {} obtained: {}";
+
     public static final String TRY_GET_ALL_EVENTS =
             "Trying to get all 'Events'";
 
@@ -49,10 +58,6 @@ public final class Messages {
 
     public static final String OK_GET_USER_COURSES_BY_USER_ID =
             "All 'Courses' for '{}' with 'id'={} obtained: {}";
-
-
-
-
 
     private Messages() { }
 

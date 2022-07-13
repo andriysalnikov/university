@@ -5,99 +5,82 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import ua.com.foxminded.andriysalnikov.university.config.SpringJdbcConfig;
 import ua.com.foxminded.andriysalnikov.university.constants.Messages;
+import ua.com.foxminded.andriysalnikov.university.controller.TimeTableManager;
 import ua.com.foxminded.andriysalnikov.university.exceptions.ServiceException;
-import ua.com.foxminded.andriysalnikov.university.model.Course;
-import ua.com.foxminded.andriysalnikov.university.model.Event;
+import ua.com.foxminded.andriysalnikov.university.exceptions.TimeTableException;
 import ua.com.foxminded.andriysalnikov.university.model.Student;
 import ua.com.foxminded.andriysalnikov.university.model.Teacher;
-import ua.com.foxminded.andriysalnikov.university.service.EventService;
+import ua.com.foxminded.andriysalnikov.university.model.TimeTable;
 import ua.com.foxminded.andriysalnikov.university.service.StudentService;
 import ua.com.foxminded.andriysalnikov.university.service.TeacherService;
-import ua.com.foxminded.andriysalnikov.university.service.impl.EventServiceImpl;
 import ua.com.foxminded.andriysalnikov.university.service.impl.StudentServiceImpl;
 import ua.com.foxminded.andriysalnikov.university.service.impl.TeacherServiceImpl;
 
 import java.time.LocalDate;
-import java.util.List;
 
 public class UniversityApplication {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UniversityApplication.class);
 
-    private static AnnotationConfigApplicationContext context;
-
     public static void main(String[] args) {
 
         LOGGER.info(Messages.APPLICATION_STARTED);
 
-        context = new AnnotationConfigApplicationContext(SpringJdbcConfig.class);
+        AnnotationConfigApplicationContext context =
+                new AnnotationConfigApplicationContext(SpringJdbcConfig.class);
 
         StudentService studentService = context.getBean(StudentServiceImpl.class);
         TeacherService teacherService = context.getBean(TeacherServiceImpl.class);
-        EventService eventService = context.getBean(EventServiceImpl.class);
+        TimeTableManager timeTableManager = context.getBean(TimeTableManager.class);
 
-        Integer studentId = 1;
-        Student student;
-        LOGGER.info(Messages.TRY_GET_ENTITY_BY_ID, Student.class.getSimpleName(), studentId);
+
+        int id = 1;
+        Student student = null;
+        LOGGER.info(Messages.TRY_GET_ENTITY_BY_ID, Student.class.getSimpleName(), id);
         try {
-            student = studentService.getStudentById(studentId);
-            LOGGER.info(Messages.OK_GET_ENTITY_BY_ID,
-                    Student.class.getSimpleName(), studentId, student);
-        } catch (ServiceException serviceException) {
-            LOGGER.error(serviceException.getMessage(), serviceException);
-        }
-        List<Course> courses;
-        LOGGER.info(Messages.TRY_GET_USER_COURSES_BY_USER_ID, Student.class.getSimpleName(), studentId);
-        try {
-            courses = studentService.getStudentCoursesByStudentId(studentId);
-            LOGGER.info(Messages.OK_GET_USER_COURSES_BY_USER_ID,
-                    Student.class.getSimpleName(), studentId, courses);
+            student = studentService.getStudentById(id);
+            LOGGER.info(Messages.OK_GET_ENTITY_BY_ID, Student.class.getSimpleName(), id, student);
         } catch (ServiceException serviceException) {
             LOGGER.error(serviceException.getMessage(), serviceException);
         }
 
-
-        Integer teacherId = 3;
-        Teacher teacher;
-        LOGGER.info(Messages.TRY_GET_ENTITY_BY_ID, Teacher.class.getSimpleName(), studentId);
-        try {
-            teacher = teacherService.getTeacherById(teacherId);
-            LOGGER.info(Messages.OK_GET_ENTITY_BY_ID,
-                    Teacher.class.getSimpleName(), teacherId, teacher);
-        } catch (ServiceException serviceException) {
-            LOGGER.error(serviceException.getMessage(), serviceException);
-        }
-
-        LOGGER.info(Messages.TRY_GET_USER_COURSES_BY_USER_ID, Teacher.class.getSimpleName(), teacherId);
-        try {
-            courses = teacherService.getTeacherCoursesByTeacherId(teacherId);
-            LOGGER.info(Messages.OK_GET_USER_COURSES_BY_USER_ID,
-                    Teacher.class.getSimpleName(), teacherId, courses);
-        } catch (ServiceException serviceException) {
-            LOGGER.error(serviceException.getMessage(), serviceException);
-        }
-
-
-        LOGGER.info(Messages.TRY_GET_ALL_EVENTS);
-        List<Event> events = eventService.getAllEvents();
-        LOGGER.info(Messages.OK_GET_ALL_EVENTS, events);
-
-        Integer courseId = 5;
+        TimeTable studentTimeTable;
         LocalDate startDate = LocalDate.of(2022, 5, 30);
         LocalDate endDate = LocalDate.of(2022, 6, 3);
-        LOGGER.info(Messages.TRY_GET_ALL_EVENTS_FROM_STARTDATE_TO_ENDDATE_BY_COURSE_ID,
-                startDate, endDate, courseId);
+        LOGGER.debug(Messages.TRY_GET_TIMETABLE_FROM_STARTDATE_TO_ENDDATE_BY_USER,
+                startDate, endDate, student);
         try {
-            events = eventService.getAllEventsFromStartDateToEndDateByCourseId(
-                    startDate, endDate, courseId);
-            LOGGER.info(Messages.OK_GET_ALL_EVENTS_FROM_STARTDATE_TO_ENDDATE_BY_COURSE_ID,
-                    startDate, endDate, courseId, events);
+            studentTimeTable = timeTableManager.getTimeTableFromStartDateToEndDateByUser(
+                    startDate, endDate, student);
+            LOGGER.info(Messages.OK_GET_TIMETABLE_FROM_STARTDATE_TO_ENDDATE_BY_USER,
+                    startDate, endDate, student, studentTimeTable);
+        } catch (TimeTableException timeTableException) {
+            LOGGER.error(timeTableException.getMessage());
+        }
+
+
+        Teacher teacher = null;
+        LOGGER.info(Messages.TRY_GET_ENTITY_BY_ID, Teacher.class.getSimpleName(), id);
+        try {
+            teacher = teacherService.getTeacherById(id);
+            LOGGER.info(Messages.OK_GET_ENTITY_BY_ID, Teacher.class.getSimpleName(), id, teacher);
         } catch (ServiceException serviceException) {
             LOGGER.error(serviceException.getMessage(), serviceException);
         }
 
-
-
+        TimeTable teacherTimeTable;
+        startDate = LocalDate.of(2022, 5, 30);
+        endDate = LocalDate.of(2022, 6, 3);
+        LOGGER.debug(Messages.TRY_GET_TIMETABLE_FROM_STARTDATE_TO_ENDDATE_BY_USER,
+                startDate, endDate, teacher);
+        try {
+            teacherTimeTable = timeTableManager.getTimeTableFromStartDateToEndDateByUser(
+                    startDate, endDate, teacher);
+            LOGGER.info(Messages.OK_GET_TIMETABLE_FROM_STARTDATE_TO_ENDDATE_BY_USER,
+                    startDate, endDate, student, teacherTimeTable);
+        } catch (TimeTableException timeTableException) {
+            LOGGER.error(timeTableException.getMessage());
+        }
 
         context.close();
         LOGGER.info(Messages.APPLICATION_FINISHED);

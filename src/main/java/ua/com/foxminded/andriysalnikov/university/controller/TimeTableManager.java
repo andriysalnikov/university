@@ -1,7 +1,11 @@
 package ua.com.foxminded.andriysalnikov.university.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import ua.com.foxminded.andriysalnikov.university.constants.Messages;
+import ua.com.foxminded.andriysalnikov.university.exceptions.TimeTableException;
 import ua.com.foxminded.andriysalnikov.university.model.Course;
 import ua.com.foxminded.andriysalnikov.university.model.User;
 import ua.com.foxminded.andriysalnikov.university.model.Student;
@@ -19,6 +23,8 @@ import java.util.List;
 @Controller
 public class TimeTableManager {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(TimeTableManager.class);
+
     private final EventService eventService;
     private final StudentService studentService;
     private final TeacherService teacherService;
@@ -34,14 +40,19 @@ public class TimeTableManager {
     public TimeTable getTimeTableFromStartDateToEndDateByUser(
             LocalDate startDate, LocalDate endDate, User user) {
 
+        LOGGER.debug(Messages.TRY_GET_TIMETABLE_FROM_STARTDATE_TO_ENDDATE_BY_USER,
+                startDate, endDate, user);
         if (user == null || user.getId() == null) {
-            throw new IllegalArgumentException("'User' or 'User.id' cannot be null");
+            LOGGER.error(Messages.ERROR_ARGUMENT_USER);
+            throw new TimeTableException(Messages.ERROR_ARGUMENT_USER);
         }
         if (startDate == null || endDate == null) {
-            throw new IllegalArgumentException("'StartDate' or 'EndDate' or both cannot be null");
+            LOGGER.error(Messages.ERROR_DATE_NULL);
+            throw new TimeTableException(Messages.ERROR_DATE_NULL);
         }
         if (startDate.isAfter(endDate)) {
-            throw new IllegalArgumentException("'StartDate' cannot be after 'EndDate'");
+            LOGGER.error(Messages.ERROR_STARTDATE_AFTER_ENDDATE);
+            throw new TimeTableException(Messages.ERROR_STARTDATE_AFTER_ENDDATE);
         }
 
         TimeTable timeTable = new TimeTable();
@@ -56,10 +67,10 @@ public class TimeTableManager {
             events.addAll(eventService.getAllEventsFromStartDateToEndDateByCourseId(
                     startDate, endDate, course.getId()));
         }
-
         events.sort(new EventComparatorByDateAndTime());
         timeTable.setEvents(events);
-
+        LOGGER.debug(Messages.OK_GET_TIMETABLE_FROM_STARTDATE_TO_ENDDATE_BY_USER,
+                startDate, endDate, user, timeTable);
         return timeTable;
 
     }
