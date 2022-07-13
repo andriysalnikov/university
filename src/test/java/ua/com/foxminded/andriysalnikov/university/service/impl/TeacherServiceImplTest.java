@@ -14,6 +14,7 @@ import ua.com.foxminded.andriysalnikov.university.model.Teacher;
 import ua.com.foxminded.andriysalnikov.university.utils.TestDTOFactory;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -33,7 +34,7 @@ class TeacherServiceImplTest {
     @Test
     void getTeacherById_shouldReturnTeacher_whenArgumentIsInteger() {
         Teacher teacher = new Teacher(1, "Thor", "Heyerdahl");
-        when(teacherDAO.getTeacherById(1)).thenReturn(teacher);
+        when(teacherDAO.getTeacherById(1)).thenReturn(Optional.of(teacher));
         assertSame(teacher, teacherServiceImpl.getTeacherById(1));
         verify(teacherDAO, times(1)).getTeacherById(any(Integer.class));
     }

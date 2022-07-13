@@ -14,8 +14,29 @@ public final class Messages {
     public static final String ERROR_ARGUMENT_LESS_OR_EQUALS_ZERO =
             "'id' cannot be less or equals 0";
 
+    public static final String ERROR_DATE_NULL =
+            "'StartDate' or 'EndDate' or both cannot be null";
+
+    public static final String ERROR_STARTDATE_AFTER_ENDDATE =
+            "'StartDate' cannot be after 'EndDate'";
+
     public static final String ERROR_GET_STUDENT_BY_ID =
             "Cannot get 'Student' from storage";
+
+    public static final String ERROR_GET_TEACHER_BY_ID =
+            "Cannot get 'Teacher' from storage";
+
+    public static final String TRY_GET_ALL_EVENTS_FROM_STARTDATE_TO_ENDDATE_BY_COURSE_ID =
+            "Trying to get all 'Events' from '{}' to '{}' by 'Course id'={}";
+
+    public static final String OK_GET_ALL_EVENTS_FROM_STARTDATE_TO_ENDDATE_BY_COURSE_ID =
+            "All 'Events' from '{}' to '{}' by 'Course id'={} obtained: {}";
+
+    public static final String TRY_GET_ALL_EVENTS =
+            "Trying to get all 'Events'";
+
+    public static final String OK_GET_ALL_EVENTS =
+            "All 'Events' obtained: {}";
 
     public static final String TRY_GET_ENTITY_BY_ID =
             "Trying to get '{}' by 'id'={}";
