@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import ua.com.foxminded.andriysalnikov.university.constants.Messages;
-import ua.com.foxminded.andriysalnikov.university.exceptions.TimeTableException;
+import ua.com.foxminded.andriysalnikov.university.exceptions.TimeTableManagerException;
 import ua.com.foxminded.andriysalnikov.university.model.Course;
 import ua.com.foxminded.andriysalnikov.university.model.User;
 import ua.com.foxminded.andriysalnikov.university.model.Student;
@@ -44,15 +44,15 @@ public class TimeTableManager {
                 startDate, endDate, user);
         if (user == null || user.getId() == null) {
             LOGGER.error(Messages.ERROR_ARGUMENT_USER);
-            throw new TimeTableException(Messages.ERROR_ARGUMENT_USER);
+            throw new TimeTableManagerException(Messages.ERROR_ARGUMENT_USER);
         }
         if (startDate == null || endDate == null) {
             LOGGER.error(Messages.ERROR_DATE_NULL);
-            throw new TimeTableException(Messages.ERROR_DATE_NULL);
+            throw new TimeTableManagerException(Messages.ERROR_DATE_NULL);
         }
         if (startDate.isAfter(endDate)) {
             LOGGER.error(Messages.ERROR_STARTDATE_AFTER_ENDDATE);
-            throw new TimeTableException(Messages.ERROR_STARTDATE_AFTER_ENDDATE);
+            throw new TimeTableManagerException(Messages.ERROR_STARTDATE_AFTER_ENDDATE);
         }
 
         TimeTable timeTable = new TimeTable();

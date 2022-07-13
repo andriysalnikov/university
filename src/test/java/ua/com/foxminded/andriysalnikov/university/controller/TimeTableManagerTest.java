@@ -8,8 +8,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.junit.jupiter.MockitoSettings;
-import org.mockito.quality.Strictness;
+import ua.com.foxminded.andriysalnikov.university.exceptions.TimeTableManagerException;
 import ua.com.foxminded.andriysalnikov.university.model.TimeTable;
 import ua.com.foxminded.andriysalnikov.university.model.Event;
 import ua.com.foxminded.andriysalnikov.university.model.User;
@@ -79,7 +78,7 @@ class TimeTableManagerTest {
                 super.setId(1);
             }
         };
-        assertThrows(IllegalArgumentException.class,
+        assertThrows(TimeTableManagerException.class,
                 () -> timeTableManager.getTimeTableFromStartDateToEndDateByUser(
                         startDate, endDate, user));
     }
@@ -94,7 +93,7 @@ class TimeTableManagerTest {
                 super.setId(id);
             }
         };
-        assertThrows(IllegalArgumentException.class,
+        assertThrows(TimeTableManagerException.class,
                 () -> timeTableManager.getTimeTableFromStartDateToEndDateByUser(
                         startDate, endDate, user));
     }
@@ -105,7 +104,7 @@ class TimeTableManagerTest {
             User user) {
         LocalDate startDate = LocalDate.now();
         LocalDate endDate = LocalDate.now();
-        assertThrows(IllegalArgumentException.class,
+        assertThrows(TimeTableManagerException.class,
                 () -> timeTableManager.getTimeTableFromStartDateToEndDateByUser(
                         startDate, endDate, user));
     }

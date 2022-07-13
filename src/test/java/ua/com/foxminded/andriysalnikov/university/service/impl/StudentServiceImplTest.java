@@ -9,6 +9,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import ua.com.foxminded.andriysalnikov.university.dao.StudentDAO;
+import ua.com.foxminded.andriysalnikov.university.exceptions.ServiceException;
 import ua.com.foxminded.andriysalnikov.university.model.Course;
 import ua.com.foxminded.andriysalnikov.university.model.Student;
 import ua.com.foxminded.andriysalnikov.university.utils.TestDTOFactory;
@@ -42,14 +43,14 @@ class StudentServiceImplTest {
     @ParameterizedTest
     @NullSource
     void getTeacherById_shouldThrowIllegalArgumentException_whenArgumentIsNull(Integer id) {
-        assertThrows(IllegalArgumentException.class,
+        assertThrows(ServiceException.class,
                 () -> studentServiceImpl.getStudentById(id));
     }
 
     @ParameterizedTest
     @CsvSource({"0", "-6", "-9"})
     void getTeacherById_shouldThrowIllegalArgumentException_whenArgumentIsIntegerLessOrEqualsZero(Integer id) {
-        assertThrows(IllegalArgumentException.class,
+        assertThrows(ServiceException.class,
                 () -> studentServiceImpl.getStudentById(id));
     }
 
@@ -65,14 +66,14 @@ class StudentServiceImplTest {
     @ParameterizedTest
     @NullSource
     void getTeacherCoursesByTeacherId_shouldThrowIllegalArgumentException_whenArgumentIsNull(Integer id) {
-        assertThrows(IllegalArgumentException.class,
+        assertThrows(ServiceException.class,
                 () -> studentServiceImpl.getStudentCoursesByStudentId(id));
     }
 
     @ParameterizedTest
     @CsvSource({"0", "-8", "-150"})
     void getTeacherCoursesByTeacherId_shouldThrowIllegalArgumentException_whenArgumentIsIntegerLessOrEqualsZero(Integer id) {
-        assertThrows(IllegalArgumentException.class,
+        assertThrows(ServiceException.class,
                 () -> studentServiceImpl.getStudentCoursesByStudentId(id));
     }
 

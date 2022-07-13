@@ -7,7 +7,7 @@ import ua.com.foxminded.andriysalnikov.university.config.SpringJdbcConfig;
 import ua.com.foxminded.andriysalnikov.university.constants.Messages;
 import ua.com.foxminded.andriysalnikov.university.controller.TimeTableManager;
 import ua.com.foxminded.andriysalnikov.university.exceptions.ServiceException;
-import ua.com.foxminded.andriysalnikov.university.exceptions.TimeTableException;
+import ua.com.foxminded.andriysalnikov.university.exceptions.TimeTableManagerException;
 import ua.com.foxminded.andriysalnikov.university.model.Student;
 import ua.com.foxminded.andriysalnikov.university.model.Teacher;
 import ua.com.foxminded.andriysalnikov.university.model.TimeTable;
@@ -54,8 +54,8 @@ public class UniversityApplication {
                     startDate, endDate, student);
             LOGGER.info(Messages.OK_GET_TIMETABLE_FROM_STARTDATE_TO_ENDDATE_BY_USER,
                     startDate, endDate, student, studentTimeTable);
-        } catch (TimeTableException timeTableException) {
-            LOGGER.error(timeTableException.getMessage());
+        } catch (TimeTableManagerException timeTableManagerException) {
+            LOGGER.error(timeTableManagerException.getMessage());
         }
 
 
@@ -78,8 +78,8 @@ public class UniversityApplication {
                     startDate, endDate, teacher);
             LOGGER.info(Messages.OK_GET_TIMETABLE_FROM_STARTDATE_TO_ENDDATE_BY_USER,
                     startDate, endDate, student, teacherTimeTable);
-        } catch (TimeTableException timeTableException) {
-            LOGGER.error(timeTableException.getMessage());
+        } catch (TimeTableManagerException timeTableManagerException) {
+            LOGGER.error(timeTableManagerException.getMessage());
         }
 
         context.close();
