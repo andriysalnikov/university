@@ -14,6 +14,7 @@ import ua.com.foxminded.andriysalnikov.university.model.Student;
 import ua.com.foxminded.andriysalnikov.university.utils.TestDTOFactory;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -33,7 +34,7 @@ class StudentServiceImplTest {
     @Test
     void getStudentById_shouldReturnStudent_whenArgumentIsInteger() {
         Student student = new Student(5, "Elon", "Musk");
-        when(studentDAO.getStudentById(5)).thenReturn(student);
+        when(studentDAO.getStudentById(5)).thenReturn(Optional.of(student));
         assertSame(student, studentServiceImpl.getStudentById(5));
         verify(studentDAO, times(1)).getStudentById(any(Integer.class));
     }

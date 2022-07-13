@@ -6,9 +6,12 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import ua.com.foxminded.andriysalnikov.university.config.SpringJdbcConfig;
 import ua.com.foxminded.andriysalnikov.university.constants.Messages;
 import ua.com.foxminded.andriysalnikov.university.exceptions.ServiceException;
+import ua.com.foxminded.andriysalnikov.university.model.Course;
 import ua.com.foxminded.andriysalnikov.university.model.Student;
 import ua.com.foxminded.andriysalnikov.university.service.StudentService;
 import ua.com.foxminded.andriysalnikov.university.service.impl.StudentServiceImpl;
+
+import java.util.List;
 
 public class UniversityApplication {
 
@@ -24,22 +27,29 @@ public class UniversityApplication {
 
         StudentService studentService = context.getBean(StudentServiceImpl.class);
 
-        Student student = null;
-        LOGGER.info(Messages.TRY_GET_ENTITY_BY_ID, Student.class.getSimpleName(), -1);
+
+        Integer studentId = 1;
+        Student student;
+        LOGGER.info(Messages.TRY_GET_ENTITY_BY_ID, Student.class.getSimpleName(), studentId);
         try {
-            student = studentService.getStudentById(-1);
-            LOGGER.info(Messages.ENTITY_GOTTEN_BY_ID, Student.class.getSimpleName(), -1);
+            student = studentService.getStudentById(studentId);
+            LOGGER.info(Messages.OK_GET_ENTITY_BY_ID,
+                    Student.class.getSimpleName(), studentId, student);
         } catch (ServiceException serviceException) {
-            LOGGER.error("Oooops!", serviceException);
+            LOGGER.error(serviceException.getMessage(), serviceException);
+        }
+        List<Course> courses;
+        LOGGER.info(Messages.TRY_GET_USER_COURSES_BY_USER_ID, Student.class.getSimpleName(), studentId);
+        try {
+            courses = studentService.getStudentCoursesByStudentId(studentId);
+            LOGGER.info(Messages.OK_GET_USER_COURSES_BY_USER_ID,
+                    Student.class.getSimpleName(), studentId, courses);
+        } catch (ServiceException serviceException) {
+            LOGGER.error(serviceException.getMessage(), serviceException);
         }
 
-        LOGGER.info(Messages.TRY_GET_ENTITY_BY_ID, Student.class.getSimpleName(), 1);
-        try {
-            student = studentService.getStudentById(1);
-            LOGGER.info(Messages.ENTITY_GOTTEN_BY_ID, Student.class.getSimpleName(), 1);
-        } catch (ServiceException serviceException) {
-            LOGGER.error("Oooops!", serviceException);
-        }
+
+
 
         context.close();
         LOGGER.info(Messages.APPLICATION_FINISHED);

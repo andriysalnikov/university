@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ua.com.foxminded.andriysalnikov.university.constants.Messages;
 import ua.com.foxminded.andriysalnikov.university.dao.StudentDAO;
-import ua.com.foxminded.andriysalnikov.university.exceptions.DBException;
 import ua.com.foxminded.andriysalnikov.university.exceptions.ServiceException;
 import ua.com.foxminded.andriysalnikov.university.model.Course;
 import ua.com.foxminded.andriysalnikov.university.model.Student;
@@ -18,7 +17,6 @@ import java.util.List;
 public class StudentServiceImpl implements StudentService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(StudentServiceImpl.class);
-
 
     private final StudentDAO studentDAO;
 
@@ -38,21 +36,17 @@ public class StudentServiceImpl implements StudentService {
             LOGGER.error(Messages.ERROR_ARGUMENT_LESS_OR_EQUALS_ZERO);
             throw new ServiceException(Messages.ERROR_ARGUMENT_LESS_OR_EQUALS_ZERO);
         }
-        Student student;
-        try {
-            student = studentDAO.getStudentById(id);
-        } catch (DBException dbException) {
+        Student student = studentDAO.getStudentById(id).orElseThrow(() -> {
             LOGGER.error(Messages.ERROR_GET_STUDENT_BY_ID);
-            throw new ServiceException(Messages.ERROR_GET_STUDENT_BY_ID, dbException);
-        }
-        LOGGER.debug(Messages.ENTITY_GOTTEN_BY_ID, Student.class.getSimpleName(), student);
+            return new ServiceException(Messages.ERROR_GET_STUDENT_BY_ID);
+        });
+        LOGGER.debug(Messages.OK_GET_ENTITY_BY_ID, Student.class.getSimpleName(), id, student);
         return student;
     }
 
     @Override
     public List<Course> getStudentCoursesByStudentId(Integer id) {
-        LOGGER.debug(Messages.TRY_GET_ENTITY_COURSES_BY_ENTITY_ID,
-                Student.class.getSimpleName(), Student.class.getSimpleName(), id);
+        LOGGER.debug(Messages.TRY_GET_USER_COURSES_BY_USER_ID, Student.class.getSimpleName(), id);
         if (id == null) {
             LOGGER.error(Messages.ERROR_ARGUMENT_NULL);
             throw new ServiceException(Messages.ERROR_ARGUMENT_NULL);
@@ -61,14 +55,8 @@ public class StudentServiceImpl implements StudentService {
             LOGGER.error(Messages.ERROR_ARGUMENT_LESS_OR_EQUALS_ZERO);
             throw new ServiceException(Messages.ERROR_ARGUMENT_LESS_OR_EQUALS_ZERO);
         }
-        List<Course> courses;
-        try {
-            courses = studentDAO.getStudentCoursesByStudentId(id);
-        } catch (DBException dbException) {
-            LOGGER.error(Messages.ERROR_GET_STUDENT_COURSES_BY_STUDENT_ID);
-            throw new ServiceException(Messages.ERROR_GET_STUDENT_COURSES_BY_STUDENT_ID, dbException);
-        }
-        LOGGER.debug(Messages.ENTITY_COURSES_GOTTEN, Student.class.getSimpleName(), id, courses);
+        List<Course> courses = studentDAO.getStudentCoursesByStudentId(id);
+        LOGGER.debug(Messages.OK_GET_USER_COURSES_BY_USER_ID, Student.class.getSimpleName(), id, courses);
         return courses;
     }
 
