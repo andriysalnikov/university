@@ -11,6 +11,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import ua.com.foxminded.andriysalnikov.university.dao.EventDAO;
+import ua.com.foxminded.andriysalnikov.university.exceptions.ServiceException;
 import ua.com.foxminded.andriysalnikov.university.model.Event;
 import ua.com.foxminded.andriysalnikov.university.utils.TestDTOFactory;
 
@@ -60,7 +61,7 @@ class EventServiceImplTest {
     @NullSource
     void getAllEventsFromStartDateToEndDateByCourseId_shouldThrowIllegalArgumentException_whenArgumentsContainIntegerNull(
             Integer id) {
-        assertThrows(IllegalArgumentException.class,
+        assertThrows(ServiceException.class,
                 () -> eventServiceImpl.getAllEventsFromStartDateToEndDateByCourseId(
                         LocalDate.MIN, LocalDate.MAX, id));
     }
@@ -71,7 +72,7 @@ class EventServiceImplTest {
             Integer id) {
         LocalDate startDate = LocalDate.now();
         LocalDate endDate = LocalDate.now().plusDays(1);
-        assertThrows(IllegalArgumentException.class,
+        assertThrows(ServiceException.class,
                 () -> eventServiceImpl.getAllEventsFromStartDateToEndDateByCourseId(
                         startDate, endDate, id));
     }
@@ -80,7 +81,7 @@ class EventServiceImplTest {
     void getAllEventsFromStartDateToEndDateByCourseId_shouldThrowIllegalArgumentException_whenArgumentsContainStartDateAfterEndDate() {
         LocalDate startDate = LocalDate.now().plusDays(1);
         LocalDate endDate = LocalDate.now();
-        assertThrows(IllegalArgumentException.class,
+        assertThrows(ServiceException.class,
                 () -> eventServiceImpl.getAllEventsFromStartDateToEndDateByCourseId(
                         startDate, endDate, 1));
     }
@@ -89,7 +90,7 @@ class EventServiceImplTest {
     @MethodSource("provideForOneOrBothDataArgumentsNull")
     void getAllEventsFromStartDateToEndDateByCourseId_shouldThrowIllegalArgumentException_whenOneOrBothDataArgumentsNull(
             LocalDate startDate, LocalDate endDate) {
-        assertThrows(IllegalArgumentException.class,
+        assertThrows(ServiceException.class,
                 () -> eventServiceImpl.getAllEventsFromStartDateToEndDateByCourseId(
                         startDate, endDate, 1));
     }

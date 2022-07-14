@@ -13,6 +13,7 @@ import ua.com.foxminded.andriysalnikov.university.model.Teacher;
 
 import javax.sql.DataSource;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class TeacherDAOImpl implements TeacherDAO {
@@ -32,25 +33,29 @@ public class TeacherDAOImpl implements TeacherDAO {
     }
 
     @Override
-    public Teacher getTeacherById(Integer id) {
-        return Assembler.assembleTeacher(jdbcTemplate.queryForRowSet(DBConstants.SQL_GET_TEACHER_BY_ID, id));
+    public Optional<Teacher> getTeacherById(Integer id) {
+        return Optional.ofNullable(Assembler.assembleTeacher(
+                jdbcTemplate.queryForRowSet(DBConstants.SQL_GET_TEACHER_BY_ID, id)));
     }
 
     @Override
-    public Teacher createTeacher(Teacher teacher) {
-        return Assembler.assembleTeacher(jdbcTemplate.queryForRowSet(DBConstants.SQL_CREATE_TEACHER,
-                teacher.getFirstName(), teacher.getLastName()));
+    public Optional<Teacher> createTeacher(Teacher teacher) {
+        return Optional.ofNullable(Assembler.assembleTeacher(
+                jdbcTemplate.queryForRowSet(DBConstants.SQL_CREATE_TEACHER,
+                        teacher.getFirstName(), teacher.getLastName())));
     }
 
     @Override
-    public Teacher deleteTeacherById(Integer id) {
-        return Assembler.assembleTeacher(jdbcTemplate.queryForRowSet(DBConstants.SQL_DELETE_TEACHER_BY_ID, id));
+    public Optional<Teacher> deleteTeacherById(Integer id) {
+        return Optional.ofNullable(Assembler.assembleTeacher(
+                jdbcTemplate.queryForRowSet(DBConstants.SQL_DELETE_TEACHER_BY_ID, id)));
     }
 
     @Override
-    public Teacher updateTeacher(Teacher teacher) {
-        return Assembler.assembleTeacher(jdbcTemplate.queryForRowSet(DBConstants.SQL_UPDATE_TEACHER,
-                teacher.getFirstName(), teacher.getLastName(), teacher.getId()));
+    public Optional<Teacher> updateTeacher(Teacher teacher) {
+        return Optional.ofNullable(Assembler.assembleTeacher(
+                jdbcTemplate.queryForRowSet(DBConstants.SQL_UPDATE_TEACHER,
+                        teacher.getFirstName(), teacher.getLastName(), teacher.getId())));
     }
 
     @Override

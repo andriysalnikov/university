@@ -3,17 +3,14 @@ package ua.com.foxminded.andriysalnikov.university.dao;
 import ua.com.foxminded.andriysalnikov.university.model.ClassRoom;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ClassRoomDAO {
 
     List<ClassRoom> getAllClassRooms();
-
-    ClassRoom getClassRoomById(Integer id);
-
-    ClassRoom createClassRoom(ClassRoom classRoom);
-
-    ClassRoom deleteClassRoomById(Integer id);
-
-    ClassRoom updateClassRoom(ClassRoom classRoom);
+    Optional<ClassRoom> getClassRoomById(Integer id);
+    Optional<ClassRoom> createClassRoom(ClassRoom classRoom);
+    Optional<ClassRoom> deleteClassRoomById(Integer id);
+    Optional<ClassRoom> updateClassRoom(ClassRoom classRoom);
 
 }

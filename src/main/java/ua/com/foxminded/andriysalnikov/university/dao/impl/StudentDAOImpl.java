@@ -13,6 +13,7 @@ import ua.com.foxminded.andriysalnikov.university.model.Student;
 
 import javax.sql.DataSource;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class StudentDAOImpl implements StudentDAO {
@@ -28,35 +29,40 @@ public class StudentDAOImpl implements StudentDAO {
 
     @Override
     public List<Student> getAllStudents() {
-        return jdbcTemplate.query(DBConstants.SQL_GET_ALL_STUDENTS, new BeanPropertyRowMapper<>(Student.class));
+        return jdbcTemplate.query(
+                DBConstants.SQL_GET_ALL_STUDENTS, new BeanPropertyRowMapper<>(Student.class));
     }
 
     @Override
-    public Student getStudentById(Integer id) {
-        return Assembler.assembleStudent(jdbcTemplate.queryForRowSet(DBConstants.SQL_GET_STUDENT_BY_ID, id));
+    public Optional<Student> getStudentById(Integer id) {
+        return Optional.ofNullable(Assembler.assembleStudent(
+                jdbcTemplate.queryForRowSet(DBConstants.SQL_GET_STUDENT_BY_ID, id)));
     }
 
     @Override
-    public Student createStudent(Student student) {
-        return Assembler.assembleStudent(jdbcTemplate.queryForRowSet(DBConstants.SQL_CREATE_STUDENT,
-                0, student.getFirstName(), student.getLastName()));
+    public Optional<Student> createStudent(Student student) {
+        return Optional.ofNullable(Assembler.assembleStudent(
+                jdbcTemplate.queryForRowSet(DBConstants.SQL_CREATE_STUDENT,
+                        0, student.getFirstName(), student.getLastName())));
     }
 
     @Override
-    public Student deleteStudentById(Integer id) {
-        return Assembler.assembleStudent(jdbcTemplate.queryForRowSet(DBConstants.SQL_DELETE_STUDENT_BY_ID, id));
+    public Optional<Student> deleteStudentById(Integer id) {
+        return Optional.ofNullable(Assembler.assembleStudent(
+                jdbcTemplate.queryForRowSet(DBConstants.SQL_DELETE_STUDENT_BY_ID, id)));
     }
 
     @Override
-    public Student updateStudent(Student student) {
-        return Assembler.assembleStudent(jdbcTemplate.queryForRowSet(DBConstants.SQL_UPDATE_STUDENT,
-                student.getFirstName(), student.getLastName(), student.getId()));
+    public Optional<Student> updateStudent(Student student) {
+        return Optional.ofNullable(Assembler.assembleStudent(
+                jdbcTemplate.queryForRowSet(DBConstants.SQL_UPDATE_STUDENT,
+                        student.getFirstName(), student.getLastName(), student.getId())));
     }
 
     @Override
     public List<Course> getStudentCoursesByStudentId(Integer id) {
-        return jdbcTemplate.query(DBConstants.SQL_GET_STUDENT_COURSES_BY_STUDENT_ID,
-                courseMapper, id);
+        return jdbcTemplate.query(
+                DBConstants.SQL_GET_STUDENT_COURSES_BY_STUDENT_ID, courseMapper, id);
     }
 
 }

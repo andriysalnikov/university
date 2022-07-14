@@ -11,6 +11,7 @@ import ua.com.foxminded.andriysalnikov.university.model.Faculty;
 
 import javax.sql.DataSource;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class FacultyDAOImpl implements FacultyDAO {
@@ -28,25 +29,28 @@ public class FacultyDAOImpl implements FacultyDAO {
     }
 
     @Override
-    public Faculty getFacultyById(Integer id) {
-        return Assembler.assembleFaculty(jdbcTemplate.queryForRowSet(DBConstants.SQL_GET_FACULTY_BY_ID, id));
+    public Optional<Faculty> getFacultyById(Integer id) {
+        return Optional.ofNullable(Assembler.assembleFaculty(
+                jdbcTemplate.queryForRowSet(DBConstants.SQL_GET_FACULTY_BY_ID, id)));
     }
 
     @Override
-    public Faculty createFaculty(Faculty faculty) {
-        return Assembler.assembleFaculty(jdbcTemplate.queryForRowSet(DBConstants.SQL_CREATE_FACULTY,
-                faculty.getFullName()));
+    public Optional<Faculty> createFaculty(Faculty faculty) {
+        return Optional.ofNullable(Assembler.assembleFaculty(
+                jdbcTemplate.queryForRowSet(DBConstants.SQL_CREATE_FACULTY, faculty.getFullName())));
     }
 
     @Override
-    public Faculty deleteFacultyById(Integer id) {
-        return Assembler.assembleFaculty(jdbcTemplate.queryForRowSet(DBConstants.SQL_DELETE_FACULTY_BY_ID, id));
+    public Optional<Faculty> deleteFacultyById(Integer id) {
+        return Optional.ofNullable(Assembler.assembleFaculty(
+                jdbcTemplate.queryForRowSet(DBConstants.SQL_DELETE_FACULTY_BY_ID, id)));
     }
 
     @Override
-    public Faculty updateFaculty(Faculty faculty) {
-        return Assembler.assembleFaculty(jdbcTemplate.queryForRowSet(DBConstants.SQL_UPDATE_FACULTY,
-                faculty.getFullName(), faculty.getId()));
+    public Optional<Faculty> updateFaculty(Faculty faculty) {
+        return Optional.ofNullable(Assembler.assembleFaculty(
+                jdbcTemplate.queryForRowSet(DBConstants.SQL_UPDATE_FACULTY,
+                        faculty.getFullName(), faculty.getId())));
     }
 
 }

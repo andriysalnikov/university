@@ -15,6 +15,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import ua.com.foxminded.andriysalnikov.university.assembler.Assembler;
 import ua.com.foxminded.andriysalnikov.university.config.TestSpringJdbcConfig;
 import ua.com.foxminded.andriysalnikov.university.consnants.TestDBConstants;
+import ua.com.foxminded.andriysalnikov.university.exceptions.ServiceException;
 import ua.com.foxminded.andriysalnikov.university.mapper.CourseMapper;
 import ua.com.foxminded.andriysalnikov.university.model.Course;
 import ua.com.foxminded.andriysalnikov.university.model.Teacher;
@@ -22,8 +23,7 @@ import ua.com.foxminded.andriysalnikov.university.service.TeacherService;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @ExtendWith(SpringExtension.class)
@@ -56,7 +56,7 @@ class TeacherServiceImplIT {
                 = Assembler.assembleTeacher(
                         jdbcTemplate.queryForRowSet(TestDBConstants.SQL_GET_TEACHER_BY_ID, 2));
         assertEquals(teacher, teacherService.getTeacherById(2));
-        assertNull(teacherService.getTeacherById(7));
+        assertThrows(ServiceException.class, () -> teacherService.getTeacherById(7));
     }
 
     @Test

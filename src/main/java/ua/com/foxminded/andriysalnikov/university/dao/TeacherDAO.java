@@ -4,19 +4,15 @@ import ua.com.foxminded.andriysalnikov.university.model.Course;
 import ua.com.foxminded.andriysalnikov.university.model.Teacher;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface TeacherDAO {
 
     List<Teacher> getAllTeachers();
-
-    Teacher getTeacherById(Integer id);
-
-    Teacher createTeacher(Teacher teacher);
-
-    Teacher deleteTeacherById(Integer id);
-
-    Teacher updateTeacher(Teacher teacher);
-
+    Optional<Teacher> getTeacherById(Integer id);
+    Optional<Teacher> createTeacher(Teacher teacher);
+    Optional<Teacher> deleteTeacherById(Integer id);
+    Optional<Teacher> updateTeacher(Teacher teacher);
     List<Course> getTeacherCoursesByTeacherId(Integer id);
 
 }

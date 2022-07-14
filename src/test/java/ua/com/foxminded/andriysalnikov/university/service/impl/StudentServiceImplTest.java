@@ -9,11 +9,13 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import ua.com.foxminded.andriysalnikov.university.dao.StudentDAO;
+import ua.com.foxminded.andriysalnikov.university.exceptions.ServiceException;
 import ua.com.foxminded.andriysalnikov.university.model.Course;
 import ua.com.foxminded.andriysalnikov.university.model.Student;
 import ua.com.foxminded.andriysalnikov.university.utils.TestDTOFactory;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -33,7 +35,7 @@ class StudentServiceImplTest {
     @Test
     void getStudentById_shouldReturnStudent_whenArgumentIsInteger() {
         Student student = new Student(5, "Elon", "Musk");
-        when(studentDAO.getStudentById(5)).thenReturn(student);
+        when(studentDAO.getStudentById(5)).thenReturn(Optional.of(student));
         assertSame(student, studentServiceImpl.getStudentById(5));
         verify(studentDAO, times(1)).getStudentById(any(Integer.class));
     }
@@ -41,14 +43,14 @@ class StudentServiceImplTest {
     @ParameterizedTest
     @NullSource
     void getTeacherById_shouldThrowIllegalArgumentException_whenArgumentIsNull(Integer id) {
-        assertThrows(IllegalArgumentException.class,
+        assertThrows(ServiceException.class,
                 () -> studentServiceImpl.getStudentById(id));
     }
 
     @ParameterizedTest
     @CsvSource({"0", "-6", "-9"})
     void getTeacherById_shouldThrowIllegalArgumentException_whenArgumentIsIntegerLessOrEqualsZero(Integer id) {
-        assertThrows(IllegalArgumentException.class,
+        assertThrows(ServiceException.class,
                 () -> studentServiceImpl.getStudentById(id));
     }
 
@@ -64,14 +66,14 @@ class StudentServiceImplTest {
     @ParameterizedTest
     @NullSource
     void getTeacherCoursesByTeacherId_shouldThrowIllegalArgumentException_whenArgumentIsNull(Integer id) {
-        assertThrows(IllegalArgumentException.class,
+        assertThrows(ServiceException.class,
                 () -> studentServiceImpl.getStudentCoursesByStudentId(id));
     }
 
     @ParameterizedTest
     @CsvSource({"0", "-8", "-150"})
     void getTeacherCoursesByTeacherId_shouldThrowIllegalArgumentException_whenArgumentIsIntegerLessOrEqualsZero(Integer id) {
-        assertThrows(IllegalArgumentException.class,
+        assertThrows(ServiceException.class,
                 () -> studentServiceImpl.getStudentCoursesByStudentId(id));
     }
 
