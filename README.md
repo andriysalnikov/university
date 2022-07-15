@@ -40,9 +40,11 @@ Add custom exceptions and logging. **Use slf4j + logback**
 
 #### Before running...
 Before running the application, do the initialization of the database. 
+
 &emsp;&emsp;`src/main/resources/create_database.sql`
 
+
 #### University UML class diagram for application
-![](University UML class diagram.png)
+![](./University UML class diagram.png)
 
 
