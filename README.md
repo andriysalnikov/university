@@ -30,6 +30,7 @@ You should use Spring IoC.
 ### Task 13 - Exceptions and Logging
 Add custom exceptions and logging. **Use slf4j + logback**
 
+
 #### Tools that were used
 - Oracle JDK (11.0.15.1) 
 - Spring Framework (5.3.20)
@@ -43,8 +44,5 @@ Before running the application, do the initialization of the database.
 
 &emsp;&emsp;`src/main/resources/create_database.sql`
 
-
-#### University UML class diagram for application
-![](./University UML class diagram.png)
 
 
