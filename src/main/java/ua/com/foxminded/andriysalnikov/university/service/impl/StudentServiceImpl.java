@@ -38,7 +38,7 @@ public class StudentServiceImpl implements StudentService {
         }
         Student student = studentDAO.getStudentById(id).orElseThrow(() -> {
             LOGGER.error(Messages.ERROR_GET_STUDENT_BY_ID);
-            return new ServiceException(Messages.ERROR_GET_STUDENT_BY_ID);
+            throw new ServiceException(Messages.ERROR_GET_STUDENT_BY_ID);
         });
         LOGGER.debug(Messages.OK_GET_ENTITY_BY_ID, Student.class.getSimpleName(), id, student);
         return student;
