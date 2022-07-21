@@ -30,19 +30,30 @@ You should use Spring IoC.
 ### Task 13 - Exceptions and Logging
 Add custom exceptions and logging. **Use slf4j + logback**
 
+### Task 14 - User Interface-1
+Create status pages (read data from database - show it in HTML). 
+Use Spring MVC and Thymeleaf, Bootstrap. 
 
 #### Tools that were used
 - Oracle JDK (11.0.15.1) 
 - Spring Framework (5.3.20)
+- Servlet API (4.0.1)
+- Thymeleaf (3.1.0.M2)
+- Tomcat (9.0.63)
 - PostgreSQL (14.2) 
 - H2 (2.1.212) for testing
 - jUnit (5.8.2) and Mockito (4.4.0)
 - Logback (1.2.11)
 
-#### Before running...
-Before running the application, do the initialization of the database. 
-
-&emsp;&emsp;`src/main/resources/create_database.sql`
+#### How to run this application
+- Clone or download repository  
+- Build `university.war` package by running `mvn clean compile war:war` in application root directory
+- Initialize the database with `src/main/resources/create_database.sql`
+- Run 'Tomcat 9' (how to do this is not the subject of this text)
+- Copy built package from `{app_root_dir}/target/university.war` to `{tomcat_root_dir}/webapps/university.war`. 
+Package will be automatically unpacked
+- Go to your browser and type `http://localhost:port/university` in address bar (`port` is usually `8080`)
+- Enjoy! 
 
 
 

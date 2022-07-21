@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8">
+    <title>[[|${user_type} ${user.getFirstName()} ${user.getLastName()}|]]</title>
+  </head>
+  <body>
+    <h1 style="text-align: center">
+      [[|${user_type} ${user.getFirstName()} ${user.getLastName()}|]] Timetable</h1><br/>
+    <div style="text-align: center">
+      <form>
+        <input type="hidden" name="user_type" th:value="${user_type}" />
+        <input type="hidden" name="id" th:value="${user.getId()}" />
+        <label for="start_date">Start Date:</label>
+        <input type="date" id="start_date" name="start_date" th:value="${start_date}" />
+        <label for="end_date">End Date:</label>
+        <input type="date" id="end_date" name="end_date" th:value="${end_date}" />
+        <input type="submit" value="Show Timetable" />
+      </form>
+    </div><br/><br/>
+    <table style="margin: auto;">
+      <tr>
+        <td style="width: 100px; text-align: center; font-weight: bold">Date</td>
+        <td style="width: 100px; text-align: center; font-weight: bold">Start Time</td>
+        <td style="width: 100px; text-align: center; font-weight: bold">End Time</td>
+        <td style="width: 200px; text-align: center; font-weight: bold">Course Name</td>
+        <td style="width: 100px; text-align: center; font-weight: bold">Classroom</td>
+      </tr>
+    </table><br/>
+    <table style="margin: auto;" th:each="event:${timetable.getEvents()}">
+      <tr>
+        <td style="width: 100px; text-align: center" th:text="${event.getDayOfEvent()}"></td>
+        <td style="width: 100px; text-align: center" th:text="${event.getStartTime()}"></td>
+        <td style="width: 100px; text-align: center" th:text="${event.getEndTime()}"></td>
+        <td style="width: 200px; text-align: center" th:text="${event.getCourse().getName()}"></td>
+        <td style="width: 100px; text-align: center" th:text="${event.getClassRoom().getName()}"></td>
+      </tr>
+    </table>
+    <br/><br/>
+    <div style="text-align: center">
+      <button onclick="location.href='./'">Go to Main Page</button>
+    </div>
+  </body>
+</html>

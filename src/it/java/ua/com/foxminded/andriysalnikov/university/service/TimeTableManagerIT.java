@@ -1,4 +1,4 @@
-package ua.com.foxminded.andriysalnikov.university.controller;
+package ua.com.foxminded.andriysalnikov.university.service;
 
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.BeforeAll;
@@ -11,12 +11,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.context.web.WebAppConfiguration;
 import ua.com.foxminded.andriysalnikov.university.config.TestSpringJdbcConfig;
 import ua.com.foxminded.andriysalnikov.university.consnants.TestDBConstants;
 import ua.com.foxminded.andriysalnikov.university.mapper.EventMapper;
 import ua.com.foxminded.andriysalnikov.university.model.Student;
 import ua.com.foxminded.andriysalnikov.university.model.Teacher;
 import ua.com.foxminded.andriysalnikov.university.model.TimeTable;
+import ua.com.foxminded.andriysalnikov.university.service.TimeTableManager;
 
 import java.time.LocalDate;
 
@@ -25,6 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @ExtendWith(SpringExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @ContextConfiguration(classes = TestSpringJdbcConfig.class)
+@WebAppConfiguration
 class TimeTableManagerIT {
 
     @Autowired

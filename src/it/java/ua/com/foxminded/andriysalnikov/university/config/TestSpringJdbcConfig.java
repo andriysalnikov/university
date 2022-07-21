@@ -1,6 +1,7 @@
 package ua.com.foxminded.andriysalnikov.university.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -13,7 +14,7 @@ import javax.sql.DataSource;
 
 @Configuration
 @ComponentScan("ua.com.foxminded.andriysalnikov.university")
-@PropertySource("classpath:application.properties")
+@PropertySource("classpath:application-test.properties")
 public class TestSpringJdbcConfig {
 
     private final Environment environment;
@@ -24,14 +25,12 @@ public class TestSpringJdbcConfig {
     }
 
     private DataSource dataSource() {
-
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName(environment.getProperty("jdbc.driver"));
-        dataSource.setUrl(environment.getProperty("jdbc.url"));
-        dataSource.setUsername(environment.getProperty("jdbc.username"));
-        dataSource.setPassword(environment.getProperty("jdbc.password"));
+        dataSource.setDriverClassName(environment.getProperty("jdbc.test.driver"));
+        dataSource.setUrl(environment.getProperty("jdbc.test.url"));
+        dataSource.setUsername(environment.getProperty("jdbc.test.username"));
+        dataSource.setPassword(environment.getProperty("jdbc.test.password"));
         return dataSource;
-
     }
 
     @Bean

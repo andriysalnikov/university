@@ -7,8 +7,8 @@ import java.util.List;
 
 public interface TeacherService {
 
+    List<Teacher> getAllTeachers();
     Teacher getTeacherById(Integer id);
-
     List<Course> getTeacherCoursesByTeacherId(Integer id);
 
 }

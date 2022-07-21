@@ -26,6 +26,14 @@ public class TeacherServiceImpl implements TeacherService {
     }
 
     @Override
+    public List<Teacher> getAllTeachers() {
+        LOGGER.debug(Messages.TRY_GET_ALL_TEACHERS);
+        List<Teacher> teachers = teacherDAO.getAllTeachers();
+        LOGGER.debug(Messages.OK_GET_ALL_TEACHERS, teachers);
+        return teachers;
+    }
+
+    @Override
     public Teacher getTeacherById(Integer id) {
         LOGGER.debug(Messages.TRY_GET_ENTITY_BY_ID, Teacher.class.getSimpleName(), id);
         if (id == null) {

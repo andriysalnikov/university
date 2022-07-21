@@ -26,6 +26,14 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
+    public List<Student> getAllStudents() {
+        LOGGER.debug(Messages.TRY_GET_ALL_STUDENTS);
+        List<Student> students = studentDAO.getAllStudents();
+        LOGGER.debug(Messages.OK_GET_ALL_STUDENTS, students);
+        return students;
+    }
+
+    @Override
     public Student getStudentById(Integer id) {
         LOGGER.debug(Messages.TRY_GET_ENTITY_BY_ID, Student.class.getSimpleName(), id);
         if (id == null) {

@@ -12,6 +12,7 @@ import ua.com.foxminded.andriysalnikov.university.model.Teacher;
 import ua.com.foxminded.andriysalnikov.university.service.EventService;
 
 import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -56,9 +57,28 @@ public class EventServiceImpl implements EventService {
             throw new ServiceException(Messages.ERROR_STARTDATE_AFTER_ENDDATE);
         }
         List<Event> events = eventDAO.getAllEventsFromStartDateToEndDateByCourseId(startDate, endDate, id);
+        events.sort(new EventComparatorByDateAndTime());
         LOGGER.debug(Messages.OK_GET_ALL_EVENTS_FROM_STARTDATE_TO_ENDDATE_BY_COURSE_ID,
                 startDate, endDate, id, events);
         return events;
+    }
+
+    private static class EventComparatorByDateAndTime implements Comparator<Event> {
+        @Override
+        public int compare(Event o1, Event o2) {
+            if (o1.getDayOfEvent().isBefore(o2.getDayOfEvent())) {
+                return -1;
+            } else if (o1.getDayOfEvent().isAfter(o2.getDayOfEvent())) {
+                return 1;
+            } else {
+                if (o1.getStartTime().isBefore(o2.getStartTime())) {
+                    return -1;
+                } else if (o1.getStartTime().isAfter(o2.getStartTime())) {
+                    return 1;
+                }
+            }
+            return 0;
+        }
     }
 
 }
