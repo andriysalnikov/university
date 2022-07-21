@@ -1,9 +1,9 @@
-package ua.com.foxminded.andriysalnikov.university.controller;
+package ua.com.foxminded.andriysalnikov.university.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Service;
 import ua.com.foxminded.andriysalnikov.university.constants.Messages;
 import ua.com.foxminded.andriysalnikov.university.exceptions.TimeTableManagerException;
 import ua.com.foxminded.andriysalnikov.university.model.Course;
@@ -11,16 +11,13 @@ import ua.com.foxminded.andriysalnikov.university.model.User;
 import ua.com.foxminded.andriysalnikov.university.model.Student;
 import ua.com.foxminded.andriysalnikov.university.model.Event;
 import ua.com.foxminded.andriysalnikov.university.model.TimeTable;
-import ua.com.foxminded.andriysalnikov.university.service.EventService;
-import ua.com.foxminded.andriysalnikov.university.service.StudentService;
-import ua.com.foxminded.andriysalnikov.university.service.TeacherService;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-@Controller
+@Service
 public class TimeTableManager {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TimeTableManager.class);

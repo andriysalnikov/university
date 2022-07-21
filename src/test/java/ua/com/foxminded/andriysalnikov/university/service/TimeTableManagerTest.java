@@ -1,4 +1,4 @@
-package ua.com.foxminded.andriysalnikov.university.controller;
+package ua.com.foxminded.andriysalnikov.university.service;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,6 +17,7 @@ import ua.com.foxminded.andriysalnikov.university.model.Course;
 import ua.com.foxminded.andriysalnikov.university.service.EventService;
 import ua.com.foxminded.andriysalnikov.university.service.StudentService;
 import ua.com.foxminded.andriysalnikov.university.service.TeacherService;
+import ua.com.foxminded.andriysalnikov.university.service.TimeTableManager;
 import ua.com.foxminded.andriysalnikov.university.utils.TestDTOFactory;
 
 import java.time.LocalDate;

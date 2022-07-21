@@ -47,6 +47,18 @@ public final class Messages {
     public static final String OK_GET_ALL_EVENTS =
             "All 'Events' obtained: {}";
 
+    public static final String TRY_GET_ALL_STUDENTS =
+            "Trying to get all 'Students'";
+
+    public static final String OK_GET_ALL_STUDENTS =
+            "All 'Students' obtained: {}";
+
+    public static final String TRY_GET_ALL_TEACHERS =
+            "Trying to get all 'Teachers'";
+
+    public static final String OK_GET_ALL_TEACHERS =
+            "All 'Teachers' obtained: {}";
+
     public static final String TRY_GET_ENTITY_BY_ID =
             "Trying to get '{}' by 'id'={}";
 

@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-
+import org.springframework.test.context.web.WebAppConfiguration;
 import ua.com.foxminded.andriysalnikov.university.assembler.Assembler;
 import ua.com.foxminded.andriysalnikov.university.config.TestSpringJdbcConfig;
 import ua.com.foxminded.andriysalnikov.university.consnants.TestDBConstants;
@@ -28,6 +28,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = TestSpringJdbcConfig.class)
+@WebAppConfiguration
 class TeacherServiceImplIT {
 
     @Autowired
@@ -56,7 +57,7 @@ class TeacherServiceImplIT {
                 = Assembler.assembleTeacher(
                         jdbcTemplate.queryForRowSet(TestDBConstants.SQL_GET_TEACHER_BY_ID, 2));
         assertEquals(teacher, teacherService.getTeacherById(2));
-        assertThrows(ServiceException.class, () -> teacherService.getTeacherById(7));
+        assertThrows(ServiceException.class, () -> teacherService.getTeacherById(10));
     }
 
     @Test
