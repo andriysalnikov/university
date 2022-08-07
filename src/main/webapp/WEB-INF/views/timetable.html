@@ -36,9 +36,6 @@
         <td style="width: 100px; text-align: center" th:text="${event.getClassRoom().getName()}"></td>
       </tr>
     </table>
-    <br/><br/>
-    <div style="text-align: center">
-      <button onclick="location.href='./'">Go to Main Page</button>
-    </div>
+    <div th:insert="go_to_main_page.html"></div>
   </body>
 </html>

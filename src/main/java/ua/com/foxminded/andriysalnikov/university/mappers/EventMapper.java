@@ -1,4 +1,4 @@
-package ua.com.foxminded.andriysalnikov.university.mapper;
+package ua.com.foxminded.andriysalnikov.university.mappers;
 
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;

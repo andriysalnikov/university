@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8">
+    <title>Update Faculty</title>
+  </head>
+  <body>
+    <h1 style="text-align: center">Update Faculty</h1>
+    <form th:action="@{/faculty/update}" method="post">
+      <table style="margin: auto">
+        <tr>
+          <td style="width: 150px; text-align: right"> Faculty id:</td>
+          <td style="width: 300px; text-align: left">
+            <input style="width: 100%" type="text" name="id" th:value="${faculty.getId()}" disabled />
+            <input type="hidden" name="id" th:value="${faculty.getId()}" />
+          </td>
+        </tr>
+        <tr>
+          <td style="width: 150px; text-align: right"> Faculty Full Name:</td>
+          <td style="width: 300px; text-align: left">
+            <input style="width: 100%" type="text" name="name" th:value="${faculty.getFullName()}" />
+          </td>
+        </tr>
+      </table>
+      <div style="text-align: center">
+        <input type="submit" value="Update" />
+      </div>
+    </form>
+    <br/><br/>
+    <div style="text-align: center">
+      <button onclick="location.href='../faculties'">Back to Faculties Page</button>
+    </div>
+  </body>
+</html>

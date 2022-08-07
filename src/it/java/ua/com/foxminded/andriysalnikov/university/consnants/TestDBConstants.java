@@ -213,14 +213,16 @@ public class TestDBConstants {
               "cl.name classroom, c.name course " +
               "FROM university.events e " +
               "JOIN university.classrooms cl ON e.classroom_id = cl.id " +
-              "JOIN university.courses c ON e.course_id = c.id";
+              "JOIN university.courses c ON e.course_id = c.id " +
+              "ORDER BY e.date_of_event, e.start_time, e.id";
 
     public static final String SQL_GET_ALL_EVENTS_FROM_STARTDATE_TO_ENDDATE_BY_COURSE_ID =
               "SELECT e.id, e.date_of_event, e.start_time, e.end_time, cl.name classroom, c.name course " +
               "FROM university.events e " +
               "JOIN university.classrooms cl ON e.classroom_id = cl.id " +
               "JOIN university.courses c ON e.course_id = c.id " +
-              "WHERE e.date_of_event >= ? AND e.date_of_event <= ? AND c.id = ?";
+              "WHERE e.date_of_event >= ? AND e.date_of_event <= ? AND c.id = ? " +
+              "ORDER BY e.date_of_event, e.start_time, e.id";
 
     public static final String SQL_TIMETABLE_FROM_STARTDATE_TO_ENDDATE_BY_TEACHER_ID =
               "SELECT e.id, e.date_of_event, e.start_time, e.end_time, cl.name classroom, c.name course " +
@@ -233,7 +235,7 @@ public class TestDBConstants {
               "     JOIN university.courses c " +
               "     ON t.id = c.teacher_id " +
               "     WHERE t.id = ?) " +
-              "ORDER BY (e.date_of_event, e.start_time)";
+              "ORDER BY date_of_event, start_time, id";
 
     public static final String SQL_GET_TIMETABLE_FROM_STARTDATE_TO_ENDDATE_BY_STUDENT_ID =
              "SELECT e.id, e.date_of_event, e.start_time, e.end_time, cl.name classroom, c.name course " +
@@ -246,7 +248,7 @@ public class TestDBConstants {
              "     JOIN university.courses c " +
              "     ON sc.course_id = c.id " +
              "     WHERE sc.student_id = ?) " +
-             "ORDER BY (e.date_of_event, e.start_time)";
+             "ORDER BY date_of_event, start_time, id";
 
     public static final String SQL_CLEAN_TEACHERS =
             "TRUNCATE TABLE university.teachers RESTART IDENTITY";

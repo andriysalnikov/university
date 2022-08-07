@@ -12,11 +12,11 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
-import ua.com.foxminded.andriysalnikov.university.assembler.Assembler;
 import ua.com.foxminded.andriysalnikov.university.config.TestSpringJdbcConfig;
 import ua.com.foxminded.andriysalnikov.university.consnants.TestDBConstants;
 import ua.com.foxminded.andriysalnikov.university.exceptions.ServiceException;
-import ua.com.foxminded.andriysalnikov.university.mapper.CourseMapper;
+import ua.com.foxminded.andriysalnikov.university.extractors.StudentResultSetExtractor;
+import ua.com.foxminded.andriysalnikov.university.mappers.CourseMapper;
 import ua.com.foxminded.andriysalnikov.university.model.Course;
 import ua.com.foxminded.andriysalnikov.university.model.Student;
 import ua.com.foxminded.andriysalnikov.university.service.StudentService;
@@ -37,6 +37,8 @@ class StudentServiceImplIT {
     private StudentService studentService;
     @Autowired
     private CourseMapper courseMapper;
+    @Autowired
+    private StudentResultSetExtractor studentResultSetExtractor;
 
     @BeforeAll
     void createDataBaseForTests() {
@@ -55,17 +57,15 @@ class StudentServiceImplIT {
 
     @Test
     void getStudentById_shouldReturnStudent_whenArgumentIsIntegerId() {
-        Student student
-                = Assembler.assembleStudent(
-                        jdbcTemplate.queryForRowSet(TestDBConstants.SQL_GET_STUDENT_BY_ID, 4));
+        Student student =  jdbcTemplate.query(TestDBConstants.SQL_GET_STUDENT_BY_ID,
+                studentResultSetExtractor, 4);
         assertEquals(student, studentService.getStudentById(4));
         assertThrows(ServiceException.class, () -> studentService.getStudentById(30));
     }
 
     @Test
     void getStudentCoursesByStudentId_shouldReturnListOfStudentCourses_whenArgumentIsStudentId() {
-        List<Course> expectedCourses
-                = jdbcTemplate.query(TestDBConstants.SQL_GET_STUDENT_COURSES_BY_STUDENT_ID,
+        List<Course> expectedCourses = jdbcTemplate.query(TestDBConstants.SQL_GET_STUDENT_COURSES_BY_STUDENT_ID,
                 courseMapper, 5);
         List<Course> returnedCourses = studentService.getStudentCoursesByStudentId(5);
         assertEquals(expectedCourses, returnedCourses);

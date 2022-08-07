@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8">
+    <title>Create Classroom</title>
+  </head>
+  <body>
+    <h1 style="text-align: center">Create Classroom</h1>
+    <form th:action="@{/classroom/create}" method="post">
+      <table style="width: 300px; margin: auto">
+        <tr>
+          <td style="width: 150px; text-align: right">Classroom Name:</td>
+          <td style="width: 150px; text-align: left">
+            <input type="text" name="name"/>
+          </td>
+        </tr>
+      </table>
+      <div style="text-align: center">
+        <input type="submit" value="Create" />
+      </div>
+    </form>
+    <br/><br/>
+    <div style="text-align: center">
+      <button onclick="location.href='../classrooms'">Back to Classrooms Page</button>
+    </div>
+  </body>
+</html>

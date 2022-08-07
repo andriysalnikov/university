@@ -34,6 +34,9 @@ Add custom exceptions and logging. **Use slf4j + logback**
 Create status pages (read data from database - show it in HTML). 
 Use Spring MVC and Thymeleaf, Bootstrap. 
 
+### Task 15 - User Interface-2
+Create full CRUD pages for models that were used in the previous task.
+
 #### Tools that were used
 - Oracle JDK (11.0.15.1) 
 - Spring Framework (5.3.20)

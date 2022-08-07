@@ -56,7 +56,8 @@ public class TestDTOFactory {
         events = events
                 .stream()
                 .sorted(Comparator.comparing(Event::getDayOfEvent)
-                        .thenComparing(Event::getStartTime))
+                        .thenComparing(Event::getStartTime)
+                        .thenComparing(Event::getId))
                 .collect(Collectors.toList());
 
         timeTable.setEvents(events);

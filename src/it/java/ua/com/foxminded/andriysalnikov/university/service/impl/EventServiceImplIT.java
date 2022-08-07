@@ -14,11 +14,12 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 import ua.com.foxminded.andriysalnikov.university.config.TestSpringJdbcConfig;
 import ua.com.foxminded.andriysalnikov.university.consnants.TestDBConstants;
-import ua.com.foxminded.andriysalnikov.university.mapper.EventMapper;
+import ua.com.foxminded.andriysalnikov.university.mappers.EventMapper;
 import ua.com.foxminded.andriysalnikov.university.model.Event;
 import ua.com.foxminded.andriysalnikov.university.service.EventService;
 
 import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -53,17 +54,16 @@ class EventServiceImplIT {
 
     @Test
     void getAllEvents_shouldReturnListOfAllEvents() {
-        List<Event> expectedEvents
-                = jdbcTemplate.query(TestDBConstants.SQL_GET_ALL_EVENTS, eventMapper);
+        List<Event> expectedEvents = jdbcTemplate.query(TestDBConstants.SQL_GET_ALL_EVENTS, eventMapper);
         List<Event> returnedEvents = eventService.getAllEvents();
         assertEquals(expectedEvents, returnedEvents);
     }
 
     @Test
     void getAllEventsFromStartDateToEndDateByCourseId_shouldReturnListOfEventsConstrainedByStartDateEndDate_whenArgumentsContainCourseId() {
-        List<Event> expectedEvents
-                = jdbcTemplate.query(TestDBConstants.SQL_GET_ALL_EVENTS_FROM_STARTDATE_TO_ENDDATE_BY_COURSE_ID,
-                eventMapper, LocalDate.of(2022,5,30), LocalDate.of(2022,6,5), 5);
+        List<Event> expectedEvents =
+                jdbcTemplate.query(TestDBConstants.SQL_GET_ALL_EVENTS_FROM_STARTDATE_TO_ENDDATE_BY_COURSE_ID,
+                    eventMapper, LocalDate.of(2022,5,30), LocalDate.of(2022,6,5), 5);
         List<Event> returnedEvents = eventService
                 .getAllEventsFromStartDateToEndDateByCourseId(
                         LocalDate.of(2022,5,30), LocalDate.of(2022,6,5), 5);

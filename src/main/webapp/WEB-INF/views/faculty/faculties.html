@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8">
+    <title>Faculties</title>
+  </head>
+  <body>
+    <h1 style="text-align: center">List of All Faculties</h1>
+    <div style="text-align: center">
+      <button onclick="location.href='./faculty/create'">Create Faculty</button>
+    </div><br/>
+    <table style="margin: auto;">
+      <tr>
+        <td style="width: 50px; text-align: center; font-weight: bold">id</td>
+        <td style="width: 300px; text-align: center; font-weight: bold">Faculty Full Name</td>
+        <td style="width: 120px; text-align: center; font-weight: bold">Actions</td>
+        <td style="width: 250px; text-align: center; font-weight: bold">Pages</td>
+      </tr>
+    </table><br/>
+    <table style="margin: auto;" th:each="faculty:${faculties}">
+      <tr>
+        <td style="width: 50px; text-align: center" th:text="${faculty.getId()}"></td>
+        <td style="width: 300px; text-align: center" th:text="${faculty.getFullName()}"></td>
+        <td style="width: 50px; text-align: center" >
+          <form th:action="@{/faculty/update}" method="get">
+            <input type="hidden" name="id" th:value="${faculty.getId()}" />
+            <input type="submit" value="Update" />
+          </form>
+        </td>
+        <td style="width: 50px; text-align: center" >
+          <form th:action="@{/faculty/delete}" method="post">
+            <input type="hidden" name="id" th:value="${faculty.getId()}" />
+            <input type="submit" value="Delete" />
+          </form>
+        </td>
+        <td style="width: 80px; text-align: right">
+          <form th:action="@{/faculty_courses}" method="get">
+            <input type="hidden" name="id" th:value="${faculty.getId()}" />
+            <input type="submit" value="Courses" />
+          </form>
+        </td>
+        <td style="width: 80px; text-align: center">
+          <form th:action="@{/faculty_classrooms}" method="get">
+            <input type="hidden" name="id" th:value="${faculty.getId()}" />
+            <input type="submit" value="Classrooms" />
+          </form>
+        </td>
+        <td style="width: 80px; text-align: left">
+          <form th:action="@{/faculty_students}" method="get">
+            <input type="hidden" name="id" th:value="${faculty.getId()}" />
+            <input type="submit" value="Students" />
+          </form>
+        </td>
+      </tr>
+    </table>
+    <div th:insert="go_to_main_page.html"></div>
+  </body>
+</html>

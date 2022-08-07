@@ -7,9 +7,6 @@
   <body>
     <h1 style="text-align: center">ERROR</h1><br/>
     <h2 style="text-align: center" th:text="${error_message}"></h2>
-    <br/><br/>
-    <div style="text-align: center">
-      <button onclick="location.href='./'">Go to Main Page</button>
-    </div>
+    <div th:insert="go_to_main_page.html"></div>
   </body>
 </html>
