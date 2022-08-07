@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8">
+    <title>Faculty Classrooms</title>
+  </head>
+  <body>
+    <h1 style="text-align: center">[[|${faculty.getFullName()}|]] Classrooms</h1>
+    <br/>
+    <table style="margin: auto;">
+      <tr>
+        <td style="width: 100px; text-align: center; font-weight: bold">id</td>
+        <td style="width: 100px; text-align: center; font-weight: bold">Classroom Name</td>
+        <td style="width: 150px; text-align: center; font-weight: bold">Action</td>
+      </tr>
+    </table><br/>
+    <table style="margin: auto;" th:each="classroom:${classrooms}">
+      <tr>
+        <td style="width: 100px; text-align: center" th:text="${classroom.getId()}"></td>
+        <td style="width: 100px; text-align: center" th:text="${classroom.getName()}"></td>
+        <td style="width: 150px; text-align: center" >
+          <form th:action="@{/faculty/remove_classroom}" method="post">
+            <input type="hidden" name="faculty_id" th:value="${faculty.getId()}" />
+            <input type="hidden" name="classroom_id" th:value="${classroom.getId()}" />
+            <input type="submit" value="Remove Classroom" />
+          </form>
+        </td>
+      </tr>
+    </table><br/>
+    <h2 style="text-align: center">Classrooms Without Faculty</h2>
+    <table style="margin: auto;">
+      <tr>
+        <td style="width: 100px; text-align: center; font-weight: bold">id</td>
+        <td style="width: 100px; text-align: center; font-weight: bold">Classroom Name</td>
+        <td style="width: 150px; text-align: center; font-weight: bold">Action</td>
+      </tr>
+    </table><br/>
+    <table style="margin: auto;" th:each="otherclassroom:${otherclassrooms}">
+      <tr>
+        <td style="width: 100px; text-align: center" th:text="${otherclassroom.getId()}"></td>
+        <td style="width: 100px; text-align: center" th:text="${otherclassroom.getName()}"></td>
+        <td style="width: 150px; text-align: center" >
+          <form th:action="@{/faculty/add_classroom}" method="post">
+            <input type="hidden" name="faculty_id" th:value="${faculty.getId()}" />
+            <input type="hidden" name="classroom_id" th:value="${otherclassroom.getId()}" />
+            <input type="submit" value="Add Classroom" />
+          </form>
+        </td>
+      </tr>
+    </table>
+    <br/><br/><br/>
+    <div style="text-align: center">
+      <button onclick="location.href='./faculties'">Back to Faculties Page</button>
+    </div>
+  </body>
+</html>

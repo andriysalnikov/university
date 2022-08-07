@@ -14,11 +14,10 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 import ua.com.foxminded.andriysalnikov.university.config.TestSpringJdbcConfig;
 import ua.com.foxminded.andriysalnikov.university.consnants.TestDBConstants;
-import ua.com.foxminded.andriysalnikov.university.mapper.EventMapper;
+import ua.com.foxminded.andriysalnikov.university.mappers.EventMapper;
 import ua.com.foxminded.andriysalnikov.university.model.Student;
 import ua.com.foxminded.andriysalnikov.university.model.Teacher;
 import ua.com.foxminded.andriysalnikov.university.model.TimeTable;
-import ua.com.foxminded.andriysalnikov.university.service.TimeTableManager;
 
 import java.time.LocalDate;
 

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8">
+    <title>Classrooms</title>
+  </head>
+  <body>
+    <h1 style="text-align: center">List of All Classrooms</h1>
+    <div style="text-align: center">
+      <button onclick="location.href='./classroom/create'">Create Classroom</button>
+    </div><br/>
+    <table style="margin: auto;">
+      <tr>
+        <td style="width: 50px; text-align: center; font-weight: bold">id</td>
+        <td style="width: 150px; text-align: center; font-weight: bold">Classroom name</td>
+        <td style="width: 120px; text-align: center; font-weight: bold">Actions</td>
+      </tr>
+    </table><br/>
+    <table style="margin: auto;" th:each="classroom:${classrooms}">
+      <tr>
+        <td style="width: 50px; text-align: center" th:text="${classroom.getId()}"></td>
+        <td style="width: 150px; text-align: center" th:text="${classroom.getName()}"></td>
+        <td style="width: 50px; text-align: center" >
+          <form th:action="@{/classroom/update}" method="get">
+            <input type="hidden" name="id" th:value="${classroom.getId()}" />
+            <input type="submit" value="Update" />
+          </form>
+        </td>
+        <td style="width: 50px; text-align: center" >
+          <form th:action="@{/classroom/delete}" method="post">
+            <input type="hidden" name="id" th:value="${classroom.getId()}" />
+            <input type="submit" value="Delete" />
+          </form>
+        </td>
+      </tr>
+    </table>
+    <div th:insert="go_to_main_page.html"></div>
+  </body>
+</html>

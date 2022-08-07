@@ -21,7 +21,7 @@ CREATE TABLE university.teachers (
 
 CREATE TABLE university.students (
     id INT GENERATED ALWAYS AS IDENTITY,
-    faculty_id INT NOT NULL REFERENCES university.faculties(id),
+    faculty_id INT REFERENCES university.faculties(id) ON DELETE SET NULL,
     first_name VARCHAR(20) NOT NULL,
     last_name VARCHAR(20) NOT NULL,
     PRIMARY KEY(id),
@@ -30,8 +30,8 @@ CREATE TABLE university.students (
 
 CREATE TABLE university.courses (
     id INT GENERATED ALWAYS AS IDENTITY,
-    faculty_id INT NOT NULL REFERENCES university.faculties(id),
-    teacher_id INT REFERENCES university.teachers(id),
+    faculty_id INT REFERENCES university.faculties(id) ON DELETE SET NULL,
+    teacher_id INT REFERENCES university.teachers(id) ON DELETE SET NULL,
     name VARCHAR(20) NOT NULL,
     description VARCHAR(100),
     PRIMARY KEY(id),
@@ -40,7 +40,7 @@ CREATE TABLE university.courses (
 
 CREATE TABLE university.classrooms (
     id INT GENERATED ALWAYS AS IDENTITY,
-    faculty_id INT REFERENCES university.faculties(id),
+    faculty_id INT REFERENCES university.faculties(id) ON DELETE SET NULL,
     name VARCHAR(100) NOT NULL,
     PRIMARY KEY(id),
     UNIQUE(name)
@@ -51,8 +51,8 @@ CREATE TABLE university.events (
     date_of_event DATE NOT NULL,
     start_time TIME NOT NULL,
     end_time TIME NOT NULL,
-    classroom_id INT REFERENCES university.classrooms(id),
-    course_id INT REFERENCES university.courses(id),
+    classroom_id INT REFERENCES university.classrooms(id) ON DELETE SET NULL,
+    course_id INT REFERENCES university.courses(id) ON DELETE CASCADE,
     PRIMARY KEY(id),
     UNIQUE(date_of_event, start_time, end_time, course_id)
 );

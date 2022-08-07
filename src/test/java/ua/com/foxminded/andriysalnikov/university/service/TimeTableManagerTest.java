@@ -21,7 +21,9 @@ import ua.com.foxminded.andriysalnikov.university.service.TimeTableManager;
 import ua.com.foxminded.andriysalnikov.university.utils.TestDTOFactory;
 
 import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -60,6 +62,11 @@ class TimeTableManagerTest {
                 TestDTOFactory.createTimeTableFromStartDateToEndDateByUser();
         TimeTable returnedTimeTable =
                 timeTableManager.getTimeTableFromStartDateToEndDateByUser(LocalDate.MIN, LocalDate.MAX, user);
+        returnedTimeTable.setEvents(returnedTimeTable.getEvents().stream()
+                .sorted(Comparator.comparing(Event::getDayOfEvent)
+                        .thenComparing(Event::getStartTime)
+                        .thenComparing(Event::getId))
+                .collect(Collectors.toList()));
         assertEquals(expectedTimeTable, returnedTimeTable);
         verify(eventService, times(3)).getAllEventsFromStartDateToEndDateByCourseId(
                 any(LocalDate.class), any(LocalDate.class), anyInt());

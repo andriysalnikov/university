@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8">
+    <title>Create Course</title>
+  </head>
+  <body>
+    <h1 style="text-align: center">Create Course</h1>
+    <form th:action="@{/course/create}" method="post">
+      <table style="margin: auto">
+        <tr>
+          <td style="width: 200px; text-align: right">Course Name:</td>
+          <td style="width: 500px; text-align: left;">
+            <input style="width: 100%" type="text" name="name" />
+          </td>
+        </tr>
+        <tr>
+          <td style="width: 200px; text-align: right">Course Description:</td>
+          <td style="width: 500px; text-align: left">
+            <input style="width: 100%" type="text" name="description" />
+          </td>
+        </tr>
+      </table>
+      <div style="text-align: center">
+        <input type="submit" value="Create" />
+      </div>
+    </form>
+    <br/><br/>
+    <div style="text-align: center">
+      <button onclick="location.href='../courses'">Back to Courses Page</button>
+    </div>
+  </body>
+</html>

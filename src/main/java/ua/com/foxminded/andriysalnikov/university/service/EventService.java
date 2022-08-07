@@ -8,7 +8,10 @@ import java.util.List;
 public interface EventService {
 
     List<Event> getAllEvents();
-
+    Event getEventById(Integer id);
+    Event createEvent(Event event);
+    Event deleteEventById(Integer id);
+    Event updateEvent(Event event);
     List<Event> getAllEventsFromStartDateToEndDateByCourseId(
             LocalDate startDate, LocalDate endDate, Integer id);
 

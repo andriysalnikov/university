@@ -16,6 +16,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class TimeTableManager {
@@ -27,8 +28,8 @@ public class TimeTableManager {
     private final TeacherService teacherService;
 
     @Autowired
-    public TimeTableManager(
-            EventService eventService, StudentService studentService, TeacherService teacherService) {
+    public TimeTableManager(EventService eventService, StudentService studentService,
+                            TeacherService teacherService) {
         this.eventService = eventService;
         this.studentService = studentService;
         this.teacherService = teacherService;
@@ -36,7 +37,6 @@ public class TimeTableManager {
 
     public TimeTable getTimeTableFromStartDateToEndDateByUser(
             LocalDate startDate, LocalDate endDate, User user) {
-
         LOGGER.debug(Messages.TRY_GET_TIMETABLE_FROM_STARTDATE_TO_ENDDATE_BY_USER,
                 startDate, endDate, user);
         if (user == null || user.getId() == null) {
@@ -51,7 +51,6 @@ public class TimeTableManager {
             LOGGER.error(Messages.ERROR_STARTDATE_AFTER_ENDDATE);
             throw new TimeTableManagerException(Messages.ERROR_STARTDATE_AFTER_ENDDATE);
         }
-
         TimeTable timeTable = new TimeTable();
         List<Event> events = new ArrayList<>();
         List<Course> userCourses;
@@ -64,30 +63,12 @@ public class TimeTableManager {
             events.addAll(eventService.getAllEventsFromStartDateToEndDateByCourseId(
                     startDate, endDate, course.getId()));
         }
-        events.sort(new EventComparatorByDateAndTime());
+        events = events.stream().sorted(Comparator.comparing(Event::getDayOfEvent)
+                .thenComparing(Event::getStartTime).thenComparing(Event::getId)).collect(Collectors.toList());
         timeTable.setEvents(events);
         LOGGER.debug(Messages.OK_GET_TIMETABLE_FROM_STARTDATE_TO_ENDDATE_BY_USER,
                 startDate, endDate, user, timeTable);
         return timeTable;
-
-    }
-
-    private static class EventComparatorByDateAndTime implements Comparator<Event> {
-        @Override
-        public int compare(Event o1, Event o2) {
-            if (o1.getDayOfEvent().isBefore(o2.getDayOfEvent())) {
-                return -1;
-            } else if (o1.getDayOfEvent().isAfter(o2.getDayOfEvent())) {
-                return 1;
-            } else {
-                if (o1.getStartTime().isBefore(o2.getStartTime())) {
-                    return -1;
-                } else if (o1.getStartTime().isAfter(o2.getStartTime())) {
-                    return 1;
-                }
-            }
-            return 0;
-        }
     }
 
 }
