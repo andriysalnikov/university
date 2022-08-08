@@ -1,33 +1,38 @@
 package ua.com.foxminded.andriysalnikov.university.config;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.*;
 import org.springframework.core.env.Environment;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ViewResolverRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring5.view.ThymeleafViewResolver;
+import ua.com.foxminded.andriysalnikov.university.constants.Messages;
+import ua.com.foxminded.andriysalnikov.university.service.impl.ClassRoomServiceImpl;
 
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.sql.DataSource;
 
 @Configuration
 @ComponentScan("ua.com.foxminded.andriysalnikov.university")
-@PropertySource("classpath:application.properties")
 @EnableWebMvc
 public class SpringConfig implements WebMvcConfigurer {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(SpringConfig.class);
+
     private final ApplicationContext applicationContext;
-    private final Environment environment;
 
     @Autowired
-    public SpringConfig(ApplicationContext applicationContext, Environment environment) {
+    public SpringConfig(ApplicationContext applicationContext) {
         this.applicationContext = applicationContext;
-        this.environment = environment;
     }
 
     @Bean
@@ -55,11 +60,16 @@ public class SpringConfig implements WebMvcConfigurer {
     }
 
     private DataSource dataSource() {
-        DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName(environment.getProperty("jdbc.driver"));
-        dataSource.setUrl(environment.getProperty("jdbc.url"));
-        dataSource.setUsername(environment.getProperty("jdbc.username"));
-        dataSource.setPassword(environment.getProperty("jdbc.password"));
+        LOGGER.debug(Messages.TRY_OBTAIN_DATASOURCE);
+        DataSource dataSource = null;
+        try {
+            Context initContext = new InitialContext();
+            Context envContext  = (Context) initContext.lookup("java:/comp/env");
+            dataSource = (DataSource) envContext.lookup("jdbc/postgres");
+            LOGGER.debug(Messages.OK_OBTAIN_DATASOURCE);
+        } catch (NamingException namingException) {
+            LOGGER.error(Messages.ERROR_OBTAIN_DATASOURCE, namingException);
+        }
         return dataSource;
     }
 
