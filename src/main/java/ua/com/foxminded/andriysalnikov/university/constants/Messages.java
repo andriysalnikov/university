@@ -17,6 +17,18 @@ public final class Messages {
             "'StartDate' cannot be after 'EndDate'";
 
 
+    // Messages for 'DataSource'
+
+    public static final String TRY_OBTAIN_DATASOURCE =
+            "Trying to obtain a DataSource";
+
+    public static final String OK_OBTAIN_DATASOURCE =
+            "DataSource obtained";
+
+    public static final String ERROR_OBTAIN_DATASOURCE =
+            "Cannot obtain a DataSource";
+
+
     // Messages for 'Timetable'
 
     public static final String TRY_GET_TIMETABLE_FROM_STARTDATE_TO_ENDDATE_BY_USER =
