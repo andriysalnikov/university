@@ -49,6 +49,7 @@ the Service layer should use and depend on the JPA interfaces, not the Hibernate
 - Oracle JDK (11.0.15.1) 
 - Spring Framework (5.3.20)
 - Servlet API (4.0.1)
+- Hibernate (6.1.2.Final)
 - Thymeleaf (3.1.0.M2)
 - Tomcat (9.0.63)
 - PostgreSQL (14.2) 

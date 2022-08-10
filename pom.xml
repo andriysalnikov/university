@@ -21,6 +21,8 @@
     <thymeleaf.version>3.1.0.M2</thymeleaf.version>
     <servlet.version>4.0.1</servlet.version>
     <h2.version>2.1.212</h2.version>
+    <hibernate.version>6.1.2.Final</hibernate.version>
+    <hibernateannot.version>6.0.2.Final</hibernateannot.version>
   </properties>
 
   <dependencies>
@@ -94,6 +96,16 @@
       <artifactId>javax.servlet-api</artifactId>
       <version>${servlet.version}</version>
       <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-core</artifactId>
+      <version>${hibernate.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.hibernate.common</groupId>
+      <artifactId>hibernate-commons-annotations</artifactId>
+      <version>${hibernateannot.version}</version>
     </dependency>
   </dependencies>
 
