@@ -14,13 +14,13 @@
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <maven.compiler.release>11</maven.compiler.release>
     <logback.version>1.2.11</logback.version>
-    <junit5.version>5.8.2</junit5.version>
+    <junit5.version>5.9.0</junit5.version>
     <mockito.version>4.4.0</mockito.version>
-    <postgresql.version>42.3.4</postgresql.version>
-    <spring.version>5.3.20</spring.version>
+    <postgresql.version>42.3.6</postgresql.version>
+    <spring.version>5.3.22</spring.version>
     <thymeleaf.version>3.1.0.M2</thymeleaf.version>
     <servlet.version>4.0.1</servlet.version>
-    <h2.version>2.1.212</h2.version>
+    <h2.version>2.1.214</h2.version>
     <hibernate.version>6.1.2.Final</hibernate.version>
     <hibernateannot.version>6.0.2.Final</hibernateannot.version>
   </properties>
