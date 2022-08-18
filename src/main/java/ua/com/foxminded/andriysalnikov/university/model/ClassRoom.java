@@ -1,16 +1,27 @@
 package ua.com.foxminded.andriysalnikov.university.model;
 
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import javax.persistence.Id;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Column;
+import javax.persistence.GenerationType;
+
 import java.util.Objects;
 
+@Entity
+@Table(name = "classrooms", schema = "university")
 public class ClassRoom {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    @Column(name = "name")
     private String name;
 
     public ClassRoom() { }
 
-    public ClassRoom(Integer id, String name) {
-        this.id = id;
+    public ClassRoom(String name) {
         this.name = name;
     }
 

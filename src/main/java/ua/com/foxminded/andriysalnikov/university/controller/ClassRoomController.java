@@ -47,7 +47,7 @@ public class ClassRoomController {
     public String createClassRoom(@RequestParam("name") String name, Model model) {
         ClassRoom createdClassRoom;
         try {
-            createdClassRoom = classRoomService.createClassRoom(new ClassRoom(0, name));
+            createdClassRoom = classRoomService.createClassRoom(new ClassRoom(name));
         } catch (ServiceException exception) {
             return ExceptionUtil.handleException(exception, LOGGER, model);
         }
@@ -87,7 +87,9 @@ public class ClassRoomController {
                                   Model model) {
         ClassRoom updatedClassRoom;
         try {
-            updatedClassRoom = classRoomService.updateClassRoom(new ClassRoom(classRoomId, name));
+            ClassRoom classRoom = new ClassRoom(name);
+            classRoom.setId(classRoomId);
+            updatedClassRoom = classRoomService.updateClassRoom(classRoom);
         } catch (ServiceException exception) {
             return ExceptionUtil.handleException(exception, LOGGER, model);
         }

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8">
+    <title>Students</title>
+  </head>
+  <body>
+    <h1 style="text-align: center">List of All Students</h1><br/>
+    <div style="text-align: center">
+      <form th:action="@{/student/create}" method="get">
+        <input type="submit" value="Create Student" />
+      </form>
+    </div><br/>
+    <table style="margin: auto">
+      <tr>
+        <td style="width: 50px; text-align: center; font-weight: bold">id</td>
+        <td style="width: 200px; text-align: center; font-weight: bold">First Name</td>
+        <td style="width: 200px; text-align: center; font-weight: bold">Last Name</td>
+        <td style="width: 270px; text-align: center; font-weight: bold">Actions</td>
+      </tr>
+    </table><br/>
+    <table style="margin: auto;" th:each="student:${students}">
+      <tr>
+        <td style="width: 50px; text-align: center" th:text="${student.getId()}"></td>
+        <td style="width: 200px; text-align: center" th:text="${student.getFirstName()}"></td>
+        <td style="width: 200px; text-align: center" th:text="${student.getLastName()}"></td>
+        <td style="width: 50px; text-align: center" >
+          <form th:action="@{/student/update}" method="get">
+            <input type="hidden" name="id" th:value="${student.getId()}" />
+            <input type="submit" value="Update" />
+          </form>
+        </td>
+        <td style="width: 50px; text-align: center" >
+          <form th:action="@{/student/delete}" method="post">
+            <input type="hidden" name="id" th:value="${student.getId()}" />
+            <input type="submit" value="Delete" />
+          </form>
+        </td>
+        <td style="width: 150px; text-align: center">
+          <form th:action="@{/student}" method="get">
+            <input type="hidden" name="id" th:value="${student.getId()}" />
+            <div style="text-align: center">
+              <input type="submit" value="Go to Student Page" />
+            </div>
+          </form>
+        </td>
+      </tr>
+    </table>
+    <div th:insert="go_to_main_page.html"></div>
+  </body>
+</html>

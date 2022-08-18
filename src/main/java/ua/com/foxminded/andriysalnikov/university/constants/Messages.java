@@ -38,7 +38,7 @@ public final class Messages {
             "'Timetable' from '{}' to '{}' for {} obtained: {}";
 
 
-    // Messages for 'Users'
+    // Messages for 'Teachers' and 'Students'
 
     public static final String TRY_GET_ALL_STUDENTS =
             "Trying to get all 'Students'";
@@ -52,11 +52,17 @@ public final class Messages {
     public static final String OK_GET_ALL_TEACHERS =
             "All 'Teachers' obtained: {}";
 
-    public static final String TRY_GET_USER_BY_ID =
-            "Trying to get '{}' by 'id'={}";
+    public static final String TRY_GET_TEACHER_BY_ID =
+            "Trying to get 'Teacher' by 'id'={}";
 
-    public static final String OK_GET_USER_BY_ID =
-            "'{}' obtained by 'id'={} : {}";
+    public static final String OK_GET_TEACHER_BY_ID =
+            "'Teacher' obtained by 'id'={} : {}";
+
+    public static final String TRY_GET_STUDENT_BY_ID =
+            "Trying to get 'Student' by 'id'={}";
+
+    public static final String OK_GET_STUDENT_BY_ID =
+            "'Student' obtained by 'id'={} : {}";
 
     public static final String ERROR_GET_STUDENT_BY_ID =
             "Cannot get 'Student' from storage";
@@ -64,11 +70,17 @@ public final class Messages {
     public static final String ERROR_GET_TEACHER_BY_ID =
             "Cannot get 'Teacher' from storage";
 
-    public static final String TRY_CREATE_USER =
-            "Trying to create a '{}'";
+    public static final String TRY_CREATE_TEACHER =
+            "Trying to create a 'Teacher'";
 
-    public static final String OK_CREATE_USER =
-            "'{}' created : {}";
+    public static final String OK_CREATE_TEACHER =
+            "'Teacher' created : {}";
+
+    public static final String TRY_CREATE_STUDENT =
+            "Trying to create a 'Student'";
+
+    public static final String OK_CREATE_STUDENT =
+            "'Student' created : {}";
 
     public static final String ERROR_CREATE_TEACHER =
             "Cannot create 'Teacher' in storage";
@@ -76,14 +88,23 @@ public final class Messages {
     public static final String ERROR_CREATE_STUDENT =
             "Cannot create 'Student' in storage";
 
-    public static final String ERROR_ARGUMENT_USER =
-            "'User' or 'User.firstName' or 'User.lastName' cannot be null";
+    public static final String ERROR_ARGUMENT_TEACHER =
+            "'Teacher' or 'Teacher.firstName' or 'Teacher.lastName' cannot be null";
 
-    public static final String TRY_DELETE_USER_BY_ID =
-            "Trying to delete '{}' by 'id'={}";
+    public static final String ERROR_ARGUMENT_STUDENT =
+            "'Student' or 'Student.firstName' or 'Student.lastName' cannot be null";
 
-    public static final String OK_DELETE_USER_BY_ID =
-            "'{}' delete by 'id'={} : {}";
+    public static final String TRY_DELETE_TEACHER_BY_ID =
+            "Trying to delete 'Teacher' by 'id'={}";
+
+    public static final String OK_DELETE_TEACHER_BY_ID =
+            "'Teacher' delete by 'id'={} : {}";
+
+    public static final String TRY_DELETE_STUDENT_BY_ID =
+            "Trying to delete 'Student' by 'id'={}";
+
+    public static final String OK_DELETE_STUDENT_BY_ID =
+            "'Student' delete by 'id'={} : {}";
 
     public static final String ERROR_DELETE_TEACHER_BY_ID =
             "Cannot delete 'Teacher' from storage";
@@ -91,11 +112,17 @@ public final class Messages {
     public static final String ERROR_DELETE_STUDENT_BY_ID =
             "Cannot delete 'Student' from storage";
 
-    public static final String TRY_UPDATE_USER =
-            "Trying to update a '{}' : {}";
+    public static final String TRY_UPDATE_TEACHER =
+            "Trying to update a 'Teacher' : {}";
 
-    public static final String OK_UPDATE_USER =
-            "Trying to update a '{}' : {}";
+    public static final String OK_UPDATE_TEACHER =
+            "Trying to update a 'Teacher' : {}";
+
+    public static final String TRY_UPDATE_STUDENT =
+            "Trying to update a 'Student' : {}";
+
+    public static final String OK_UPDATE_STUDENT =
+            "Trying to update a 'Student' : {}";
 
     public static final String ERROR_UPDATE_TEACHER =
             "Cannot update 'Teacher' in storage";
@@ -103,11 +130,11 @@ public final class Messages {
     public static final String ERROR_UPDATE_STUDENT =
             "Cannot update 'Student' in storage";
 
-    public static final String TRY_GET_USER_COURSES_BY_USER_ID =
-            "Trying to get '{}' 'Courses' by 'id'={}";
+    public static final String TRY_GET_USER_COURSES_BY_TEACHER_ID =
+            "Trying to get 'Teacher' 'Courses' by 'id'={}";
 
-    public static final String OK_GET_USER_COURSES_BY_USER_ID =
-            "All 'Courses' for '{}' with 'id'={} obtained: {}";
+    public static final String OK_GET_USER_COURSES_BY_TEACHER_ID =
+            "All 'Courses' for 'Teacher' with 'id'={} obtained: {}";
 
     public static final String TRY_SET_FACULTY_TO_STUDENT =
             "Trying to set 'Faculty'('id'={}) to 'Student'('id'={})";

@@ -1,26 +1,27 @@
 package ua.com.foxminded.andriysalnikov.university.model;
 
-import java.util.ArrayList;
-import java.util.List;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import javax.persistence.Id;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Column;
+
 import java.util.Objects;
 
+@Entity
+@Table(name = "faculties", schema = "university")
 public class Faculty {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    @Column(name = "full_name")
     private String fullName;
-    private List<Course> courses;
-    private List<Student> students;
-    private List<ClassRoom> classRooms;
 
-    public Faculty() {
-        this.courses = new ArrayList<>();
-        this.students = new ArrayList<>();
-        this.classRooms = new ArrayList<>();
-    }
+    public Faculty() { }
 
-    public Faculty(Integer id, String fullName) {
-        this();
-        this.id = id;
+    public Faculty(String fullName) {
         this.fullName = fullName;
     }
 
@@ -38,30 +39,6 @@ public class Faculty {
 
     public void setFullName(String fullName) {
         this.fullName = fullName;
-    }
-
-    public List<Course> getCourses() {
-        return courses;
-    }
-
-    public void setCourses(List<Course> courses) {
-        this.courses = new ArrayList<>(courses);
-    }
-
-    public List<Student> getStudents() {
-        return students;
-    }
-
-    public void setStudents(List<Student> students) {
-        this.students = new ArrayList<>(students);
-    }
-
-    public List<ClassRoom> getClassRooms() {
-        return classRooms;
-    }
-
-    public void setClassRooms(List<ClassRoom> classRooms) {
-        this.classRooms = new ArrayList<>(classRooms);
     }
 
     @Override

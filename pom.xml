@@ -21,8 +21,7 @@
     <thymeleaf.version>3.1.0.M2</thymeleaf.version>
     <servlet.version>4.0.1</servlet.version>
     <h2.version>2.1.214</h2.version>
-    <hibernate.version>6.1.2.Final</hibernate.version>
-    <hibernateannot.version>6.0.2.Final</hibernateannot.version>
+    <hibernate.version>5.6.10.Final</hibernate.version>
   </properties>
 
   <dependencies>
@@ -56,21 +55,6 @@
     </dependency>
     <dependency>
       <groupId>org.springframework</groupId>
-      <artifactId>spring-core</artifactId>
-      <version>${spring.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-context</artifactId>
-      <version>${spring.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-jdbc</artifactId>
-      <version>${spring.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework</groupId>
       <artifactId>spring-webmvc</artifactId>
       <version>${spring.version}</version>
     </dependency>
@@ -79,6 +63,11 @@
       <artifactId>spring-test</artifactId>
       <version>${spring.version}</version>
       <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-orm</artifactId>
+      <version>${spring.version}</version>
     </dependency>
     <dependency>
       <groupId>com.h2database</groupId>
@@ -101,11 +90,6 @@
       <groupId>org.hibernate</groupId>
       <artifactId>hibernate-core</artifactId>
       <version>${hibernate.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.hibernate.common</groupId>
-      <artifactId>hibernate-commons-annotations</artifactId>
-      <version>${hibernateannot.version}</version>
     </dependency>
   </dependencies>
 

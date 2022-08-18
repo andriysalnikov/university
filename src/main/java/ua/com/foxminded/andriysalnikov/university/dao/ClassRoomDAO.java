@@ -8,12 +8,12 @@ import java.util.Optional;
 public interface ClassRoomDAO {
 
     List<ClassRoom> getAllClassRooms();
-    List<ClassRoom> getAllClassRoomsWithoutFaculty();
+//    List<ClassRoom> getAllClassRoomsWithoutFaculty();
     Optional<ClassRoom> getClassRoomById(Integer id);
     Optional<ClassRoom> createClassRoom(ClassRoom classRoom);
     Optional<ClassRoom> deleteClassRoomById(Integer id);
     Optional<ClassRoom> updateClassRoom(ClassRoom classRoom);
-    Optional<ClassRoom> setFacultyToClassRoom(Integer facultyId, Integer classRoomId);
-    Optional<ClassRoom> removeFacultyFromClassRoom(Integer classRoomId);
+//    Optional<ClassRoom> setFacultyToClassRoom(Integer facultyId, Integer classRoomId);
+//    Optional<ClassRoom> removeFacultyFromClassRoom(Integer classRoomId);
 
 }

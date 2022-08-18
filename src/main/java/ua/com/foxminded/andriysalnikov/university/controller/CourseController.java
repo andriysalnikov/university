@@ -49,7 +49,7 @@ public class CourseController {
                                Model model) {
         Course createdCourse;
         try {
-            createdCourse = courseService.createCourse(new Course(0, name, description));
+            createdCourse = courseService.createCourse(new Course(name, description));
         } catch (ServiceException exception) {
             return ExceptionUtil.handleException(exception, LOGGER, model);
         }
@@ -90,7 +90,9 @@ public class CourseController {
                                Model model) {
         Course updatedCourse;
         try {
-            updatedCourse = courseService.updateCourse(new Course(courseId, name, description));
+            Course course = new Course(name, description);
+            course.setId(courseId);
+            updatedCourse = courseService.updateCourse(course);
         } catch (ServiceException exception) {
             return ExceptionUtil.handleException(exception, LOGGER, model);
         }
