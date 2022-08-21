@@ -35,13 +35,13 @@ public class ClassRoomServiceImpl implements ClassRoomService {
         return classRooms;
     }
 
-//    @Override
-//    public List<ClassRoom> getAllClassRoomsWithoutFaculty() {
-//        LOGGER.debug(Messages.TRY_GET_ALL_CLASSROOMS_WITHOUT_FACULTY);
-//        List<ClassRoom> classRooms = classRoomDAO.getAllClassRoomsWithoutFaculty();
-//        LOGGER.debug(Messages.OK_GET_ALL_CLASSROOMS_WITHOUT_FACULTY, classRooms);
-//        return classRooms;
-//    }
+    @Override
+    public List<ClassRoom> getAllClassRoomsWithoutFaculty() {
+        LOGGER.debug(Messages.TRY_GET_ALL_CLASSROOMS_WITHOUT_FACULTY);
+        List<ClassRoom> classRooms = classRoomDAO.getAllClassRoomsWithoutFaculty();
+        LOGGER.debug(Messages.OK_GET_ALL_CLASSROOMS_WITHOUT_FACULTY, classRooms);
+        return classRooms;
+    }
 
     @Override
     public ClassRoom getClassRoomById(Integer id) {
@@ -90,30 +90,5 @@ public class ClassRoomServiceImpl implements ClassRoomService {
         LOGGER.debug(Messages.OK_UPDATE_CLASSROOM, updatedClassRoom);
         return updatedClassRoom;
     }
-
-//    @Override
-//    public ClassRoom setFacultyToClassRoom(Integer facultyId, Integer classRoomId) {
-//        LOGGER.debug(Messages.TRY_SET_FACULTY_TO_CLASSROOM, facultyId, classRoomId);
-//        Validation.validateId(facultyId);
-//        Validation.validateId(classRoomId);
-//        ClassRoom updatedClassroom = classRoomDAO.setFacultyToClassRoom(facultyId, classRoomId).orElseThrow(() -> {
-//            LOGGER.error(Messages.ERROR_SET_FACULTY_TO_CLASSROOM);
-//            throw new ServiceException(Messages.ERROR_SET_FACULTY_TO_CLASSROOM);
-//        });
-//        LOGGER.debug(Messages.OK_SET_FACULTY_TO_CLASSROOM, facultyId, classRoomId, updatedClassroom);
-//        return updatedClassroom;
-//    }
-//
-//    @Override
-//    public ClassRoom removeFacultyFromClassRoom(Integer classRoomId) {
-//        LOGGER.debug(Messages.TRY_REMOVE_FACULTY_FROM_CLASSROOM, classRoomId);
-//        Validation.validateId(classRoomId);
-//        ClassRoom updatedClassroom = classRoomDAO.removeFacultyFromClassRoom(classRoomId).orElseThrow(() -> {
-//            LOGGER.error(Messages.ERROR_REMOVE_FACULTY_FROM_CLASSROOM);
-//            throw new ServiceException(Messages.ERROR_REMOVE_FACULTY_FROM_CLASSROOM);
-//        });
-//        LOGGER.debug(Messages.OK_REMOVE_FACULTY_FROM_CLASSROOM, classRoomId, updatedClassroom);
-//        return updatedClassroom;
-//    }
 
 }

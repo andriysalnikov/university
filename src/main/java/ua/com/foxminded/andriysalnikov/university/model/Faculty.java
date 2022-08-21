@@ -1,12 +1,9 @@
 package ua.com.foxminded.andriysalnikov.university.model;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import javax.persistence.Id;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Column;
+import javax.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -16,13 +13,52 @@ public class Faculty {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
     @Column(name = "full_name")
     private String fullName;
 
-    public Faculty() { }
+    @OneToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE,
+            CascadeType.DETACH, CascadeType.REFRESH },
+            fetch = FetchType.LAZY)
+    @JoinColumn(name = "faculty_id")
+    @OrderBy(value = "id")
+    private final List<ClassRoom> classRooms;
+
+    @OneToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE,
+            CascadeType.DETACH, CascadeType.REFRESH },
+            fetch = FetchType.LAZY)
+    @JoinColumn(name = "faculty_id")
+    @OrderBy(value = "id")
+    private final List<Course> courses;
+
+    @OneToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE,
+            CascadeType.DETACH, CascadeType.REFRESH },
+            fetch = FetchType.LAZY)
+    @JoinColumn(name = "faculty_id")
+    @OrderBy(value = "id")
+    private final List<Student> students;
+
+    public Faculty() {
+        this.classRooms = new ArrayList<>();
+        this.courses = new ArrayList<>();
+        this.students = new ArrayList<>();
+    }
 
     public Faculty(String fullName) {
+        this();
         this.fullName = fullName;
+    }
+
+    public void addClassRoomToFaculty(ClassRoom classRoom) {
+        classRooms.add(classRoom);
+    }
+
+    public void addCourseToFaculty(Course course) {
+        courses.add(course);
+    }
+
+    public void addStudentToFaculty(Student student) {
+        students.add(student);
     }
 
     public Integer getId() {
@@ -39,6 +75,18 @@ public class Faculty {
 
     public void setFullName(String fullName) {
         this.fullName = fullName;
+    }
+
+    public List<ClassRoom> getClassRooms() {
+        return classRooms;
+    }
+
+    public List<Course> getCourses() {
+        return courses;
+    }
+
+    public List<Student> getStudents() {
+        return students;
     }
 
     @Override

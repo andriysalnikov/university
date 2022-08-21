@@ -5,10 +5,11 @@ import org.slf4j.LoggerFactory;
 import ua.com.foxminded.andriysalnikov.university.constants.Messages;
 import ua.com.foxminded.andriysalnikov.university.exceptions.ServiceException;
 import ua.com.foxminded.andriysalnikov.university.model.Faculty;
-import ua.com.foxminded.andriysalnikov.university.model.ClassRoom;
 import ua.com.foxminded.andriysalnikov.university.model.Course;
-import ua.com.foxminded.andriysalnikov.university.model.Teacher;
 import ua.com.foxminded.andriysalnikov.university.model.Student;
+import ua.com.foxminded.andriysalnikov.university.model.Teacher;
+import ua.com.foxminded.andriysalnikov.university.model.ClassRoom;
+import ua.com.foxminded.andriysalnikov.university.model.Event;
 
 import java.time.LocalDate;
 
@@ -48,13 +49,13 @@ public class Validation {
         }
     }
 
-//    public static void validateEvent(Event event) {
-//        if (event == null || event.getDayOfEvent() == null
-//                || event.getStartTime() == null || event.getEndTime() == null ) {
-//            LOGGER.error(Messages.ERROR_ARGUMENT_EVENT);
-//            throw new ServiceException(Messages.ERROR_ARGUMENT_EVENT);
-//        }
-//    }
+    public static void validateEvent(Event event) {
+        if (event == null || event.getDayOfEvent() == null
+                || event.getStartTime() == null || event.getEndTime() == null ) {
+            LOGGER.error(Messages.ERROR_ARGUMENT_EVENT);
+            throw new ServiceException(Messages.ERROR_ARGUMENT_EVENT);
+        }
+    }
 
     public static void validateDate(LocalDate startDate, LocalDate endDate) {
         if (startDate == null || endDate == null) {

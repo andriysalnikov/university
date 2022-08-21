@@ -7,12 +7,10 @@ import java.util.List;
 public interface ClassRoomService {
 
     List<ClassRoom> getAllClassRooms();
+    List<ClassRoom> getAllClassRoomsWithoutFaculty();
     ClassRoom getClassRoomById(Integer id);
-//    List<ClassRoom> getAllClassRoomsWithoutFaculty();
     ClassRoom createClassRoom(ClassRoom classRoom);
     ClassRoom deleteClassRoomById(Integer id);
     ClassRoom updateClassRoom(ClassRoom classRoom);
-//    ClassRoom setFacultyToClassRoom(Integer facultyId, Integer classRoomId);
-//    ClassRoom removeFacultyFromClassRoom(Integer classRoomId);
 
 }

@@ -4,13 +4,12 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import ua.com.foxminded.andriysalnikov.university.constants.DBConstants;
 import ua.com.foxminded.andriysalnikov.university.dao.FacultyDAO;
 import ua.com.foxminded.andriysalnikov.university.model.Faculty;
 
-import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Repository
 public class FacultyDAOImpl implements FacultyDAO {
@@ -24,16 +23,40 @@ public class FacultyDAOImpl implements FacultyDAO {
 
     @Override
     public List<Faculty> getAllFaculties() {
-
         return sessionFactory.getCurrentSession()
-            .createQuery("from Faculty", Faculty.class).getResultList()
-            .stream().sorted(Comparator.comparingInt(Faculty::getId)).collect(Collectors.toList());
-
+            .createQuery(DBConstants.HQL_GET_ALL_FACULTIES, Faculty.class).getResultList();
     }
 
     @Override
     public Optional<Faculty> getFacultyById(Integer id) {
         return Optional.ofNullable(sessionFactory.getCurrentSession().find(Faculty.class, id));
+    }
+
+    @Override
+    public Optional<Faculty> getFacultyByIdWithClassRooms(Integer id) {
+        Faculty faculty = sessionFactory.getCurrentSession().find(Faculty.class, id);
+        if (faculty != null && !faculty.getClassRooms().isEmpty()) {
+            faculty.getClassRooms().get(0);
+        }
+        return Optional.ofNullable(faculty);
+    }
+
+    @Override
+    public Optional<Faculty> getFacultyByIdWithCourses(Integer id) {
+        Faculty faculty = sessionFactory.getCurrentSession().find(Faculty.class, id);
+        if (faculty != null && !faculty.getCourses().isEmpty()) {
+            faculty.getCourses().get(0);
+        }
+        return Optional.ofNullable(faculty);
+    }
+
+    @Override
+    public Optional<Faculty> getFacultyByIdWithStudents(Integer id) {
+        Faculty faculty = sessionFactory.getCurrentSession().find(Faculty.class, id);
+        if (faculty != null && !faculty.getStudents().isEmpty()) {
+            faculty.getStudents().get(0);
+        }
+        return Optional.ofNullable(faculty);
     }
 
     @Override

@@ -8,9 +8,9 @@ public interface TeacherService {
 
     List<Teacher> getAllTeachers();
     Teacher getTeacherById(Integer id);
+    Teacher getTeacherByIdWithCourses(Integer id);
     Teacher createTeacher(Teacher teacher);
     Teacher deleteTeacherById(Integer id);
     Teacher updateTeacher(Teacher teacher);
-//    List<Course> getTeacherCoursesByTeacherId(Integer id);
 
 }

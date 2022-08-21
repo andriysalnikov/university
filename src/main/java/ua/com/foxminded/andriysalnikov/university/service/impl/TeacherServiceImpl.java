@@ -48,6 +48,18 @@ public class TeacherServiceImpl implements TeacherService {
     }
 
     @Override
+    public Teacher getTeacherByIdWithCourses(Integer id) {
+        LOGGER.debug(Messages.TRY_GET_TEACHER_BY_ID, id);
+        Validation.validateId(id);
+        Teacher teacher = teacherDAO.getTeacherByIdWithCourses(id).orElseThrow(() -> {
+            LOGGER.error(Messages.ERROR_GET_TEACHER_BY_ID);
+            return new ServiceException(Messages.ERROR_GET_TEACHER_BY_ID);
+        });
+        LOGGER.debug(Messages.OK_GET_TEACHER_BY_ID, id, teacher);
+        return teacher;
+    }
+
+    @Override
     public Teacher createTeacher(Teacher teacher) {
         LOGGER.debug(Messages.TRY_CREATE_TEACHER);
         Validation.validateTeacher(teacher);
@@ -82,14 +94,5 @@ public class TeacherServiceImpl implements TeacherService {
         LOGGER.debug(Messages.OK_UPDATE_TEACHER, updatedTeacher);
         return updatedTeacher;
     }
-
-//    @Override
-//    public List<Course> getTeacherCoursesByTeacherId(Integer id) {
-//        LOGGER.debug(Messages.TRY_GET_USER_COURSES_BY_USER_ID, Teacher_h.class.getSimpleName(), id);
-//        Validation.validateId(id);
-//        List<Course> courses = teacherDAO.getTeacherCoursesByTeacherId(id);
-//        LOGGER.debug(Messages.OK_GET_USER_COURSES_BY_USER_ID, Teacher_h.class.getSimpleName(), id, courses);
-//        return courses;
-//    }
 
 }

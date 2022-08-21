@@ -8,13 +8,11 @@ import java.util.Optional;
 public interface StudentDAO {
 
     List<Student> getAllStudents();
-//    List<Student> getAllStudentsWithoutFaculty();
+    List<Student> getAllStudentsWithoutFaculty();
     Optional<Student> getStudentById(Integer id);
+    Optional<Student> getStudentByIdWithCourses(Integer id);
     Optional<Student> createStudent(Student student);
     Optional<Student> deleteStudentById(Integer id);
     Optional<Student> updateStudent(Student student);
-//    List<Course> getStudentCoursesByStudentId(Integer id);
-//    Optional<Student> setFacultyToStudent(Integer facultyId, Integer studentId);
-//    Optional<Student> removeFacultyFromStudent(Integer studentId);
 
 }

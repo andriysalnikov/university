@@ -3,7 +3,6 @@ package ua.com.foxminded.andriysalnikov.university.service.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ua.com.foxminded.andriysalnikov.university.constants.Messages;
@@ -36,29 +35,21 @@ public class CourseServiceImpl implements CourseService {
         return courses;
     }
 
-//    @Override
-//    public List<Course> getAllCoursesWithoutTeacher() {
-//        LOGGER.debug(Messages.TRY_GET_ALL_COURSES_WITHOUT_TEACHER);
-//        List<Course> courses = courseDAO.getAllCoursesWithoutTeacher();
-//        LOGGER.debug(Messages.OK_GET_ALL_COURSES_WITHOUT_TEACHER, courses);
-//        return courses;
-//    }
+    @Override
+    public List<Course> getAllCoursesWithoutTeacher() {
+        LOGGER.debug(Messages.TRY_GET_ALL_COURSES_WITHOUT_TEACHER);
+        List<Course> courses = courseDAO.getAllCoursesWithoutTeacher();
+        LOGGER.debug(Messages.OK_GET_ALL_COURSES_WITHOUT_TEACHER, courses);
+        return courses;
+    }
 
-//    @Override
-//    public List<Course> getAllCoursesWithoutFaculty() {
-//        LOGGER.debug(Messages.TRY_GET_ALL_COURSES_WITHOUT_FACULTY);
-//        List<Course> courses = courseDAO.getAllCoursesWithoutFaculty();
-//        LOGGER.debug(Messages.OK_GET_ALL_COURSES_WITHOUT_FACULTY, courses);
-//        return courses;
-//    }
-
-//    @Override
-//    public List<Course> getAllOtherAvailableCoursesForStudent(Integer studentId) {
-//        LOGGER.debug(Messages.TRY_GET_ALL_OTHER_AVAILABLE_COURSES_FOR_STUDENT, studentId);
-//        List<Course> courses = courseDAO.getAllOtherAvailableCoursesForStudent(studentId);
-//        LOGGER.debug(Messages.OK_GET_ALL_OTHER_AVAILABLE_COURSES_FOR_STUDENT, studentId, courses);
-//        return courses;
-//    }
+    @Override
+    public List<Course> getAllCoursesWithoutFaculty() {
+        LOGGER.debug(Messages.TRY_GET_ALL_COURSES_WITHOUT_FACULTY);
+        List<Course> courses = courseDAO.getAllCoursesWithoutFaculty();
+        LOGGER.debug(Messages.OK_GET_ALL_COURSES_WITHOUT_FACULTY, courses);
+        return courses;
+    }
 
     @Override
     public Course getCourseById(Integer id) {
@@ -106,83 +97,5 @@ public class CourseServiceImpl implements CourseService {
         LOGGER.debug(Messages.OK_UPDATE_COURSE, updatedCourse);
         return updatedCourse;
     }
-
-//    @Override
-//    public Course setTeacherToCourse(Integer teacherId, Integer courseId) {
-//        LOGGER.debug(Messages.TRY_SET_TEACHER_TO_COURSE, teacherId, courseId);
-//        Validation.validateId(teacherId);
-//        Validation.validateId(courseId);
-//        Course updatedCourse = courseDAO.setTeacherToCourse(teacherId, courseId).orElseThrow(() -> {
-//            LOGGER.error(Messages.ERROR_SET_TEACHER_TO_COURSE);
-//            throw new ServiceException(Messages.ERROR_SET_TEACHER_TO_COURSE);
-//        });
-//        LOGGER.debug(Messages.OK_SET_TEACHER_TO_COURSE, teacherId, courseId, updatedCourse);
-//        return updatedCourse;
-//    }
-
-//    @Override
-//    public Course removeTeacherFromCourse(Integer courseId) {
-//        LOGGER.debug(Messages.TRY_REMOVE_TEACHER_FROM_COURSE, courseId);
-//        Validation.validateId(courseId);
-//        Course updatedCourse = courseDAO.removeTeacherFromCourse(courseId).orElseThrow(() -> {
-//            LOGGER.error(Messages.ERROR_REMOVE_TEACHER_FROM_COURSE);
-//            throw new ServiceException(Messages.ERROR_REMOVE_TEACHER_FROM_COURSE);
-//        });
-//        LOGGER.debug(Messages.OK_REMOVE_TEACHER_FROM_COURSE, courseId, updatedCourse);
-//        return updatedCourse;
-//    }
-
-//    @Override
-//    public Course setFacultyToCourse(Integer facultyId, Integer courseId) {
-//        LOGGER.debug(Messages.TRY_SET_FACULTY_TO_COURSE, facultyId, courseId);
-//        Validation.validateId(facultyId);
-//        Validation.validateId(courseId);
-//        Course updatedCourse = courseDAO.setFacultyToCourse(facultyId, courseId).orElseThrow(() -> {
-//            LOGGER.error(Messages.ERROR_SET_FACULTY_TO_COURSE);
-//            throw new ServiceException(Messages.ERROR_SET_FACULTY_TO_COURSE);
-//        });
-//        LOGGER.debug(Messages.OK_SET_FACULTY_TO_COURSE, facultyId, courseId, updatedCourse);
-//        return updatedCourse;
-//    }
-
-//    @Override
-//    public Course removeFacultyFromCourse(Integer courseId) {
-//        LOGGER.debug(Messages.TRY_REMOVE_FACULTY_FROM_COURSE, courseId);
-//        Validation.validateId(courseId);
-//        Course updatedCourse = courseDAO.removeFacultyFromCourse(courseId).orElseThrow(() -> {
-//            LOGGER.error(Messages.ERROR_REMOVE_FACULTY_FROM_COURSE);
-//            throw new ServiceException(Messages.ERROR_REMOVE_TEACHER_FROM_COURSE);
-//        });
-//        LOGGER.debug(Messages.OK_REMOVE_FACULTY_FROM_COURSE, courseId, updatedCourse);
-//        return updatedCourse;
-//    }
-
-//    @Override
-//    public void setStudentToCourse(Integer studentId, Integer courseId) {
-//        LOGGER.debug(Messages.TRY_SET_STUDENT_TO_COURSE, studentId, courseId);
-//        Validation.validateId(studentId);
-//        Validation.validateId(courseId);
-//        try {
-//            courseDAO.setStudentToCourse(studentId, courseId);
-//        } catch (DataAccessException exception) {
-//            LOGGER.error(Messages.ERROR_SET_STUDENT_TO_COURSE);
-//            throw new ServiceException(Messages.ERROR_SET_STUDENT_TO_COURSE);
-//        }
-//        LOGGER.debug(Messages.OK_SET_STUDENT_TO_COURSE, studentId, courseId);
-//    }
-
-//    @Override
-//    public void removeStudentFromCourse(Integer studentId, Integer courseId) {
-//        LOGGER.debug(Messages.TRY_REMOVE_STUDENT_FROM_COURSE, studentId, courseId);
-//        Validation.validateId(studentId);
-//        Validation.validateId(courseId);
-//        try {
-//            courseDAO.removeStudentFromCourse(studentId, courseId);
-//        } catch (DataAccessException exception) {
-//            LOGGER.error(Messages.ERROR_REMOVE_STUDENT_FROM_COURSE);
-//            throw new ServiceException(Messages.ERROR_REMOVE_STUDENT_FROM_COURSE);
-//        }
-//        LOGGER.debug(Messages.OK_REMOVE_STUDENT_FROM_COURSE, studentId, courseId);
-//    }
 
 }

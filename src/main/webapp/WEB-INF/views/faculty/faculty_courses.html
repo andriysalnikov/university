@@ -15,7 +15,7 @@
         <td style="width: 150px; text-align: center; font-weight: bold">Action</td>
       </tr>
     </table><br/>
-    <table style="margin: auto;" th:each="course:${courses}">
+    <table style="margin: auto;" th:each="course:${faculty.getCourses()}">
       <tr>
         <td style="width: 100px; text-align: center" th:text="${course.getId()}"></td>
         <td style="width: 200px; text-align: center" th:text="${course.getName()}"></td>

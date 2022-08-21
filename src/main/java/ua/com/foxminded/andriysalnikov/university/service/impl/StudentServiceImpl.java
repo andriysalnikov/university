@@ -35,19 +35,31 @@ public class StudentServiceImpl implements StudentService {
         return students;
     }
 
-//    @Override
-//    public List<Student> getAllStudentsWithoutFaculty() {
-//        LOGGER.debug(Messages.TRY_GET_ALL_STUDENTS_WITHOUT_FACULTY);
-//        List<Student> students = studentDAO.getAllStudentsWithoutFaculty();
-//        LOGGER.debug(Messages.OK_GET_ALL_STUDENTS_WITHOUT_FACULTY, students);
-//        return students;
-//    }
+    @Override
+    public List<Student> getAllStudentsWithoutFaculty() {
+        LOGGER.debug(Messages.TRY_GET_ALL_STUDENTS_WITHOUT_FACULTY);
+        List<Student> students = studentDAO.getAllStudentsWithoutFaculty();
+        LOGGER.debug(Messages.OK_GET_ALL_STUDENTS_WITHOUT_FACULTY, students);
+        return students;
+    }
 
     @Override
     public Student getStudentById(Integer id) {
         LOGGER.debug(Messages.TRY_GET_STUDENT_BY_ID, id);
         Validation.validateId(id);
         Student student = studentDAO.getStudentById(id).orElseThrow(() -> {
+            LOGGER.error(Messages.ERROR_GET_STUDENT_BY_ID);
+            throw new ServiceException(Messages.ERROR_GET_STUDENT_BY_ID);
+        });
+        LOGGER.debug(Messages.OK_GET_STUDENT_BY_ID, id, student);
+        return student;
+    }
+
+    @Override
+    public Student getStudentByIdWithCourses(Integer id) {
+        LOGGER.debug(Messages.TRY_GET_STUDENT_BY_ID, id);
+        Validation.validateId(id);
+        Student student = studentDAO.getStudentByIdWithCourses(id).orElseThrow(() -> {
             LOGGER.error(Messages.ERROR_GET_STUDENT_BY_ID);
             throw new ServiceException(Messages.ERROR_GET_STUDENT_BY_ID);
         });
@@ -90,39 +102,5 @@ public class StudentServiceImpl implements StudentService {
         LOGGER.debug(Messages.OK_UPDATE_STUDENT, updatedStudent);
         return updatedStudent;
     }
-
-//    @Override
-//    public List<Course> getStudentCoursesByStudentId(Integer id) {
-//        LOGGER.debug(Messages.TRY_GET_USER_COURSES_BY_USER_ID, Student.class.getSimpleName(), id);
-//        Validation.validateId(id);
-//        List<Course> courses = studentDAO.getStudentCoursesByStudentId(id);
-//        LOGGER.debug(Messages.OK_GET_USER_COURSES_BY_USER_ID, Student.class.getSimpleName(), id, courses);
-//        return courses;
-//    }
-
-//    @Override
-//    public Student setFacultyToStudent(Integer facultyId, Integer studentId) {
-//        LOGGER.debug(Messages.TRY_SET_FACULTY_TO_STUDENT, facultyId, studentId);
-//        Validation.validateId(facultyId);
-//        Validation.validateId(studentId);
-//        Student updateStudent = studentDAO.setFacultyToStudent(facultyId, studentId).orElseThrow(() -> {
-//            LOGGER.error(Messages.ERROR_SET_FACULTY_TO_STUDENT);
-//            throw new ServiceException(Messages.ERROR_SET_FACULTY_TO_STUDENT);
-//        });
-//        LOGGER.debug(Messages.OK_SET_FACULTY_TO_STUDENT, facultyId, studentId, updateStudent);
-//        return updateStudent;
-//    }
-
-//    @Override
-//    public Student removeFacultyFromStudent(Integer studentId) {
-//        LOGGER.debug(Messages.TRY_REMOVE_FACULTY_FROM_STUDENT, studentId);
-//        Validation.validateId(studentId);
-//        Student updateStudent = studentDAO.removeFacultyFromStudent(studentId).orElseThrow(() -> {
-//            LOGGER.error(Messages.ERROR_REMOVE_FACULTY_FROM_STUDENT);
-//            throw new ServiceException(Messages.ERROR_REMOVE_FACULTY_FROM_STUDENT);
-//        });
-//        LOGGER.debug(Messages.OK_REMOVE_FACULTY_FROM_STUDENT, studentId, updateStudent);
-//        return updateStudent;
-//    }
 
 }

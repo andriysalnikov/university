@@ -2,15 +2,14 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
   <head>
     <meta charset="UTF-8">
-    <title>[[|${user_type} ${user.getFirstName()} ${user.getLastName()}|]]</title>
+    <title>Teacher [[|${teacher.getFirstName()} ${teacher.getLastName()}|]]</title>
   </head>
   <body>
     <h1 style="text-align: center">
-      [[|${user_type} ${user.getFirstName()} ${user.getLastName()}|]] Timetable</h1><br/>
+      Teacher [[|${teacher.getFirstName()} ${teacher.getLastName()}|]] Timetable</h1><br/>
     <div style="text-align: center">
       <form>
-        <input type="hidden" name="user_type" th:value="${user_type}" />
-        <input type="hidden" name="id" th:value="${user.getId()}" />
+        <input type="hidden" name="id" th:value="${teacher.getId()}" />
         <label for="start_date">Start Date:</label>
         <input type="date" id="start_date" name="start_date" th:value="${start_date}" />
         <label for="end_date">End Date:</label>

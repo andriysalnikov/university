@@ -8,11 +8,11 @@ public interface FacultyService {
 
     List<Faculty> getAllFaculties();
     Faculty getFacultyById(Integer id);
+    Faculty getFacultyByIdWithClassRooms(Integer id);
+    Faculty getFacultyByIdWithCourses(Integer id);
+    Faculty getFacultyByIdWithStudents(Integer id);
     Faculty createFaculty(Faculty faculty);
     Faculty deleteFacultyById(Integer id);
     Faculty updateFaculty(Faculty faculty);
-//    List<Course> getFacultyCoursesByFacultyId(Integer id);
-//    List<ClassRoom> getFacultyClassRoomsByFacultyId(Integer id);
-//    List<Student> getFacultyStudentsByFacultyId(Integer id);
 
 }

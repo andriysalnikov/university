@@ -9,11 +9,11 @@ public interface FacultyDAO {
 
     List<Faculty> getAllFaculties();
     Optional<Faculty> getFacultyById(Integer id);
+    Optional<Faculty> getFacultyByIdWithClassRooms(Integer id);
+    Optional<Faculty> getFacultyByIdWithCourses(Integer id);
+    Optional<Faculty> getFacultyByIdWithStudents(Integer id);
     Optional<Faculty> createFaculty(Faculty faculty);
     Optional<Faculty> deleteFacultyById(Integer id);
     Optional<Faculty> updateFaculty(Faculty faculty);
-//    List<Course> getFacultyCoursesByFacultyId(Integer id);
-//    List<ClassRoom> getFacultyClassRoomsByFacultyId(Integer id);
-//    List<Student> getFacultyStudentsByFacultyId(Integer id);
 
 }

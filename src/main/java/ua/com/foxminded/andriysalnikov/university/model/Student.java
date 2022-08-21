@@ -1,12 +1,9 @@
 package ua.com.foxminded.andriysalnikov.university.model;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import javax.persistence.Id;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Column;
-import javax.persistence.GenerationType;
+import javax.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -23,11 +20,25 @@ public class Student {
     @Column(name = "last_name")
     private String lastName;
 
-    public Student() { }
+    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE,
+            CascadeType.DETACH, CascadeType.REFRESH },
+            fetch = FetchType.LAZY)
+    @JoinTable(name = "students_courses", schema = "university",
+        joinColumns = @JoinColumn(name = "student_id"),
+        inverseJoinColumns = @JoinColumn(name = "course_id"))
+    @OrderBy
+    private final List<Course> courses;
+
+    public Student() { this.courses = new ArrayList<>(); }
 
     public Student(String firstName, String lastName) {
+        this();
         this.firstName = firstName;
         this.lastName = lastName;
+    }
+
+    public void addCourseToStudent(Course course) {
+        courses.add(course);
     }
 
     public Integer getId() {
@@ -52,6 +63,10 @@ public class Student {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public List<Course> getCourses() {
+        return courses;
     }
 
     @Override

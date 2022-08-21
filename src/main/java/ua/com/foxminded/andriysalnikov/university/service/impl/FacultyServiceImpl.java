@@ -48,6 +48,42 @@ public class FacultyServiceImpl implements FacultyService {
     }
 
     @Override
+    public Faculty getFacultyByIdWithClassRooms(Integer id) {
+        LOGGER.debug(Messages.TRY_GET_FACULTY_BY_ID, id);
+        Validation.validateId(id);
+        Faculty faculty = facultyDAO.getFacultyByIdWithClassRooms(id).orElseThrow(() -> {
+            LOGGER.error(Messages.ERROR_GET_FACULTY_BY_ID);
+            throw new ServiceException(Messages.ERROR_GET_FACULTY_BY_ID);
+        });
+        LOGGER.debug(Messages.OK_GET_FACULTY_BY_ID, id, faculty);
+        return faculty;
+    }
+
+    @Override
+    public Faculty getFacultyByIdWithCourses(Integer id) {
+        LOGGER.debug(Messages.TRY_GET_FACULTY_BY_ID, id);
+        Validation.validateId(id);
+        Faculty faculty = facultyDAO.getFacultyByIdWithCourses(id).orElseThrow(() -> {
+            LOGGER.error(Messages.ERROR_GET_FACULTY_BY_ID);
+            throw new ServiceException(Messages.ERROR_GET_FACULTY_BY_ID);
+        });
+        LOGGER.debug(Messages.OK_GET_FACULTY_BY_ID, id, faculty);
+        return faculty;
+    }
+
+    @Override
+    public Faculty getFacultyByIdWithStudents(Integer id) {
+        LOGGER.debug(Messages.TRY_GET_FACULTY_BY_ID, id);
+        Validation.validateId(id);
+        Faculty faculty = facultyDAO.getFacultyByIdWithStudents(id).orElseThrow(() -> {
+            LOGGER.error(Messages.ERROR_GET_FACULTY_BY_ID);
+            throw new ServiceException(Messages.ERROR_GET_FACULTY_BY_ID);
+        });
+        LOGGER.debug(Messages.OK_GET_FACULTY_BY_ID, id, faculty);
+        return faculty;
+    }
+
+    @Override
     public Faculty createFaculty(Faculty faculty) {
         LOGGER.debug(Messages.TRY_CREATE_FACULTY);
         Validation.validateFaculty(faculty);
@@ -82,32 +118,5 @@ public class FacultyServiceImpl implements FacultyService {
         LOGGER.debug(Messages.OK_UPDATE_FACULTY, updatedFaculty);
         return updatedFaculty;
     }
-
-//    @Override
-//    public List<Course> getFacultyCoursesByFacultyId(Integer id) {
-//        LOGGER.debug(Messages.TRY_GET_FACULTY_COURSES_BY_FACULTY_ID, id);
-//        Validation.validateId(id);
-//        List<Course> courses = new ArrayList<>(); //facultyDAO.getFacultyCoursesByFacultyId(id);
-//        LOGGER.debug(Messages.OK_GET_FACULTY_COURSES_BY_FACULTY_ID, id, courses);
-//        return courses;
-//    }
-//
-//    @Override
-//    public List<ClassRoom> getFacultyClassRoomsByFacultyId(Integer id) {
-//        LOGGER.debug(Messages.TRY_GET_FACULTY_CLASSROOMS_BY_FACULTY_ID, id);
-//        Validation.validateId(id);
-//        List<ClassRoom> classRooms = new ArrayList<>(); //facultyDAO.getFacultyClassRoomsByFacultyId(id);
-//        LOGGER.debug(Messages.OK_GET_FACULTY_CLASSROOMS_BY_FACULTY_ID, id, classRooms);
-//        return classRooms;
-//    }
-//
-//    @Override
-//    public List<Student> getFacultyStudentsByFacultyId(Integer id) {
-//        LOGGER.debug(Messages.TRY_GET_FACULTY_STUDENTS_BY_FACULTY_ID, id);
-//        Validation.validateId(id);
-//        List<Student> students = new ArrayList<>(); //facultyDAO.getFacultyStudentsByFacultyId(id);
-//        LOGGER.debug(Messages.OK_GET_FACULTY_STUDENTS_BY_FACULTY_ID, id, students);
-//        return students;
-//    }
 
 }

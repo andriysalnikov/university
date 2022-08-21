@@ -33,7 +33,7 @@ public class StudentController {
     }
 
     @GetMapping("/students")
-    public String getAllTeachers(Model model) {
+    public String getAllStudents(Model model) {
         LOGGER.info(Messages.TRY_GET_ALL_TEACHERS);
         List<Student> students = studentService.getAllStudents();
         LOGGER.info(Messages.OK_GET_ALL_STUDENTS, students);
@@ -44,18 +44,16 @@ public class StudentController {
     @GetMapping("/student")
     public String showStudent(@RequestParam("id") Integer id, Model model) {
         Student student;
-        List<Course> studentCourses;
         List<Course> otherAvailableCourses;
         try {
-            student = studentService.getStudentById(id);
-//            userCourses = getUserCoursesByUserId(userType, userId);
-//            otherAvailableCourses = getOtherCoursesAvailableForUser(userType, userId);
+            student = studentService.getStudentByIdWithCourses(id);
+            otherAvailableCourses = courseService.getAllCourses();
+            otherAvailableCourses.removeAll(student.getCourses());
         } catch (ServiceException exception) {
             return ExceptionUtil.handleException(exception, LOGGER, model);
         }
         model.addAttribute("student", student);
-//        model.addAttribute("courses", userCourses);
-//        model.addAttribute("othercourses", otherAvailableCourses);
+        model.addAttribute("othercourses", otherAvailableCourses);
         return "student/student";
     }
 
@@ -122,82 +120,40 @@ public class StudentController {
         return "redirect:/students";
     }
 
-//    @PostMapping("/user/add_course")
-//    public String addCourseToUser(@RequestParam("user_type") String userType,
-//                                  @RequestParam("user_id") Integer userId,
-//                                  @RequestParam("course_id") Integer courseId,
-//                                  Model model) {
-//        LOGGER.info(Messages.TRY_SET_USER_TO_COURSE,
-//                userType.equals("Teacher") ? Teacher_h.class.getSimpleName() : Student.class.getSimpleName(),
-//                userId, courseId);
-//        try {
-//            addCourseToUser(userType, userId, courseId);
-//        } catch (ServiceException exception) {
-//            return ExceptionUtil.handleException(exception, LOGGER, model);
-//        }
-//        LOGGER.info(Messages.OK_SET_USER_TO_COURSE,
-//                userType.equals("Teacher") ? Teacher_h.class.getSimpleName() : Student.class.getSimpleName(),
-//                userId, courseId);
-//        return "redirect:/user?user_type=" + userType + "&id=" + userId;
-//    }
-//
-//    @PostMapping("/user/remove_course")
-//    public String removeCourseFromUser(@RequestParam("user_type") String userType,
-//                                       @RequestParam("user_id") Integer userId,
-//                                       @RequestParam("course_id") Integer courseId,
-//                                       Model model) {
-//        LOGGER.info(Messages.TRY_REMOVE_USER_FROM_COURSE,
-//                userType.equals("Teacher") ? Teacher_h.class.getSimpleName() : Student.class.getSimpleName(),
-//                userId, courseId);
-//        try {
-//            removeCourseFromUser(userType, userId, courseId);
-//        } catch (ServiceException exception) {
-//            return ExceptionUtil.handleException(exception, LOGGER, model);
-//        }
-//        LOGGER.info(Messages.OK_REMOVE_USER_FROM_COURSE,
-//                userType.equals("Teacher") ? Teacher_h.class.getSimpleName() : Student.class.getSimpleName(),
-//                userId, courseId);
-//        return "redirect:/user?user_type=" + userType + "&id=" + userId;
-//    }
-//
-//    private List<Course> getUserCoursesByUserId(String userType, Integer userId) {
-//        List<Course> courses = new ArrayList<>();
-//        if (userType.equals("Teacher")) {
-//            courses = teacherService.getTeacherCoursesByTeacherId(userId);
-//        }
-//        if (userType.equals("Student")) {
-//            courses = studentService.getStudentCoursesByStudentId(userId);
-//        }
-//        return courses;
-//    }
-//
-//    private List<Course> getOtherCoursesAvailableForUser(String userType, Integer userId) {
-//        List<Course> courses = new ArrayList<>();
-//        if (userType.equals("Teacher")) {
-//            courses = courseService.getAllCoursesWithoutTeacher();
-//        }
-//        if (userType.equals("Student")) {
-//            courses = courseService.getAllOtherAvailableCoursesForStudent(userId);
-//        }
-//        return courses;
-//    }
-//
-//    private void addCourseToUser(String userType, Integer userId, Integer courseId) {
-//        if (userType.equals("Teacher")) {
-//            courseService.setTeacherToCourse(userId, courseId);
-//        }
-//        if (userType.equals("Student")) {
-//            courseService.setStudentToCourse(userId, courseId);
-//        }
-//    }
-//
-//    private void removeCourseFromUser(String userType, Integer userId, Integer courseId) {
-//        if (userType.equals("Teacher")) {
-//            courseService.removeTeacherFromCourse(courseId);
-//        }
-//        if (userType.equals("Student")) {
-//            courseService.removeStudentFromCourse(userId, courseId);
-//        }
-//    }
+    @PostMapping("/student/add_course")
+    public String addCourseToStudent(@RequestParam("student_id") Integer studentId,
+                                     @RequestParam("course_id") Integer courseId,
+                                     Model model) {
+        LOGGER.info(Messages.TRY_ADD_COURSE_TO_STUDENT, courseId, studentId);
+        Course course;
+        try {
+            Student student = studentService.getStudentByIdWithCourses(studentId);
+            course = courseService.getCourseById(courseId);
+            student.addCourseToStudent(course);
+            studentService.updateStudent(student);
+        } catch (ServiceException exception) {
+            return ExceptionUtil.handleException(exception, LOGGER, model);
+        }
+        LOGGER.info(Messages.OK_ADD_COURSE_TO_STUDENT, courseId, studentId, course);
+        return "redirect:/student?&id=" + studentId;
+    }
+
+    @PostMapping("/student/remove_course")
+    public String removeCourseFromStudent(@RequestParam("student_id") Integer studentId,
+                                          @RequestParam("course_id") Integer courseId,
+                                          Model model) {
+        LOGGER.info(Messages.TRY_REMOVE_COURSE_FROM_STUDENT, courseId, studentId);
+        Course course;
+        try {
+            Student student = studentService.getStudentByIdWithCourses(studentId);
+            course = courseService.getCourseById(courseId);
+            student.getCourses().remove(course);
+            studentService.updateStudent(student);
+        } catch (ServiceException exception) {
+            return ExceptionUtil.handleException(exception, LOGGER, model);
+        }
+        LOGGER.info(Messages.OK_REMOVE_COURSE_FROM_STUDENT, courseId, studentId, course);
+        return "redirect:/student?&id=" + studentId;
+    }
 
 }
