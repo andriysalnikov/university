@@ -4,6 +4,7 @@ import org.springframework.stereotype.Repository;
 import ua.com.foxminded.andriysalnikov.university.constants.DBConstants;
 import ua.com.foxminded.andriysalnikov.university.dao.StudentDAO;
 import ua.com.foxminded.andriysalnikov.university.model.Student;
+import ua.com.foxminded.andriysalnikov.university.model.Teacher;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -35,10 +36,10 @@ public class StudentDAOImpl implements StudentDAO {
 
     @Override
     public Optional<Student> getStudentByIdWithCourses(Integer id) {
-        Student student = entityManager.find(Student.class, id);
-        if (student != null && !student.getCourses().isEmpty()) {
-            student.getCourses().get(0);
-        }
+        Student student = entityManager
+                .createQuery(DBConstants.JPQL_GET_STUDENT_BY_ID_WITH_COURSES, Student.class)
+                .setParameter("studentId", id)
+                .getSingleResult();
         return Optional.ofNullable(student);
     }
 

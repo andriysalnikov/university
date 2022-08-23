@@ -29,10 +29,10 @@ public class TeacherDAOImpl implements TeacherDAO {
 
     @Override
     public Optional<Teacher> getTeacherByIdWithCourses(Integer id) {
-        Teacher teacher = entityManager.find(Teacher.class, id);
-        if (teacher != null && !teacher.getCourses().isEmpty()) {
-            teacher.getCourses().get(0);
-        }
+        Teacher teacher = entityManager
+                .createQuery(DBConstants.JPQL_GET_TEACHER_BY_ID_WITH_COURSES,Teacher.class)
+                .setParameter("teacherId", id)
+                .getSingleResult();
         return Optional.ofNullable(teacher);
     }
 

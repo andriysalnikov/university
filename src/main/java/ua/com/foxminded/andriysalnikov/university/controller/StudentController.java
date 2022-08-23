@@ -34,7 +34,7 @@ public class StudentController {
 
     @GetMapping("/students")
     public String getAllStudents(Model model) {
-        LOGGER.info(Messages.TRY_GET_ALL_TEACHERS);
+        LOGGER.info(Messages.TRY_GET_ALL_STUDENTS);
         List<Student> students = studentService.getAllStudents();
         LOGGER.info(Messages.OK_GET_ALL_STUDENTS, students);
         model.addAttribute("students", students);

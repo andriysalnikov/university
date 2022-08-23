@@ -4,6 +4,7 @@ import org.springframework.stereotype.Repository;
 import ua.com.foxminded.andriysalnikov.university.constants.DBConstants;
 import ua.com.foxminded.andriysalnikov.university.dao.FacultyDAO;
 import ua.com.foxminded.andriysalnikov.university.model.Faculty;
+import ua.com.foxminded.andriysalnikov.university.model.Teacher;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -29,28 +30,28 @@ public class FacultyDAOImpl implements FacultyDAO {
 
     @Override
     public Optional<Faculty> getFacultyByIdWithClassRooms(Integer id) {
-        Faculty faculty = entityManager.find(Faculty.class, id);
-        if (faculty != null && !faculty.getClassRooms().isEmpty()) {
-            faculty.getClassRooms().get(0);
-        }
+        Faculty faculty = entityManager
+                .createQuery(DBConstants.JPQL_GET_FACULTY_BY_ID_WITH_CLASSROOMS, Faculty.class)
+                .setParameter("facultyId", id)
+                .getSingleResult();
         return Optional.ofNullable(faculty);
     }
 
     @Override
     public Optional<Faculty> getFacultyByIdWithCourses(Integer id) {
-        Faculty faculty = entityManager.find(Faculty.class, id);
-        if (faculty != null && !faculty.getCourses().isEmpty()) {
-            faculty.getCourses().get(0);
-        }
+        Faculty faculty = entityManager
+                .createQuery(DBConstants.JPQL_GET_FACULTY_BY_ID_WITH_COURSES,Faculty.class)
+                .setParameter("facultyId", id)
+                .getSingleResult();
         return Optional.ofNullable(faculty);
     }
 
     @Override
     public Optional<Faculty> getFacultyByIdWithStudents(Integer id) {
-        Faculty faculty = entityManager.find(Faculty.class, id);
-        if (faculty != null && !faculty.getStudents().isEmpty()) {
-            faculty.getStudents().get(0);
-        }
+        Faculty faculty = entityManager
+                .createQuery(DBConstants.JPQL_GET_FACULTY_BY_ID_WITH_STUDENTS,Faculty.class)
+                .setParameter("facultyId", id)
+                .getSingleResult();
         return Optional.ofNullable(faculty);
     }
 
