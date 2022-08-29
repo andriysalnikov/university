@@ -9,6 +9,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import ua.com.foxminded.andriysalnikov.university.exceptions.ServiceException;
+import ua.com.foxminded.andriysalnikov.university.model.Teacher;
 import ua.com.foxminded.andriysalnikov.university.model.TimeTable;
 import ua.com.foxminded.andriysalnikov.university.model.Event;
 import ua.com.foxminded.andriysalnikov.university.model.Student;
@@ -23,6 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -38,12 +40,13 @@ class TimeTableManagerTest {
     void getTimeTableFromStartDateToEndDateByStudent_shouldReturnListOfEventsConstrainedByStartDateEndDate_whenArgumentsContainStudent() {
         List<Event> events = TestDTOFactory.createListOfEventsConstrainedByStartDateEndDateForTest();
         Student student = TestDTOFactory.createStudentWithCoursesForTest();
+        System.out.println(student.getCourses());
         when(eventService.getAllEventsFromStartDateToEndDateByCourseId(
                 any(LocalDate.class), any(LocalDate.class), anyInt())).thenReturn(events);
         TimeTable expectedTimeTable =
                 TestDTOFactory.createTimeTableFromStartDateToEndDate();
         TimeTable returnedTimeTable =
-                timeTableManager.getTimeTableFromStartDateToEndDateByStudent(LocalDate.MIN, LocalDate.MAX, student);
+                timeTableManager.getTimeTableFromStartDateToEndDateByStudent(LocalDate.now(), LocalDate.now(), student);
         assertEquals(expectedTimeTable, returnedTimeTable);
         verify(eventService, times(3)).getAllEventsFromStartDateToEndDateByCourseId(
                 any(LocalDate.class), any(LocalDate.class), anyInt());
@@ -70,14 +73,25 @@ class TimeTableManagerTest {
     }
 
     @ParameterizedTest
-    @MethodSource("provideForStudentOrStudentIdIsNull")
-    void getTimeTableFromStartDateToEndDateByStudent_shouldThrowIllegalArgumentException_whenStudentOrStudentIdIsNull(
+    @MethodSource("provideForStudentOrStudentParametersAreNull")
+    void getTimeTableFromStartDateToEndDateByStudent_shouldThrowIllegalArgumentException_whenStudentOrStudentParametersAreNull(
             Student student) {
         LocalDate startDate = LocalDate.now();
         LocalDate endDate = LocalDate.now();
         assertThrows(ServiceException.class,
                 () -> timeTableManager.getTimeTableFromStartDateToEndDateByStudent(
                         startDate, endDate, student));
+    }
+
+    @ParameterizedTest
+    @MethodSource("provideForTeacherOrTeacherParametersAreNull")
+    void getTimeTableFromStartDateToEndDateByTeacher_shouldThrowIllegalArgumentException_whenTeacherOrTeacherParametersAreNull(
+            Teacher teacher) {
+        LocalDate startDate = LocalDate.now();
+        LocalDate endDate = LocalDate.now();
+        assertThrows(ServiceException.class,
+                () -> timeTableManager.getTimeTableFromStartDateToEndDateByTeacher(
+                        startDate, endDate, teacher));
     }
 
     private static Stream<Arguments> provideForOneOrBothDataArgumentsNull() {
@@ -88,10 +102,26 @@ class TimeTableManagerTest {
         );
     }
 
-    private static Stream<Arguments> provideForStudentOrStudentIdIsNull() {
+    private static Stream<Arguments> provideForStudentOrStudentParametersAreNull() {
+        Student student1 = new Student("First Name", null);
+        student1.setId(1);
+        Student student2 = new Student(null, "Last Name");
+        student2.setId(2);
         return Stream.of(
                 Arguments.of((Student) null),
-                Arguments.of(new Student("Oloo", "Trololo")));
+                Arguments.of(student1),
+                Arguments.of(student2));
+    }
+
+    private static Stream<Arguments> provideForTeacherOrTeacherParametersAreNull() {
+        Teacher teacher1 = new Teacher("First Name", null);
+        teacher1.setId(1);
+        Teacher teacher2 = new Teacher(null, "Last Name");
+        teacher2.setId(2);
+        return Stream.of(
+                Arguments.of((Teacher) null),
+                Arguments.of(teacher1),
+                Arguments.of(teacher2));
     }
 
 }

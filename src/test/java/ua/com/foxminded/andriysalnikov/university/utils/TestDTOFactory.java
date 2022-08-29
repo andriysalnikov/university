@@ -27,9 +27,15 @@ public class TestDTOFactory {
 
     public static List<Course> createListOfCoursesForTest() {
         List<Course> courses = new ArrayList<>();
-        courses.add(new Course("Mathematics", "Fundamentals of algebra, geometry and analysis"));
-        courses.add(new Course("Physics", "Study of the fundamental laws of the universe"));
-        courses.add(new Course("Chemistry", "How to make a moonshine machine"));
+        Course course1 = new Course("Mathematics", "Fundamentals of algebra, geometry and analysis");
+        course1.setId(1);
+        Course course2 = new Course("Physics", "Study of the fundamental laws of the universe");
+        course2.setId(2);
+        Course course3 = new Course("Chemistry", "How to make a moonshine machine");
+        course3.setId(3);
+        courses.add(course1);
+        courses.add(course2);
+        courses.add(course3);
         return courses;
     }
 
