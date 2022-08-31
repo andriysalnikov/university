@@ -1,6 +1,5 @@
 package ua.com.foxminded.andriysalnikov.university.dao;
 
-import ua.com.foxminded.andriysalnikov.university.model.Course;
 import ua.com.foxminded.andriysalnikov.university.model.Student;
 
 import java.util.List;
@@ -11,11 +10,9 @@ public interface StudentDAO {
     List<Student> getAllStudents();
     List<Student> getAllStudentsWithoutFaculty();
     Optional<Student> getStudentById(Integer id);
+    Optional<Student> getStudentByIdWithCourses(Integer id);
     Optional<Student> createStudent(Student student);
     Optional<Student> deleteStudentById(Integer id);
     Optional<Student> updateStudent(Student student);
-    List<Course> getStudentCoursesByStudentId(Integer id);
-    Optional<Student> setFacultyToStudent(Integer facultyId, Integer studentId);
-    Optional<Student> removeFacultyFromStudent(Integer studentId);
 
 }

@@ -1,67 +1,58 @@
 package ua.com.foxminded.andriysalnikov.university.dao.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import ua.com.foxminded.andriysalnikov.university.constants.DBConstants;
 import ua.com.foxminded.andriysalnikov.university.dao.TeacherDAO;
-import ua.com.foxminded.andriysalnikov.university.mappers.CourseMapper;
-import ua.com.foxminded.andriysalnikov.university.extractors.TeacherResultSetExtractor;
-import ua.com.foxminded.andriysalnikov.university.model.Course;
 import ua.com.foxminded.andriysalnikov.university.model.Teacher;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.List;
 import java.util.Optional;
 
 @Repository
 public class TeacherDAOImpl implements TeacherDAO {
 
-    private final JdbcTemplate jdbcTemplate;
-    private final CourseMapper courseMapper;
-    private final TeacherResultSetExtractor teacherResultSetExtractor;
-
-    @Autowired
-    public TeacherDAOImpl(JdbcTemplate jdbcTemplate, CourseMapper courseMapper,
-                          TeacherResultSetExtractor teacherResultSetExtractor) {
-        this.jdbcTemplate = jdbcTemplate;
-        this.courseMapper = courseMapper;
-        this.teacherResultSetExtractor = teacherResultSetExtractor;
-    }
+    @PersistenceContext
+    private EntityManager entityManager;
 
     @Override
     public List<Teacher> getAllTeachers() {
-        return jdbcTemplate.query(DBConstants.SQL_GET_ALL_TEACHERS, new BeanPropertyRowMapper<>(Teacher.class));
+        return entityManager.createQuery(DBConstants.JPQL_GET_ALL_TEACHERS, Teacher.class)
+                .getResultList();
     }
 
     @Override
     public Optional<Teacher> getTeacherById(Integer id) {
-        return Optional.ofNullable(jdbcTemplate.query(DBConstants.SQL_GET_TEACHER_BY_ID,
-                teacherResultSetExtractor, id));
+        return Optional.ofNullable(entityManager.find(Teacher.class, id));
+    }
+
+    @Override
+    public Optional<Teacher> getTeacherByIdWithCourses(Integer id) {
+        Teacher teacher = entityManager
+                .createQuery(DBConstants.JPQL_GET_TEACHER_BY_ID_WITH_COURSES,Teacher.class)
+                .setParameter("teacherId", id)
+                .getSingleResult();
+        return Optional.ofNullable(teacher);
     }
 
     @Override
     public Optional<Teacher> createTeacher(Teacher teacher) {
-        return Optional.ofNullable(jdbcTemplate.query(DBConstants.SQL_CREATE_TEACHER,
-            teacherResultSetExtractor, teacher.getFirstName(), teacher.getLastName()));
+        entityManager.persist(teacher);
+        return Optional.ofNullable(teacher);
     }
 
     @Override
     public Optional<Teacher> deleteTeacherById(Integer id) {
-        return Optional.ofNullable(jdbcTemplate.query(DBConstants.SQL_DELETE_TEACHER_BY_ID,
-                teacherResultSetExtractor, id));
+        Teacher teacher = entityManager.find(Teacher.class, id);
+        entityManager.remove(teacher);
+        return Optional.ofNullable(teacher);
     }
 
     @Override
     public Optional<Teacher> updateTeacher(Teacher teacher) {
-        return Optional.ofNullable(jdbcTemplate.query(DBConstants.SQL_UPDATE_TEACHER,
-                teacherResultSetExtractor, teacher.getFirstName(), teacher.getLastName(), teacher.getId()));
-    }
-
-    @Override
-    public List<Course> getTeacherCoursesByTeacherId(Integer id) {
-        return jdbcTemplate.query(DBConstants.SQL_GET_TEACHER_COURSES_BY_TEACHER_ID,
-                courseMapper, id);
+        entityManager.merge(teacher);
+        return Optional.ofNullable(teacher);
     }
 
 }

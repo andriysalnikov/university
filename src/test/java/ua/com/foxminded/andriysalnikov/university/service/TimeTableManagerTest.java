@@ -8,22 +8,15 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import ua.com.foxminded.andriysalnikov.university.exceptions.TimeTableManagerException;
+import ua.com.foxminded.andriysalnikov.university.exceptions.ServiceException;
+import ua.com.foxminded.andriysalnikov.university.model.Teacher;
 import ua.com.foxminded.andriysalnikov.university.model.TimeTable;
 import ua.com.foxminded.andriysalnikov.university.model.Event;
-import ua.com.foxminded.andriysalnikov.university.model.User;
 import ua.com.foxminded.andriysalnikov.university.model.Student;
-import ua.com.foxminded.andriysalnikov.university.model.Course;
-import ua.com.foxminded.andriysalnikov.university.service.EventService;
-import ua.com.foxminded.andriysalnikov.university.service.StudentService;
-import ua.com.foxminded.andriysalnikov.university.service.TeacherService;
-import ua.com.foxminded.andriysalnikov.university.service.TimeTableManager;
 import ua.com.foxminded.andriysalnikov.university.utils.TestDTOFactory;
 
 import java.time.LocalDate;
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -31,90 +24,74 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.atLeast;
-import static org.mockito.Mockito.atMostOnce;
-import static org.mockito.Mockito.lenient;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 class TimeTableManagerTest {
 
     @Mock
     EventService eventService;
-    @Mock
-    StudentService studentService;
-    @Mock
-    TeacherService teacherService;
     @InjectMocks
     TimeTableManager timeTableManager;
 
     @Test
-    void getTimeTableFromStartDateToEndDateByUser_shouldReturnListOfEventsConstrainedByStartDateEndDate_whenArgumentsContainUser() {
+    void getTimeTableFromStartDateToEndDateByStudent_shouldReturnListOfEventsConstrainedByStartDateEndDate_whenArgumentsContainStudent() {
         List<Event> events = TestDTOFactory.createListOfEventsConstrainedByStartDateEndDateForTest();
-        List<Course> courses = TestDTOFactory.createListOfCoursesForTest();
-        lenient().when(studentService.getStudentCoursesByStudentId(anyInt())).thenReturn(courses);
-        lenient().when(teacherService.getTeacherCoursesByTeacherId(anyInt())).thenReturn(courses);
+        Student student = TestDTOFactory.createStudentWithCoursesForTest();
+        System.out.println(student.getCourses());
         when(eventService.getAllEventsFromStartDateToEndDateByCourseId(
                 any(LocalDate.class), any(LocalDate.class), anyInt())).thenReturn(events);
-        User user = new Student(1, "First Name", "Last Name");
         TimeTable expectedTimeTable =
-                TestDTOFactory.createTimeTableFromStartDateToEndDateByUser();
+                TestDTOFactory.createTimeTableFromStartDateToEndDate();
         TimeTable returnedTimeTable =
-                timeTableManager.getTimeTableFromStartDateToEndDateByUser(LocalDate.MIN, LocalDate.MAX, user);
-        returnedTimeTable.setEvents(returnedTimeTable.getEvents().stream()
-                .sorted(Comparator.comparing(Event::getDayOfEvent)
-                        .thenComparing(Event::getStartTime)
-                        .thenComparing(Event::getId))
-                .collect(Collectors.toList()));
+                timeTableManager.getTimeTableFromStartDateToEndDateByStudent(LocalDate.now(), LocalDate.now(), student);
         assertEquals(expectedTimeTable, returnedTimeTable);
         verify(eventService, times(3)).getAllEventsFromStartDateToEndDateByCourseId(
                 any(LocalDate.class), any(LocalDate.class), anyInt());
-        verify(studentService, atLeast(0)).getStudentCoursesByStudentId(anyInt());
-        verify(studentService, atMostOnce()).getStudentCoursesByStudentId(anyInt());
-        verify(teacherService, atLeast(0)).getTeacherCoursesByTeacherId(anyInt());
-        verify(teacherService, atMostOnce()).getTeacherCoursesByTeacherId(anyInt());
     }
 
     @Test
-    void getTimeTableFromStartDateToEndDateByUser_shouldThrowIllegalArgumentException_whenArgumentsContainStartDateAfterEndDate() {
+    void getTimeTableFromStartDateToEndDateByStudent_shouldThrowIllegalArgumentException_whenArgumentsContainStartDateAfterEndDate() {
         LocalDate startDate = LocalDate.now().plusDays(1);
         LocalDate endDate = LocalDate.now();
-        User user = new User() {
-            @Override
-            public void setId(Integer id) {
-                super.setId(1);
-            }
-        };
-        assertThrows(TimeTableManagerException.class,
-                () -> timeTableManager.getTimeTableFromStartDateToEndDateByUser(
-                        startDate, endDate, user));
+        Student student = new Student("Oloo", "Trololo");
+        assertThrows(ServiceException.class,
+                () -> timeTableManager.getTimeTableFromStartDateToEndDateByStudent(
+                        startDate, endDate, student));
     }
 
     @ParameterizedTest
     @MethodSource("provideForOneOrBothDataArgumentsNull")
     void getTimeTableFromStartDateToEndDateByUser_shouldThrowIllegalArgumentException_whenOneOrBothDataArgumentsNull(
             LocalDate startDate, LocalDate endDate) {
-        User user = new User() {
-            @Override
-            public void setId(Integer id) {
-                super.setId(id);
-            }
-        };
-        assertThrows(TimeTableManagerException.class,
-                () -> timeTableManager.getTimeTableFromStartDateToEndDateByUser(
-                        startDate, endDate, user));
+        Student student = new Student("Oloo", "Trololo");
+        assertThrows(ServiceException.class,
+                () -> timeTableManager.getTimeTableFromStartDateToEndDateByStudent(
+                        startDate, endDate, student));
     }
 
     @ParameterizedTest
-    @MethodSource("provideForUserOrUserIdIsNull")
-    void getTimeTableFromStartDateToEndDateByUser_shouldThrowIllegalArgumentException_whenUserOrUserIdIsNull(
-            User user) {
+    @MethodSource("provideForStudentOrStudentParametersAreNull")
+    void getTimeTableFromStartDateToEndDateByStudent_shouldThrowIllegalArgumentException_whenStudentOrStudentParametersAreNull(
+            Student student) {
         LocalDate startDate = LocalDate.now();
         LocalDate endDate = LocalDate.now();
-        assertThrows(TimeTableManagerException.class,
-                () -> timeTableManager.getTimeTableFromStartDateToEndDateByUser(
-                        startDate, endDate, user));
+        assertThrows(ServiceException.class,
+                () -> timeTableManager.getTimeTableFromStartDateToEndDateByStudent(
+                        startDate, endDate, student));
+    }
+
+    @ParameterizedTest
+    @MethodSource("provideForTeacherOrTeacherParametersAreNull")
+    void getTimeTableFromStartDateToEndDateByTeacher_shouldThrowIllegalArgumentException_whenTeacherOrTeacherParametersAreNull(
+            Teacher teacher) {
+        LocalDate startDate = LocalDate.now();
+        LocalDate endDate = LocalDate.now();
+        assertThrows(ServiceException.class,
+                () -> timeTableManager.getTimeTableFromStartDateToEndDateByTeacher(
+                        startDate, endDate, teacher));
     }
 
     private static Stream<Arguments> provideForOneOrBothDataArgumentsNull() {
@@ -125,16 +102,26 @@ class TimeTableManagerTest {
         );
     }
 
-    private static Stream<Arguments> provideForUserOrUserIdIsNull() {
+    private static Stream<Arguments> provideForStudentOrStudentParametersAreNull() {
+        Student student1 = new Student("First Name", null);
+        student1.setId(1);
+        Student student2 = new Student(null, "Last Name");
+        student2.setId(2);
         return Stream.of(
-                Arguments.of((User) null),
-                Arguments.of(new User() {
-                    @Override
-                    public void setFirstName(String firstName) {
-                        super.setFirstName(firstName);
-                    }
-                })
-        );
+                Arguments.of((Student) null),
+                Arguments.of(student1),
+                Arguments.of(student2));
+    }
+
+    private static Stream<Arguments> provideForTeacherOrTeacherParametersAreNull() {
+        Teacher teacher1 = new Teacher("First Name", null);
+        teacher1.setId(1);
+        Teacher teacher2 = new Teacher(null, "Last Name");
+        teacher2.setId(2);
+        return Stream.of(
+                Arguments.of((Teacher) null),
+                Arguments.of(teacher1),
+                Arguments.of(teacher2));
     }
 
 }

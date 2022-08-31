@@ -14,7 +14,8 @@ public class TeacherResultSetExtractor implements ResultSetExtractor<Teacher> {
     public Teacher extractData(ResultSet rs) throws SQLException, DataAccessException {
         Teacher teacher = null;
         if (rs.next()) {
-            teacher = new Teacher(rs.getInt("id"), rs.getString("first_name"), rs.getString("last_name"));
+            teacher = new Teacher(rs.getString("first_name"), rs.getString("last_name"));
+            teacher.setId(rs.getInt("id"));
         }
         return teacher;
     }

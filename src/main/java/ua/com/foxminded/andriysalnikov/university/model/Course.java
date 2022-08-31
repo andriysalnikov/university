@@ -1,24 +1,29 @@
 package ua.com.foxminded.andriysalnikov.university.model;
 
-import java.util.ArrayList;
-import java.util.List;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import javax.persistence.Id;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Column;
+import javax.persistence.GenerationType;
+        ;
 import java.util.Objects;
 
+@Entity
+@Table(name = "courses", schema = "university")
 public class Course {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    @Column(name = "name")
     private String name;
+    @Column(name = "description")
     private String description;
-    private Teacher teacher;
-    private List<Student> students;
 
-    public Course() {
-        this.students = new ArrayList<>();
-    }
+    public Course() { }
 
-    public Course(Integer id, String name, String description) {
-        this();
-        this.id = id;
+    public Course(String name, String description) {
         this.name = name;
         this.description = description;
     }
@@ -45,22 +50,6 @@ public class Course {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public Teacher getTeacher() {
-        return teacher;
-    }
-
-    public void setTeacher(Teacher teacher) {
-        this.teacher = teacher;
-    }
-
-    public List<Student> getStudents() {
-        return students;
-    }
-
-    public void setStudents(List<Student> students) {
-        this.students = new ArrayList<>(students);
     }
 
     @Override

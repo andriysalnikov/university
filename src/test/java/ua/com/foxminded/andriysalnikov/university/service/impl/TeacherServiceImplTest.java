@@ -10,11 +10,9 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import ua.com.foxminded.andriysalnikov.university.dao.TeacherDAO;
 import ua.com.foxminded.andriysalnikov.university.exceptions.ServiceException;
-import ua.com.foxminded.andriysalnikov.university.model.Course;
 import ua.com.foxminded.andriysalnikov.university.model.Teacher;
 import ua.com.foxminded.andriysalnikov.university.utils.TestDTOFactory;
 
-import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertSame;
@@ -34,7 +32,8 @@ class TeacherServiceImplTest {
 
     @Test
     void getTeacherById_shouldReturnTeacher_whenArgumentIsInteger() {
-        Teacher teacher = new Teacher(1, "Thor", "Heyerdahl");
+        Teacher teacher = new Teacher("Thor", "Heyerdahl");
+        teacher.setId(1);
         when(teacherDAO.getTeacherById(1)).thenReturn(Optional.of(teacher));
         assertSame(teacher, teacherServiceImpl.getTeacherById(1));
         verify(teacherDAO, times(1)).getTeacherById(any(Integer.class));
@@ -55,26 +54,26 @@ class TeacherServiceImplTest {
     }
 
     @Test
-    void getTeacherCoursesByTeacherId_shouldReturnListOfTeacherCourses_whenArgumentIsInteger() {
-        List<Course> expectedCourses = TestDTOFactory.createListOfCoursesForTest();
-        when(teacherDAO.getTeacherCoursesByTeacherId(1)).thenReturn(expectedCourses);
-        List<Course> returnedCourses = teacherServiceImpl.getTeacherCoursesByTeacherId(1);
-        assertSame(expectedCourses, returnedCourses);
-        verify(teacherDAO, times(1)).getTeacherCoursesByTeacherId(any(Integer.class));
+    void getTeacherByIdWithCourses_shouldReturnTeacherWithListOfCourses_whenArgumentIsInteger() {
+        Teacher expectedTeacher = TestDTOFactory.createTeacherWithCoursesForTest();
+        when(teacherDAO.getTeacherByIdWithCourses(1)).thenReturn(Optional.of(expectedTeacher));
+        Teacher returnedTeacher = teacherServiceImpl.getTeacherByIdWithCourses(1);
+        assertSame(expectedTeacher, returnedTeacher);
+        verify(teacherDAO, times(1)).getTeacherByIdWithCourses(any(Integer.class));
     }
 
     @ParameterizedTest
     @NullSource
-    void getTeacherCoursesByTeacherId_shouldThrowIllegalArgumentException_whenArgumentIsNull(Integer id) {
+    void getTeacherByIdWithCourses_shouldThrowIllegalArgumentException_whenArgumentIsNull(Integer id) {
         assertThrows(ServiceException.class,
-                () -> teacherServiceImpl.getTeacherCoursesByTeacherId(id));
+                () -> teacherServiceImpl.getTeacherByIdWithCourses(id));
     }
 
     @ParameterizedTest
     @CsvSource({"0", "-5", "-27"})
-    void getTeacherCoursesByTeacherId_shouldThrowIllegalArgumentException_whenArgumentIsIntegerLessOrEqualsZero(Integer id) {
+    void getTeacherByIdWithCourses_shouldThrowIllegalArgumentException_whenArgumentIsIntegerLessOrEqualsZero(Integer id) {
         assertThrows(ServiceException.class,
-                () -> teacherServiceImpl.getTeacherCoursesByTeacherId(id));
+                () -> teacherServiceImpl.getTeacherByIdWithCourses(id));
     }
 
 }

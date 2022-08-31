@@ -10,15 +10,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ua.com.foxminded.andriysalnikov.university.constants.Messages;
 import ua.com.foxminded.andriysalnikov.university.exceptions.ServiceException;
-import ua.com.foxminded.andriysalnikov.university.utils.ExceptionUtil;
-import ua.com.foxminded.andriysalnikov.university.model.Course;
 import ua.com.foxminded.andriysalnikov.university.model.ClassRoom;
+import ua.com.foxminded.andriysalnikov.university.model.Course;
 import ua.com.foxminded.andriysalnikov.university.model.Student;
-import ua.com.foxminded.andriysalnikov.university.model.Faculty;
 import ua.com.foxminded.andriysalnikov.university.service.ClassRoomService;
 import ua.com.foxminded.andriysalnikov.university.service.CourseService;
-import ua.com.foxminded.andriysalnikov.university.service.FacultyService;
 import ua.com.foxminded.andriysalnikov.university.service.StudentService;
+import ua.com.foxminded.andriysalnikov.university.utils.ExceptionUtil;
+import ua.com.foxminded.andriysalnikov.university.model.Faculty;
+import ua.com.foxminded.andriysalnikov.university.service.FacultyService;
 
 import java.util.List;
 
@@ -28,16 +28,16 @@ public class FacultyController {
     private static final Logger LOGGER = LoggerFactory.getLogger(FacultyController.class);
 
     private final FacultyService facultyService;
-    private final CourseService courseService;
     private final ClassRoomService classRoomService;
+    private final CourseService courseService;
     private final StudentService studentService;
 
     @Autowired
-    public FacultyController(FacultyService facultyService, CourseService courseService,
-                             ClassRoomService classRoomService, StudentService studentService) {
+    public FacultyController(FacultyService facultyService, ClassRoomService classRoomService,
+                             CourseService courseService, StudentService studentService) {
         this.facultyService = facultyService;
-        this.courseService = courseService;
         this.classRoomService = classRoomService;
+        this.courseService = courseService;
         this.studentService = studentService;
     }
 
@@ -60,7 +60,7 @@ public class FacultyController {
     public String createFaculty(@RequestParam("name") String fullName, Model model) {
         Faculty createdFaculty;
         try {
-            createdFaculty = facultyService.createFaculty(new Faculty(0, fullName));
+            createdFaculty = facultyService.createFaculty(new Faculty(fullName));
         } catch (ServiceException exception) {
             return ExceptionUtil.handleException(exception, LOGGER, model);
         }
@@ -100,7 +100,9 @@ public class FacultyController {
                                 Model model) {
         Faculty updatedFaculty;
         try {
-            updatedFaculty = facultyService.updateFaculty(new Faculty(facultyId, fullName));
+            Faculty faculty = new Faculty(fullName);
+            faculty.setId(facultyId);
+            updatedFaculty = facultyService.updateFaculty(faculty);
         } catch (ServiceException exception) {
             return ExceptionUtil.handleException(exception, LOGGER, model);
         }
@@ -108,68 +110,17 @@ public class FacultyController {
         return "redirect:/faculties";
     }
 
-    @GetMapping("/faculty_courses")
-    public String showFacultyCourses(@RequestParam("id") Integer facultyId, Model model) {
-        Faculty faculty;
-        List<Course> facultyCourses;
-        List<Course> otherAvailableCourses;
-        try {
-            faculty = facultyService.getFacultyById(facultyId);
-            facultyCourses = facultyService.getFacultyCoursesByFacultyId(facultyId);
-            otherAvailableCourses = courseService.getAllCoursesWithoutFaculty();
-        } catch (ServiceException exception) {
-            return ExceptionUtil.handleException(exception, LOGGER, model);
-        }
-        model.addAttribute("faculty", faculty);
-        model.addAttribute("courses", facultyCourses);
-        model.addAttribute("othercourses", otherAvailableCourses);
-        return "faculty/faculty_courses";
-    }
-
-    @PostMapping("/faculty/add_course")
-    public String addCourseToFaculty(@RequestParam("faculty_id") Integer facultyId,
-                                     @RequestParam("course_id") Integer courseId,
-                                     Model model) {
-        LOGGER.info(Messages.TRY_SET_FACULTY_TO_COURSE, facultyId, courseId);
-        Course updatedCourse;
-        try {
-            updatedCourse = courseService.setFacultyToCourse(facultyId, courseId);
-        } catch (ServiceException exception) {
-            return ExceptionUtil.handleException(exception, LOGGER, model);
-        }
-        LOGGER.info(Messages.OK_SET_FACULTY_TO_COURSE, facultyId, courseId, updatedCourse);
-        return "redirect:/faculty_courses?&id=" + facultyId;
-    }
-
-    @PostMapping("/faculty/remove_course")
-    public String removeCourseFromFaculty(@RequestParam("faculty_id") Integer facultyId,
-                                          @RequestParam("course_id") Integer courseId,
-                                          Model model) {
-        LOGGER.info(Messages.TRY_REMOVE_FACULTY_FROM_COURSE, courseId);
-        Course updatedCourse;
-        try {
-            updatedCourse = courseService.removeFacultyFromCourse(courseId);
-        } catch (ServiceException exception) {
-            return ExceptionUtil.handleException(exception, LOGGER, model);
-        }
-        LOGGER.info(Messages.OK_REMOVE_FACULTY_FROM_COURSE, courseId, updatedCourse);
-        return "redirect:/faculty_courses?&id=" + facultyId;
-    }
-
     @GetMapping("/faculty_classrooms")
     public String showFacultyClassRooms(@RequestParam("id") Integer facultyId, Model model) {
         Faculty faculty;
-        List<ClassRoom> facultyClassRooms;
         List<ClassRoom> otherAvailableClassRooms;
         try {
-            faculty = facultyService.getFacultyById(facultyId);
-            facultyClassRooms = facultyService.getFacultyClassRoomsByFacultyId(facultyId);
+            faculty = facultyService.getFacultyByIdWithClassRooms(facultyId);
             otherAvailableClassRooms = classRoomService.getAllClassRoomsWithoutFaculty();
         } catch (ServiceException exception) {
             return ExceptionUtil.handleException(exception, LOGGER, model);
         }
         model.addAttribute("faculty", faculty);
-        model.addAttribute("classrooms", facultyClassRooms);
         model.addAttribute("otherclassrooms", otherAvailableClassRooms);
         return "faculty/faculty_classrooms";
     }
@@ -178,14 +129,17 @@ public class FacultyController {
     public String addClassRoomToFaculty(@RequestParam("faculty_id") Integer facultyId,
                                         @RequestParam("classroom_id") Integer classRoomId,
                                         Model model) {
-        LOGGER.info(Messages.TRY_SET_FACULTY_TO_CLASSROOM, facultyId, classRoomId);
-        ClassRoom updatedClassRoom;
+        LOGGER.info(Messages.TRY_ADD_CLASSROOM_TO_FACULTY, classRoomId, facultyId);
+        ClassRoom classRoom;
         try {
-            updatedClassRoom = classRoomService.setFacultyToClassRoom(facultyId, classRoomId);
+            Faculty faculty = facultyService.getFacultyByIdWithClassRooms(facultyId);
+            classRoom = classRoomService.getClassRoomById(classRoomId);
+            faculty.addClassRoomToFaculty(classRoom);
+            facultyService.updateFaculty(faculty);
         } catch (ServiceException exception) {
             return ExceptionUtil.handleException(exception, LOGGER, model);
         }
-        LOGGER.info(Messages.OK_SET_FACULTY_TO_CLASSROOM, facultyId, classRoomId, updatedClassRoom);
+        LOGGER.info(Messages.OK_ADD_CLASSROOM_TO_FACULTY, classRoomId, facultyId, classRoom);
         return "redirect:/faculty_classrooms?&id=" + facultyId;
     }
 
@@ -193,31 +147,82 @@ public class FacultyController {
     public String removeClassRoomFromFaculty(@RequestParam("faculty_id") Integer facultyId,
                                              @RequestParam("classroom_id") Integer classRoomId,
                                              Model model) {
-        LOGGER.info(Messages.TRY_REMOVE_FACULTY_FROM_CLASSROOM, classRoomId);
-        ClassRoom updatedClassRoom;
+        LOGGER.info(Messages.TRY_REMOVE_CLASSROOM_FROM_FACULTY, classRoomId, facultyId);
+        ClassRoom classRoom;
         try {
-            updatedClassRoom = classRoomService.removeFacultyFromClassRoom(classRoomId);
+            Faculty faculty = facultyService.getFacultyByIdWithClassRooms(facultyId);
+            classRoom = classRoomService.getClassRoomById(classRoomId);
+            faculty.getClassRooms().remove(classRoom);
+            facultyService.updateFaculty(faculty);
         } catch (ServiceException exception) {
             return ExceptionUtil.handleException(exception, LOGGER, model);
         }
-        LOGGER.info(Messages.OK_REMOVE_FACULTY_FROM_CLASSROOM, classRoomId, updatedClassRoom);
+        LOGGER.info(Messages.OK_REMOVE_CLASSROOM_FROM_FACULTY, classRoomId, facultyId, classRoom);
         return "redirect:/faculty_classrooms?&id=" + facultyId;
+    }
+
+    @GetMapping("/faculty_courses")
+    public String showFacultyCourses(@RequestParam("id") Integer facultyId, Model model) {
+        Faculty faculty;
+        List<Course> otherAvailableCourses;
+        try {
+            faculty = facultyService.getFacultyByIdWithCourses(facultyId);
+            otherAvailableCourses = courseService.getAllCoursesWithoutFaculty();
+        } catch (ServiceException exception) {
+            return ExceptionUtil.handleException(exception, LOGGER, model);
+        }
+        model.addAttribute("faculty", faculty);
+        model.addAttribute("othercourses", otherAvailableCourses);
+        return "faculty/faculty_courses";
+    }
+
+    @PostMapping("/faculty/add_course")
+    public String addCourseToFaculty(@RequestParam("faculty_id") Integer facultyId,
+                                     @RequestParam("course_id") Integer courseId,
+                                     Model model) {
+        LOGGER.info(Messages.TRY_ADD_COURSE_TO_FACULTY, facultyId, courseId);
+        Course course;
+        try {
+            Faculty faculty = facultyService.getFacultyByIdWithCourses(facultyId);
+            course = courseService.getCourseById(courseId);
+            faculty.addCourseToFaculty(course);
+            facultyService.updateFaculty(faculty);
+        } catch (ServiceException exception) {
+            return ExceptionUtil.handleException(exception, LOGGER, model);
+        }
+        LOGGER.info(Messages.OK_ADD_COURSE_TO_FACULTY, courseId, facultyId, course);
+        return "redirect:/faculty_courses?&id=" + facultyId;
+    }
+
+    @PostMapping("/faculty/remove_course")
+    public String removeCourseFromFaculty(@RequestParam("faculty_id") Integer facultyId,
+                                          @RequestParam("course_id") Integer courseId,
+                                          Model model) {
+        LOGGER.info(Messages.TRY_REMOVE_COURSE_FROM_FACULTY, courseId, facultyId);
+        Course course;
+        try {
+            Faculty faculty = facultyService.getFacultyByIdWithCourses(facultyId);
+            course = courseService.getCourseById(courseId);
+            faculty.getCourses().remove(course);
+            facultyService.updateFaculty(faculty);
+        } catch (ServiceException exception) {
+            return ExceptionUtil.handleException(exception, LOGGER, model);
+        }
+        LOGGER.info(Messages.OK_REMOVE_COURSE_FROM_FACULTY, courseId, facultyId, course);
+        return "redirect:/faculty_courses?&id=" + facultyId;
     }
 
     @GetMapping("/faculty_students")
     public String showFacultyStudents(@RequestParam("id") Integer facultyId, Model model) {
         Faculty faculty;
-        List<Student> facultyStudents;
         List<Student> otherAvailableStudents;
         try {
-            faculty = facultyService.getFacultyById(facultyId);
-            facultyStudents = facultyService.getFacultyStudentsByFacultyId(facultyId);
+            faculty = facultyService.getFacultyByIdWithStudents(facultyId);
             otherAvailableStudents = studentService.getAllStudentsWithoutFaculty();
         } catch (ServiceException exception) {
             return ExceptionUtil.handleException(exception, LOGGER, model);
         }
         model.addAttribute("faculty", faculty);
-        model.addAttribute("students", facultyStudents);
         model.addAttribute("otherstudents", otherAvailableStudents);
         return "faculty/faculty_students";
     }
@@ -226,14 +231,17 @@ public class FacultyController {
     public String addStudentToFaculty(@RequestParam("faculty_id") Integer facultyId,
                                       @RequestParam("student_id") Integer studentId,
                                       Model model) {
-        LOGGER.info(Messages.TRY_SET_FACULTY_TO_STUDENT, facultyId, studentId);
-        Student updatedStudent;
+        LOGGER.info(Messages.TRY_ADD_STUDENT_TO_FACULTY, studentId, facultyId);
+        Student student;
         try {
-            updatedStudent = studentService.setFacultyToStudent(facultyId, studentId);
+            Faculty faculty = facultyService.getFacultyByIdWithStudents(facultyId);
+            student = studentService.getStudentById(studentId);
+            faculty.addStudentToFaculty(student);
+            facultyService.updateFaculty(faculty);
         } catch (ServiceException exception) {
             return ExceptionUtil.handleException(exception, LOGGER, model);
         }
-        LOGGER.info(Messages.OK_SET_FACULTY_TO_STUDENT, facultyId, studentId, updatedStudent);
+        LOGGER.info(Messages.OK_ADD_STUDENT_TO_FACULTY, studentId, facultyId, student);
         return "redirect:/faculty_students?&id=" + facultyId;
     }
 
@@ -241,14 +249,17 @@ public class FacultyController {
     public String removeStudentFromFaculty(@RequestParam("faculty_id") Integer facultyId,
                                            @RequestParam("student_id") Integer studentId,
                                            Model model) {
-        LOGGER.info(Messages.TRY_REMOVE_FACULTY_FROM_STUDENT, studentId);
-        Student updatedStudent;
+        LOGGER.info(Messages.TRY_REMOVE_STUDENT_FROM_FACULTY, studentId, facultyId);
+        Student student;
         try {
-            updatedStudent = studentService.removeFacultyFromStudent(studentId);
+            Faculty faculty = facultyService.getFacultyByIdWithStudents(facultyId);
+            student = studentService.getStudentById(studentId);
+            faculty.getStudents().remove(student);
+            facultyService.updateFaculty(faculty);
         } catch (ServiceException exception) {
             return ExceptionUtil.handleException(exception, LOGGER, model);
         }
-        LOGGER.info(Messages.OK_REMOVE_FACULTY_FROM_STUDENT, studentId, updatedStudent);
+        LOGGER.info(Messages.OK_REMOVE_STUDENT_FROM_FACULTY, studentId, facultyId, student);
         return "redirect:/faculty_students?&id=" + facultyId;
     }
 

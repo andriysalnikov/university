@@ -80,7 +80,7 @@ public class EventController {
         Event createdEvent;
         try {
             createdEvent = eventService.createEvent(
-                    collectEventFromParameters(0, date, time,courseId, classRoomId));
+                    collectEventFromParameters(null, date, time,courseId, classRoomId));
         } catch (ServiceException exception) {
             return ExceptionUtil.handleException(exception, LOGGER, model);
         }
@@ -125,12 +125,14 @@ public class EventController {
 
     private Event collectEventFromParameters(Integer eventId,String date, String time,
                                              Integer courseId, Integer classRoomId) {
-        Course course = new Course(courseId, null, null);
-        ClassRoom classRoom = new ClassRoom(classRoomId, null);
-        LocalDate dateOfEvent = LocalDate.parse(date);
-        LocalTime startTime = LocalTime.parse(time.replace('_', ':'));
-        LocalTime endTime = startTime.plusHours(2);
-        return new Event(eventId, dateOfEvent, startTime, endTime, classRoom, course);
+        Event event = new Event(
+                LocalDate.parse(date),
+                LocalTime.parse(time.replace('_', ':')),
+                LocalTime.parse(time.replace('_', ':')).plusHours(2),
+                classRoomService.getClassRoomById(classRoomId),
+                courseService.getCourseById(courseId));
+        event.setId(eventId);
+        return event;
     }
 
 }

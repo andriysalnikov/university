@@ -13,7 +13,5 @@ public interface ClassRoomDAO {
     Optional<ClassRoom> createClassRoom(ClassRoom classRoom);
     Optional<ClassRoom> deleteClassRoomById(Integer id);
     Optional<ClassRoom> updateClassRoom(ClassRoom classRoom);
-    Optional<ClassRoom> setFacultyToClassRoom(Integer facultyId, Integer classRoomId);
-    Optional<ClassRoom> removeFacultyFromClassRoom(Integer classRoomId);
 
 }

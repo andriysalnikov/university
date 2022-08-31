@@ -17,28 +17,22 @@ public final class Messages {
             "'StartDate' cannot be after 'EndDate'";
 
 
-    // Messages for 'DataSource'
-
-    public static final String TRY_OBTAIN_DATASOURCE =
-            "Trying to obtain a DataSource";
-
-    public static final String OK_OBTAIN_DATASOURCE =
-            "DataSource obtained";
-
-    public static final String ERROR_OBTAIN_DATASOURCE =
-            "Cannot obtain a DataSource";
-
-
     // Messages for 'Timetable'
 
-    public static final String TRY_GET_TIMETABLE_FROM_STARTDATE_TO_ENDDATE_BY_USER =
-            "Trying to get 'Timetable' from '{}' to '{}' for {}";
+    public static final String TRY_GET_TIMETABLE_FROM_STARTDATE_TO_ENDDATE_BY_TEACHER =
+            "Trying to get 'Timetable' from '{}' to '{}' for 'Teacher'";
 
-    public static final String OK_GET_TIMETABLE_FROM_STARTDATE_TO_ENDDATE_BY_USER =
-            "'Timetable' from '{}' to '{}' for {} obtained: {}";
+    public static final String OK_GET_TIMETABLE_FROM_STARTDATE_TO_ENDDATE_BY_TEACHER =
+            "'Timetable' from '{}' to '{}' for 'Teacher' obtained: {}";
+
+    public static final String TRY_GET_TIMETABLE_FROM_STARTDATE_TO_ENDDATE_BY_STUDENT =
+            "Trying to get 'Timetable' from '{}' to '{}' for 'Student'";
+
+    public static final String OK_GET_TIMETABLE_FROM_STARTDATE_TO_ENDDATE_BY_STUDENT =
+            "'Timetable' from '{}' to '{}' for 'Student' obtained: {}";
 
 
-    // Messages for 'Users'
+    // Messages for 'Teachers' and 'Students'
 
     public static final String TRY_GET_ALL_STUDENTS =
             "Trying to get all 'Students'";
@@ -52,11 +46,17 @@ public final class Messages {
     public static final String OK_GET_ALL_TEACHERS =
             "All 'Teachers' obtained: {}";
 
-    public static final String TRY_GET_USER_BY_ID =
-            "Trying to get '{}' by 'id'={}";
+    public static final String TRY_GET_TEACHER_BY_ID =
+            "Trying to get 'Teacher' by 'id'={}";
 
-    public static final String OK_GET_USER_BY_ID =
-            "'{}' obtained by 'id'={} : {}";
+    public static final String OK_GET_TEACHER_BY_ID =
+            "'Teacher' obtained by 'id'={} : {}";
+
+    public static final String TRY_GET_STUDENT_BY_ID =
+            "Trying to get 'Student' by 'id'={}";
+
+    public static final String OK_GET_STUDENT_BY_ID =
+            "'Student' obtained by 'id'={} : {}";
 
     public static final String ERROR_GET_STUDENT_BY_ID =
             "Cannot get 'Student' from storage";
@@ -64,11 +64,17 @@ public final class Messages {
     public static final String ERROR_GET_TEACHER_BY_ID =
             "Cannot get 'Teacher' from storage";
 
-    public static final String TRY_CREATE_USER =
-            "Trying to create a '{}'";
+    public static final String TRY_CREATE_TEACHER =
+            "Trying to create a 'Teacher'";
 
-    public static final String OK_CREATE_USER =
-            "'{}' created : {}";
+    public static final String OK_CREATE_TEACHER =
+            "'Teacher' created : {}";
+
+    public static final String TRY_CREATE_STUDENT =
+            "Trying to create a 'Student'";
+
+    public static final String OK_CREATE_STUDENT =
+            "'Student' created : {}";
 
     public static final String ERROR_CREATE_TEACHER =
             "Cannot create 'Teacher' in storage";
@@ -76,14 +82,23 @@ public final class Messages {
     public static final String ERROR_CREATE_STUDENT =
             "Cannot create 'Student' in storage";
 
-    public static final String ERROR_ARGUMENT_USER =
-            "'User' or 'User.firstName' or 'User.lastName' cannot be null";
+    public static final String ERROR_ARGUMENT_TEACHER =
+            "'Teacher' or 'Teacher.firstName' or 'Teacher.lastName' or 'Teacher.id' cannot be null";
 
-    public static final String TRY_DELETE_USER_BY_ID =
-            "Trying to delete '{}' by 'id'={}";
+    public static final String ERROR_ARGUMENT_STUDENT =
+            "'Student' or 'Student.firstName' or 'Student.lastName' or 'Student.id' cannot be null";
 
-    public static final String OK_DELETE_USER_BY_ID =
-            "'{}' delete by 'id'={} : {}";
+    public static final String TRY_DELETE_TEACHER_BY_ID =
+            "Trying to delete 'Teacher' by 'id'={}";
+
+    public static final String OK_DELETE_TEACHER_BY_ID =
+            "'Teacher' delete by 'id'={} : {}";
+
+    public static final String TRY_DELETE_STUDENT_BY_ID =
+            "Trying to delete 'Student' by 'id'={}";
+
+    public static final String OK_DELETE_STUDENT_BY_ID =
+            "'Student' delete by 'id'={} : {}";
 
     public static final String ERROR_DELETE_TEACHER_BY_ID =
             "Cannot delete 'Teacher' from storage";
@@ -91,11 +106,17 @@ public final class Messages {
     public static final String ERROR_DELETE_STUDENT_BY_ID =
             "Cannot delete 'Student' from storage";
 
-    public static final String TRY_UPDATE_USER =
-            "Trying to update a '{}' : {}";
+    public static final String TRY_UPDATE_TEACHER =
+            "Trying to update a 'Teacher' : {}";
 
-    public static final String OK_UPDATE_USER =
-            "Trying to update a '{}' : {}";
+    public static final String OK_UPDATE_TEACHER =
+            "Trying to update a 'Teacher' : {}";
+
+    public static final String TRY_UPDATE_STUDENT =
+            "Trying to update a 'Student' : {}";
+
+    public static final String OK_UPDATE_STUDENT =
+            "Trying to update a 'Student' : {}";
 
     public static final String ERROR_UPDATE_TEACHER =
             "Cannot update 'Teacher' in storage";
@@ -103,29 +124,17 @@ public final class Messages {
     public static final String ERROR_UPDATE_STUDENT =
             "Cannot update 'Student' in storage";
 
-    public static final String TRY_GET_USER_COURSES_BY_USER_ID =
-            "Trying to get '{}' 'Courses' by 'id'={}";
+    public static final String TRY_ADD_STUDENT_TO_FACULTY =
+            "Trying to add 'Student'('id'={}) to 'Faculty'('id'={})";
 
-    public static final String OK_GET_USER_COURSES_BY_USER_ID =
-            "All 'Courses' for '{}' with 'id'={} obtained: {}";
+    public static final String OK_ADD_STUDENT_TO_FACULTY =
+            "It is OK adding 'Student'('id'={}) to 'Faculty'('id'={}) : {}";
 
-    public static final String TRY_SET_FACULTY_TO_STUDENT =
-            "Trying to set 'Faculty'('id'={}) to 'Student'('id'={})";
+    public static final String TRY_REMOVE_STUDENT_FROM_FACULTY =
+            "Trying to remove 'Student'('id'={}) from  'Faculty'('id'={})";
 
-    public static final String OK_SET_FACULTY_TO_STUDENT =
-            "It is OK setting 'Faculty'('id'={}) to 'Student'('id'={}) : {}";
-
-    public static final String ERROR_SET_FACULTY_TO_STUDENT =
-            "Cannot set 'Faculty' to 'Student'";
-
-    public static final String TRY_REMOVE_FACULTY_FROM_STUDENT =
-            "Trying to remove 'Faculty' from 'Student'('id'={})";
-
-    public static final String OK_REMOVE_FACULTY_FROM_STUDENT =
-            "It is OK removing 'Faculty' from 'Student'('id'={}) : {}";
-
-    public static final String ERROR_REMOVE_FACULTY_FROM_STUDENT =
-            "Cannot remove 'Faculty' from 'Student'";
+    public static final String OK_REMOVE_STUDENT_FROM_FACULTY =
+            "It is OK removing 'Student'('id'={}) from  'Faculty'('id'={}) : {}";
 
     public static final String TRY_GET_ALL_STUDENTS_WITHOUT_FACULTY =
             "Trying to get all 'Students' without 'Faculty'";
@@ -235,24 +244,6 @@ public final class Messages {
     public static final String ERROR_ARGUMENT_FACULTY =
             "'Faculty' or 'Faculty.fullName' cannot be null";
 
-    public static final String TRY_GET_FACULTY_COURSES_BY_FACULTY_ID =
-            "Trying to get 'Faculty' 'Courses' by 'id'={}";
-
-    public static final String OK_GET_FACULTY_COURSES_BY_FACULTY_ID =
-            "All 'Courses' for 'Faculty' with 'id'={} obtained: {}";
-
-    public static final String TRY_GET_FACULTY_CLASSROOMS_BY_FACULTY_ID =
-            "Trying to get 'Faculty' 'Classrooms' by 'id'={}";
-
-    public static final String OK_GET_FACULTY_CLASSROOMS_BY_FACULTY_ID =
-            "All 'Classrooms' for 'Faculty' with 'id'={} obtained: {}";
-
-    public static final String TRY_GET_FACULTY_STUDENTS_BY_FACULTY_ID =
-            "Trying to get 'Faculty' 'Students' by 'id'={}";
-
-    public static final String OK_GET_FACULTY_STUDENTS_BY_FACULTY_ID =
-            "All 'Students' for 'Faculty' with 'id'={} obtained: {}";
-
 
     // Messages for 'Classrooms'
 
@@ -301,23 +292,17 @@ public final class Messages {
     public static final String ERROR_ARGUMENT_CLASSROOM =
             "'Classroom' or 'Classroom.name' cannot be null";
 
-    public static final String TRY_SET_FACULTY_TO_CLASSROOM =
-            "Trying to set 'Faculty'('id'={}) to 'Classroom'('id'={})";
+    public static final String TRY_ADD_CLASSROOM_TO_FACULTY =
+            "Trying to add 'Classroom'('id'={}) to 'Faculty'('id'={})";
 
-    public static final String OK_SET_FACULTY_TO_CLASSROOM =
-            "It is OK setting 'Faculty'('id'={}) to 'Classroom'('id'={}) : {}";
+    public static final String OK_ADD_CLASSROOM_TO_FACULTY =
+            "It is OK adding 'Classroom'('id'={}) to 'Faculty'('id'={}) : {}";
 
-    public static final String ERROR_SET_FACULTY_TO_CLASSROOM =
-            "Cannot set 'Faculty' to 'Course'";
+    public static final String TRY_REMOVE_CLASSROOM_FROM_FACULTY =
+            "Trying to remove 'Classroom'('id'={}) from 'Faculty'('id'={})";
 
-    public static final String TRY_REMOVE_FACULTY_FROM_CLASSROOM =
-            "Trying to remove 'Faculty' from 'Classroom'('id'={})";
-
-    public static final String OK_REMOVE_FACULTY_FROM_CLASSROOM =
-            "It is OK removing 'Faculty' from 'Classroom'('id'={}) : {}";
-
-    public static final String ERROR_REMOVE_FACULTY_FROM_CLASSROOM =
-            "Cannot remove 'Faculty' from 'Classroom'";
+    public static final String OK_REMOVE_CLASSROOM_FROM_FACULTY =
+            "It is OK removing 'Classroom'('id'={}) from 'Faculty'('id'={}) : {}";
 
     public static final String TRY_GET_ALL_CLASSROOMS_WITHOUT_FACULTY =
             "Trying to get all 'Classrooms' without 'Faculty'";
@@ -345,12 +330,6 @@ public final class Messages {
 
     public static final String OK_GET_ALL_COURSES_WITHOUT_FACULTY =
             "All 'Courses' without 'Faculty' obtained: {}";
-
-    public static final String TRY_GET_ALL_OTHER_AVAILABLE_COURSES_FOR_STUDENT =
-            "Trying to get all other available 'Courses' for 'Student'('id'={})";
-
-    public static final String OK_GET_ALL_OTHER_AVAILABLE_COURSES_FOR_STUDENT =
-            "All other available 'Courses' for 'Student'('id'={}) obtained: {}";
 
     public static final String TRY_GET_COURSE_BY_ID =
             "Trying to get 'Course' by 'id'={}";
@@ -391,71 +370,41 @@ public final class Messages {
     public static final String ERROR_ARGUMENT_COURSE =
             "'Course' or 'Course.name' cannot be null";
 
-    public static final String TRY_SET_TEACHER_TO_COURSE =
-            "Trying to set 'Teacher'('id'={}) to 'Course'('id'={})";
+    public static final String TRY_ADD_COURSE_TO_TEACHER =
+            "Trying to add 'Course'('id'={}) to 'Teacher'('id'={})";
 
-    public static final String OK_SET_TEACHER_TO_COURSE =
-            "It is OK setting 'Teacher'('id'={}) to 'Course'('id'={}) : {}";
+    public static final String OK_ADD_COURSE_TO_TEACHER =
+            "It is OK adding 'Course'('id'={}) to 'Teacher'('id'={}) : {}";
 
-    public static final String ERROR_SET_TEACHER_TO_COURSE =
-            "Cannot set 'Teacher' to 'Course'";
+    public static final String TRY_REMOVE_COURSE_FROM_TEACHER =
+            "Trying to remove 'Course'('id'={}) from 'Teacher'('id'={})";
 
-    public static final String TRY_REMOVE_TEACHER_FROM_COURSE =
-            "Trying to remove 'Teacher' from 'Course'('id'={})";
+    public static final String OK_REMOVE_COURSE_FROM_TEACHER =
+            "It is OK removing 'Course'('id'={}) from 'Teacher'('id'={}) : {}";
 
-    public static final String OK_REMOVE_TEACHER_FROM_COURSE =
-            "It is OK removing 'Teacher' from 'Course'('id'={}) : {}";
+    public static final String TRY_ADD_COURSE_TO_FACULTY =
+            "Trying to add 'Course'('id'={}) to 'Faculty'('id'={})";
 
-    public static final String ERROR_REMOVE_TEACHER_FROM_COURSE =
-            "Cannot remove 'Teacher' from 'Course'";
+    public static final String OK_ADD_COURSE_TO_FACULTY =
+            "It is OK adding 'Course'('id'={}) to 'Faculty'('id'={}) : {}";
 
-    public static final String TRY_SET_FACULTY_TO_COURSE =
-            "Trying to set 'Faculty'('id'={}) to 'Course'('id'={})";
+    public static final String TRY_REMOVE_COURSE_FROM_FACULTY =
+            "Trying to remove 'Course'('id'={}) from 'Faculty'('id'={})";
 
-    public static final String OK_SET_FACULTY_TO_COURSE =
-            "It is OK setting 'Faculty'('id'={}) to 'Course'('id'={}) : {}";
+    public static final String OK_REMOVE_COURSE_FROM_FACULTY =
+            "It is OK removing 'Course'('id'={}) from 'Faculty'('id'={}) : {}";
 
-    public static final String ERROR_SET_FACULTY_TO_COURSE =
-            "Cannot set 'Faculty' to 'Course'";
+    public static final String TRY_ADD_COURSE_TO_STUDENT =
+            "Trying to add 'Course'('id'={}) to 'Student'('id'={})";
 
-    public static final String TRY_REMOVE_FACULTY_FROM_COURSE =
-            "Trying to remove 'Faculty' from 'Course'('id'={})";
+    public static final String OK_ADD_COURSE_TO_STUDENT =
+            "It is OK adding 'Course'('id'={}) to 'Student'('id'={}) : {}";
 
-    public static final String OK_REMOVE_FACULTY_FROM_COURSE =
-            "It is OK removing 'Faculty' from 'Course'('id'={}) : {}";
+    public static final String TRY_REMOVE_COURSE_FROM_STUDENT =
+            "Trying to remove 'Course'('id'={}) from 'Student'('id'={})";
 
-    public static final String ERROR_REMOVE_FACULTY_FROM_COURSE =
-            "Cannot remove 'Faculty' from 'Course'";
-
-    public static final String TRY_SET_STUDENT_TO_COURSE =
-            "Trying to set 'Student'('id'={}) to 'Course'('id'={})";
-
-    public static final String OK_SET_STUDENT_TO_COURSE =
-            "It is OK setting 'Student'('id'={}) to 'Course'('id'={})";
-
-    public static final String ERROR_SET_STUDENT_TO_COURSE =
-            "Cannot set 'Student' to 'Course'";
-
-    public static final String TRY_REMOVE_STUDENT_FROM_COURSE =
-            "Trying to remove 'Student'('id'={}) from 'Course'('id'={})";
-
-    public static final String OK_REMOVE_STUDENT_FROM_COURSE =
-            "It is OK removing 'Student'('id'={}) from 'Course'('id'={})";
-
-    public static final String ERROR_REMOVE_STUDENT_FROM_COURSE =
-            "Cannot remove 'Student' from 'Course'";
-
-    public static final String TRY_SET_USER_TO_COURSE =
-            "Trying to set '{}'('id'={}) to 'Course'('id'={})";
-
-    public static final String OK_SET_USER_TO_COURSE =
-            "It is OK setting '{}'('id'={}) to 'Course'('id'={})";
-
-    public static final String TRY_REMOVE_USER_FROM_COURSE =
-            "Trying to remove '{}'('id'={}) from 'Course'('id'={})";
-
-    public static final String OK_REMOVE_USER_FROM_COURSE =
-            "It is OK removing '{}'('id'={}) from 'Course'('id'={})";
+    public static final String OK_REMOVE_COURSE_FROM_STUDENT =
+            "It is OK removing 'Course'('id'={}) from 'Student'('id'={}) : {}";
 
     private Messages() { }
 

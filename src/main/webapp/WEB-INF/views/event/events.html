@@ -27,7 +27,7 @@
         <td style="width: 100px; text-align: center" th:text="${event.getStartTime()}"></td>
         <td style="width: 100px; text-align: center" th:text="${event.getEndTime()}"></td>
         <td style="width: 150px; text-align: center" th:text="${event.getCourse().getName()}"></td>
-        <td style="width: 100px; text-align: center" th:text="${event.getClassRoom().getName()}"></td>
+        <td style="width: 100px; text-align: center" th:text="${event.classRoom?.getName()}"></td>
         <td style="width: 50px; text-align: center" >
           <form th:action="@{/event/update}" method="get">
             <input type="hidden" name="id" th:value="${event.getId()}" />

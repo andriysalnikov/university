@@ -2,13 +2,12 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
   <head>
     <meta charset="UTF-8">
-    <title>Create [[|${user_type}|]]</title>
+    <title>Create Teacher</title>
   </head>
   <body>
-    <h1 style="text-align: center">Create [[|${user_type}|]]</h1>
-    <form th:action="@{/user/create}" method="post">
+    <h1 style="text-align: center">Create Teacher</h1>
+    <form th:action="@{/teacher/create}" method="post">
       <table style="margin: auto">
-        <input type="hidden" name="user_type" th:value="${user_type}" />
         <tr>
           <td style="width: 100px; text-align: right">First Name:</td>
           <td style="width: 200px; text-align: left;">
@@ -27,13 +26,8 @@
       </div>
     </form>
     <br/><br/>
-    <div style="text-align: center" th:switch="${user_type}">
-      <span th:case="'Teacher'">
-        <button onclick="location.href='../teachers'">Back to Teachers Page</button>
-      </span>
-      <span th:case="'Student'">
-        <button onclick="location.href='../students'">Back to Students Page</button>
-      </span>
+    <div style="text-align: center">
+      <button onclick="location.href='../teachers'">Back to Teachers Page</button>
     </div>
   </body>
 </html>

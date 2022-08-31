@@ -9,13 +9,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ua.com.foxminded.andriysalnikov.university.constants.Messages;
 import ua.com.foxminded.andriysalnikov.university.exceptions.ServiceException;
-import ua.com.foxminded.andriysalnikov.university.exceptions.TimeTableManagerException;
-import ua.com.foxminded.andriysalnikov.university.utils.ExceptionUtil;
-import ua.com.foxminded.andriysalnikov.university.model.User;
+import ua.com.foxminded.andriysalnikov.university.model.Student;
+import ua.com.foxminded.andriysalnikov.university.model.Teacher;
 import ua.com.foxminded.andriysalnikov.university.model.TimeTable;
 import ua.com.foxminded.andriysalnikov.university.service.StudentService;
 import ua.com.foxminded.andriysalnikov.university.service.TeacherService;
 import ua.com.foxminded.andriysalnikov.university.service.TimeTableManager;
+import ua.com.foxminded.andriysalnikov.university.utils.ExceptionUtil;
 
 import java.time.LocalDate;
 
@@ -24,16 +24,16 @@ public class UniversityController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UniversityController.class);
 
+    private final TimeTableManager timeTableManager;
     private final StudentService studentService;
     private final TeacherService teacherService;
-    private final TimeTableManager timeTableManager;
 
     @Autowired
-    public UniversityController (StudentService studentService, TeacherService teacherService,
-                                 TimeTableManager timeTableManager) {
+    public UniversityController(TimeTableManager timeTableManager,
+                                StudentService studentService, TeacherService teacherService) {
+        this.timeTableManager = timeTableManager;
         this.studentService = studentService;
         this.teacherService = teacherService;
-        this.timeTableManager = timeTableManager;
     }
 
     @GetMapping("/")
@@ -41,48 +41,62 @@ public class UniversityController {
         return "university";
     }
 
-    @GetMapping("/timetable")
-    public String showTimeTable(@RequestParam("user_type") String userType,
-                                @RequestParam("id") Integer userId,
-                                @RequestParam("start_date") String startDate,
-                                @RequestParam("end_date") String endDate,
-                                Model model) {
-        User user;
+    @GetMapping("/timetable/teacher")
+    public String showTeacherTimeTable(@RequestParam("id") Integer id,
+                                       @RequestParam("start_date") String startDate,
+                                       @RequestParam("end_date") String endDate,
+                                       Model model) {
+        Teacher teacher = null;
         try {
-            user = getUserById(userType, userId);
+            teacher = teacherService.getTeacherByIdWithCourses(id);
         } catch (ServiceException exception) {
-            LOGGER.error(exception.getMessage());
-            model.addAttribute("error_message", exception.getMessage());
-            return "error";
+            ExceptionUtil.handleException(exception, LOGGER, model);
         }
-        LOGGER.info(Messages.TRY_GET_TIMETABLE_FROM_STARTDATE_TO_ENDDATE_BY_USER,
-                startDate, endDate, user);
+        model.addAttribute("teacher", teacher);
+        LOGGER.info(Messages.TRY_GET_TIMETABLE_FROM_STARTDATE_TO_ENDDATE_BY_TEACHER,
+                startDate, endDate);
         TimeTable timeTable;
         try {
-            timeTable = timeTableManager.getTimeTableFromStartDateToEndDateByUser(
-                    LocalDate.parse(startDate), LocalDate.parse(endDate), user);
-        } catch (TimeTableManagerException exception) {
+            timeTable = timeTableManager.getTimeTableFromStartDateToEndDateByTeacher(
+                    LocalDate.parse(startDate), LocalDate.parse(endDate), teacher);
+        } catch (ServiceException exception) {
             return ExceptionUtil.handleException(exception, LOGGER, model);
         }
-        LOGGER.info(Messages.OK_GET_TIMETABLE_FROM_STARTDATE_TO_ENDDATE_BY_USER,
-                startDate, endDate, user, timeTable);
-        model.addAttribute("user_type", userType);
-        model.addAttribute("user", user);
         model.addAttribute("start_date", startDate);
         model.addAttribute("end_date", endDate);
         model.addAttribute("timetable", timeTable);
-        return "timetable";
+        LOGGER.info(Messages.OK_GET_TIMETABLE_FROM_STARTDATE_TO_ENDDATE_BY_TEACHER,
+                startDate, endDate, timeTable);
+        return "teacher_timetable";
     }
 
-    private User getUserById(String userType, Integer userId) {
-        User user = null;
-        if (userType.equals("Teacher")) {
-            user = teacherService.getTeacherById(userId);
+    @GetMapping("/timetable/student")
+    public String showStudentTimeTable(@RequestParam("id") Integer id,
+                                       @RequestParam("start_date") String startDate,
+                                       @RequestParam("end_date") String endDate,
+                                       Model model) {
+        Student student = null;
+        try {
+            student = studentService.getStudentByIdWithCourses(id);
+        } catch (ServiceException exception) {
+            ExceptionUtil.handleException(exception, LOGGER, model);
         }
-        if (userType.equals("Student")) {
-            user = studentService.getStudentById(userId);
+        model.addAttribute("student", student);
+        LOGGER.info(Messages.TRY_GET_TIMETABLE_FROM_STARTDATE_TO_ENDDATE_BY_STUDENT,
+                startDate, endDate);
+        TimeTable timeTable;
+        try {
+            timeTable = timeTableManager.getTimeTableFromStartDateToEndDateByStudent(
+                    LocalDate.parse(startDate), LocalDate.parse(endDate), student);
+        } catch (ServiceException exception) {
+            return ExceptionUtil.handleException(exception, LOGGER, model);
         }
-        return user;
+        model.addAttribute("start_date", startDate);
+        model.addAttribute("end_date", endDate);
+        model.addAttribute("timetable", timeTable);
+        LOGGER.info(Messages.OK_GET_TIMETABLE_FROM_STARTDATE_TO_ENDDATE_BY_STUDENT,
+                startDate, endDate, timeTable);
+        return "student_timetable";
     }
 
 }

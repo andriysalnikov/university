@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ua.com.foxminded.andriysalnikov.university.constants.Messages;
 import ua.com.foxminded.andriysalnikov.university.dao.ClassRoomDAO;
 import ua.com.foxminded.andriysalnikov.university.exceptions.ServiceException;
@@ -14,6 +15,7 @@ import ua.com.foxminded.andriysalnikov.university.validation.Validation;
 import java.util.List;
 
 @Service
+@Transactional
 public class ClassRoomServiceImpl implements ClassRoomService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ClassRoomServiceImpl.class);
@@ -87,31 +89,6 @@ public class ClassRoomServiceImpl implements ClassRoomService {
         });
         LOGGER.debug(Messages.OK_UPDATE_CLASSROOM, updatedClassRoom);
         return updatedClassRoom;
-    }
-
-    @Override
-    public ClassRoom setFacultyToClassRoom(Integer facultyId, Integer classRoomId) {
-        LOGGER.debug(Messages.TRY_SET_FACULTY_TO_CLASSROOM, facultyId, classRoomId);
-        Validation.validateId(facultyId);
-        Validation.validateId(classRoomId);
-        ClassRoom updatedClassroom = classRoomDAO.setFacultyToClassRoom(facultyId, classRoomId).orElseThrow(() -> {
-            LOGGER.error(Messages.ERROR_SET_FACULTY_TO_CLASSROOM);
-            throw new ServiceException(Messages.ERROR_SET_FACULTY_TO_CLASSROOM);
-        });
-        LOGGER.debug(Messages.OK_SET_FACULTY_TO_CLASSROOM, facultyId, classRoomId, updatedClassroom);
-        return updatedClassroom;
-    }
-
-    @Override
-    public ClassRoom removeFacultyFromClassRoom(Integer classRoomId) {
-        LOGGER.debug(Messages.TRY_REMOVE_FACULTY_FROM_CLASSROOM, classRoomId);
-        Validation.validateId(classRoomId);
-        ClassRoom updatedClassroom = classRoomDAO.removeFacultyFromClassRoom(classRoomId).orElseThrow(() -> {
-            LOGGER.error(Messages.ERROR_REMOVE_FACULTY_FROM_CLASSROOM);
-            throw new ServiceException(Messages.ERROR_REMOVE_FACULTY_FROM_CLASSROOM);
-        });
-        LOGGER.debug(Messages.OK_REMOVE_FACULTY_FROM_CLASSROOM, classRoomId, updatedClassroom);
-        return updatedClassroom;
     }
 
 }

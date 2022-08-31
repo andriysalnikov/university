@@ -14,7 +14,8 @@ public class CourseResultSetExtractor implements ResultSetExtractor<Course> {
     public Course extractData(ResultSet rs) throws SQLException, DataAccessException {
         Course course = null;
         if (rs.next()) {
-            course = new Course(rs.getInt("id"), rs.getString("name"), rs.getString("description"));
+            course = new Course(rs.getString("name"), rs.getString("description"));
+            course.setId(rs.getInt("id"));
         }
         return course;
     }

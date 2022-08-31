@@ -13,7 +13,8 @@ public class ClassRoomResultSetExtractor implements ResultSetExtractor<ClassRoom
     public ClassRoom extractData(ResultSet rs) throws SQLException, DataAccessException {
         ClassRoom classRoom = null;
         if (rs.next()) {
-            classRoom = new ClassRoom(rs.getInt("id"), rs.getString("name"));
+            classRoom = new ClassRoom(rs.getString("name"));
+            classRoom.setId(rs.getInt("id"));
         }
         return classRoom;
     }

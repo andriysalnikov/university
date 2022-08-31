@@ -40,15 +40,21 @@ Create full CRUD pages for models that were used in the previous task.
 ### Task 16 - Data Source
 Create DataSource in web-project configuration files. Switch DAO layer to lookup DataSource by JNDI name.
 
+### Task 17 - Hibernate
+Rewrite the DAO layer. Use Hibernate instead of Spring JDBC. 
+The Hibernate should be used as a provider that implements JPA specification, 
+the Service layer should use and depend on the JPA interfaces, not the Hibernate ones.
+
 #### Tools that were used
-- Oracle JDK (11.0.15.1) 
-- Spring Framework (5.3.20)
+- Oracle JDK (11.0.16) 
+- Spring Framework (5.3.22)
 - Servlet API (4.0.1)
+- Hibernate (5.6.10.Final)
 - Thymeleaf (3.1.0.M2)
-- Tomcat (9.0.63)
-- PostgreSQL (14.2) 
-- H2 (2.1.212) for testing
-- jUnit (5.8.2) and Mockito (4.4.0)
+- Tomcat (9.0.65)
+- PostgreSQL (14.5) 
+- H2 (2.1.214) for testing
+- jUnit (5.9.0) and Mockito (4.6.1)
 - Logback (1.2.11)
 
 #### How to run this application

@@ -10,11 +10,9 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import ua.com.foxminded.andriysalnikov.university.dao.StudentDAO;
 import ua.com.foxminded.andriysalnikov.university.exceptions.ServiceException;
-import ua.com.foxminded.andriysalnikov.university.model.Course;
 import ua.com.foxminded.andriysalnikov.university.model.Student;
 import ua.com.foxminded.andriysalnikov.university.utils.TestDTOFactory;
 
-import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertSame;
@@ -34,7 +32,7 @@ class StudentServiceImplTest {
 
     @Test
     void getStudentById_shouldReturnStudent_whenArgumentIsInteger() {
-        Student student = new Student(5, "Elon", "Musk");
+        Student student = new Student("Elon", "Musk");
         when(studentDAO.getStudentById(5)).thenReturn(Optional.of(student));
         assertSame(student, studentServiceImpl.getStudentById(5));
         verify(studentDAO, times(1)).getStudentById(any(Integer.class));
@@ -55,26 +53,26 @@ class StudentServiceImplTest {
     }
 
     @Test
-    void getStudentCoursesByStudentId_shouldReturnListOfStudentCourses_whenArgumentIsInteger() {
-        List<Course> expectedCourses = TestDTOFactory.createListOfCoursesForTest();
-        when(studentDAO.getStudentCoursesByStudentId(1)).thenReturn(expectedCourses);
-        List<Course> returnedCourses = studentServiceImpl.getStudentCoursesByStudentId(1);
-        assertSame(expectedCourses, returnedCourses);
-        verify(studentDAO, times(1)).getStudentCoursesByStudentId(any(Integer.class));
+    void getTeacherByIdWithCourses_shouldReturnTeacherWithListOfCourses_whenArgumentIsInteger() {
+        Student expectedStudent = TestDTOFactory.createStudentWithCoursesForTest();
+        when(studentDAO.getStudentByIdWithCourses(1)).thenReturn(Optional.of(expectedStudent));
+        Student returnedStudent = studentServiceImpl.getStudentByIdWithCourses(1);
+        assertSame(expectedStudent, returnedStudent);
+        verify(studentDAO, times(1)).getStudentByIdWithCourses(any(Integer.class));
     }
 
     @ParameterizedTest
     @NullSource
-    void getTeacherCoursesByTeacherId_shouldThrowIllegalArgumentException_whenArgumentIsNull(Integer id) {
+    void getStudentByIdWithCourses_shouldThrowIllegalArgumentException_whenArgumentIsNull(Integer id) {
         assertThrows(ServiceException.class,
-                () -> studentServiceImpl.getStudentCoursesByStudentId(id));
+                () -> studentServiceImpl.getStudentByIdWithCourses(id));
     }
 
     @ParameterizedTest
-    @CsvSource({"0", "-8", "-150"})
-    void getTeacherCoursesByTeacherId_shouldThrowIllegalArgumentException_whenArgumentIsIntegerLessOrEqualsZero(Integer id) {
+    @CsvSource({"0", "-5", "-27"})
+    void getStudentByIdWithCourses_shouldThrowIllegalArgumentException_whenArgumentIsIntegerLessOrEqualsZero(Integer id) {
         assertThrows(ServiceException.class,
-                () -> studentServiceImpl.getStudentCoursesByStudentId(id));
+                () -> studentServiceImpl.getStudentByIdWithCourses(id));
     }
 
 }

@@ -14,7 +14,8 @@ public class FacultyResultSetExtractor implements ResultSetExtractor<Faculty> {
     public Faculty extractData(ResultSet rs) throws SQLException, DataAccessException {
         Faculty faculty = new Faculty();
         if (rs.next()) {
-            faculty = new Faculty(rs.getInt("id"), rs.getString("full_name"));
+            faculty = new Faculty(rs.getString("full_name"));
+            faculty.setId(rs.getInt("id"));
         }
         return faculty;
     }

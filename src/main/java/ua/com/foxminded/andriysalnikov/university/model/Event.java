@@ -1,23 +1,41 @@
 package ua.com.foxminded.andriysalnikov.university.model;
 
+import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Objects;
 
+@Entity
+@Table(name = "events", schema = "university")
 public class Event {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    @Column(name = "date_of_event")
     private LocalDate dayOfEvent;
+
+    @Column(name = "start_time")
     private LocalTime startTime;
+
+    @Column(name = "end_time")
     private LocalTime endTime;
+
+    @OneToOne(cascade = { CascadeType.DETACH, CascadeType.REFRESH },
+            fetch = FetchType.EAGER)
+    @JoinColumn(name = "classroom_id")
     private ClassRoom classRoom;
+
+    @OneToOne(cascade = { CascadeType.DETACH, CascadeType.REFRESH },
+            fetch = FetchType.EAGER)
+    @JoinColumn(name = "course_id")
     private Course course;
 
     public Event() { }
 
-    public Event(Integer id, LocalDate dayOfEvent, LocalTime startTime, LocalTime endTime,
+    public Event(LocalDate dayOfEvent, LocalTime startTime, LocalTime endTime,
                  ClassRoom classRoom, Course course) {
-        this.id = id;
         this.dayOfEvent = dayOfEvent;
         this.startTime = startTime;
         this.endTime = endTime;

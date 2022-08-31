@@ -2,11 +2,21 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
   <head>
     <meta charset="UTF-8">
-    <title>Faculty Courses</title>
+    <title>Student [[|${student.getFirstName()} ${student.getLastName()}|]]</title>
   </head>
   <body>
-    <h1 style="text-align: center">[[|${faculty.getFullName()}|]] Courses</h1>
-    <br/>
+    <h1 style="text-align: center">
+        Student [[|${student.getFirstName()} ${student.getLastName()}|]] Courses</h1>
+    <div style="text-align: center">
+      <form th:action="@{/timetable/student}" method="get">
+        <input type="hidden" name="id" th:value="${student.getId()}" />
+        <input type="hidden" name="start_date"
+               th:value="${#dates.format(#dates.create(2022,5,30), 'yyyy-MM-dd')}" />
+        <input type="hidden" name="end_date"
+               th:value="${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}" />
+        <input type="submit" value="Go to Timetable" />
+      </form>
+    </div><br/><br/>
     <table style="margin: auto;">
       <tr>
         <td style="width: 100px; text-align: center; font-weight: bold">id</td>
@@ -15,21 +25,23 @@
         <td style="width: 150px; text-align: center; font-weight: bold">Action</td>
       </tr>
     </table><br/>
-    <table style="margin: auto;" th:each="course:${faculty.getCourses()}">
+    <table style="margin: auto;" th:each="course:${student.getCourses()}">
       <tr>
         <td style="width: 100px; text-align: center" th:text="${course.getId()}"></td>
         <td style="width: 200px; text-align: center" th:text="${course.getName()}"></td>
         <td style="width: 500px; text-align: center" th:text="${course.getDescription()}"></td>
         <td style="width: 150px; text-align: center" >
-          <form th:action="@{/faculty/remove_course}" method="post">
-            <input type="hidden" name="faculty_id" th:value="${faculty.getId()}" />
+          <form th:action="@{/student/remove_course}" method="post">
+            <input type="hidden" name="student_id" th:value="${student.getId()}" />
             <input type="hidden" name="course_id" th:value="${course.getId()}" />
             <input type="submit" value="Remove Course" />
           </form>
         </td>
       </tr>
-    </table><br/>
-    <h2 style="text-align: center">Courses Without Faculty</h2>
+    </table>
+    <div style="text-align: center">
+      <h2 style="text-align: center">Courses Available For Student</h2>
+    </div>
     <table style="margin: auto;">
       <tr>
         <td style="width: 100px; text-align: center; font-weight: bold">id</td>
@@ -44,17 +56,19 @@
         <td style="width: 200px; text-align: center" th:text="${othercourse.getName()}"></td>
         <td style="width: 500px; text-align: center" th:text="${othercourse.getDescription()}"></td>
         <td style="width: 150px; text-align: center" >
-          <form th:action="@{/faculty/add_course}" method="post">
-            <input type="hidden" name="faculty_id" th:value="${faculty.getId()}" />
+          <form th:action="@{/student/add_course}" method="post">
+            <input type="hidden" name="student_id" th:value="${student.getId()}" />
             <input type="hidden" name="course_id" th:value="${othercourse.getId()}" />
             <input type="submit" value="Add Course" />
           </form>
         </td>
       </tr>
     </table>
-    <br/><br/><br/>
+    <br/>
     <div style="text-align: center">
-      <button onclick="location.href='./faculties'">Back to Faculties Page</button>
+      <button onclick="location.href='./students'">Back to Students Page</button>
     </div>
+    <br/>
+    <div th:insert="go_to_main_page.html"></div>
   </body>
 </html>
