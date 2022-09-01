@@ -110,13 +110,13 @@ public final class Messages {
             "Trying to update a 'Teacher' : {}";
 
     public static final String OK_UPDATE_TEACHER =
-            "Trying to update a 'Teacher' : {}";
+            "'Teacher' updated : {}";
 
     public static final String TRY_UPDATE_STUDENT =
             "Trying to update a 'Student' : {}";
 
     public static final String OK_UPDATE_STUDENT =
-            "Trying to update a 'Student' : {}";
+            "'Student' updated : {}";
 
     public static final String ERROR_UPDATE_TEACHER =
             "Cannot update 'Teacher' in storage";
@@ -176,7 +176,7 @@ public final class Messages {
             "Trying to update a 'Event' : {}";
 
     public static final String OK_UPDATE_EVENT =
-            "Trying to update a 'Event' : {}";
+            "'Event' updated : {}";
 
     public static final String ERROR_UPDATE_EVENT =
             "Cannot update 'Event' in storage";
@@ -236,7 +236,7 @@ public final class Messages {
             "Trying to update a 'Faculty' : {}";
 
     public static final String OK_UPDATE_FACULTY =
-            "Trying to update a 'Faculty' : {}";
+            "'Faculty' updated : {}";
 
     public static final String ERROR_UPDATE_FACULTY =
             "Cannot update 'Faculty' in storage";
@@ -284,7 +284,7 @@ public final class Messages {
             "Trying to update a 'Classroom' : {}";
 
     public static final String OK_UPDATE_CLASSROOM =
-            "Trying to update a 'Classroom' : {}";
+            "'Classroom' updated : {}";
 
     public static final String ERROR_UPDATE_CLASSROOM =
             "Cannot update 'Classroom' in storage";
@@ -362,7 +362,7 @@ public final class Messages {
             "Trying to update a 'Course' : {}";
 
     public static final String OK_UPDATE_COURSE =
-            "Trying to update a 'Course' : {}";
+            "'Course' updated : {}";
 
     public static final String ERROR_UPDATE_COURSE =
             "Cannot update 'Course' in storage";

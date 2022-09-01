@@ -3,6 +3,7 @@ package ua.com.foxminded.andriysalnikov.university.model;
 import javax.persistence.*;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
@@ -20,10 +21,8 @@ public class Teacher {
     @Column(name = "last_name")
     private String lastName;
 
-    @OneToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE,
-            CascadeType.DETACH, CascadeType.REFRESH },
-            fetch = FetchType.LAZY)
-    @JoinColumn(name = "teacher_id")
+    @OneToMany(cascade = { CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH },
+            mappedBy = "teacher")
     @OrderBy(value = "id")
     private final List<Course> courses;
 
@@ -88,4 +87,14 @@ public class Teacher {
         return "Teacher{" + "id=" + id + ", firstName='" + firstName + '\'' + ", lastName='" + lastName + '\'' + '}';
     }
 
+    @OneToMany(mappedBy = "teacher")
+    private Collection<Course> course;
+
+    public Collection<Course> getCourse() {
+        return course;
+    }
+
+    public void setCourse(Collection<Course> course) {
+        this.course = course;
+    }
 }
