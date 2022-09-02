@@ -134,8 +134,8 @@ public class FacultyController {
         try {
             Faculty faculty = facultyService.getFacultyByIdWithClassRooms(facultyId);
             classRoom = classRoomService.getClassRoomById(classRoomId);
-            faculty.addClassRoomToFaculty(classRoom);
-            facultyService.updateFaculty(faculty);
+            classRoom.setFaculty(faculty);
+            classRoomService.updateClassRoom(classRoom);
         } catch (ServiceException exception) {
             return ExceptionUtil.handleException(exception, LOGGER, model);
         }
@@ -150,10 +150,9 @@ public class FacultyController {
         LOGGER.info(Messages.TRY_REMOVE_CLASSROOM_FROM_FACULTY, classRoomId, facultyId);
         ClassRoom classRoom;
         try {
-            Faculty faculty = facultyService.getFacultyByIdWithClassRooms(facultyId);
             classRoom = classRoomService.getClassRoomById(classRoomId);
-            faculty.getClassRooms().remove(classRoom);
-            facultyService.updateFaculty(faculty);
+            classRoom.setFaculty(null);
+            classRoomService.updateClassRoom(classRoom);
         } catch (ServiceException exception) {
             return ExceptionUtil.handleException(exception, LOGGER, model);
         }
@@ -185,8 +184,8 @@ public class FacultyController {
         try {
             Faculty faculty = facultyService.getFacultyByIdWithCourses(facultyId);
             course = courseService.getCourseById(courseId);
-            faculty.addCourseToFaculty(course);
-            facultyService.updateFaculty(faculty);
+            course.setFaculty(faculty);
+            courseService.updateCourse(course);
         } catch (ServiceException exception) {
             return ExceptionUtil.handleException(exception, LOGGER, model);
         }
@@ -201,10 +200,9 @@ public class FacultyController {
         LOGGER.info(Messages.TRY_REMOVE_COURSE_FROM_FACULTY, courseId, facultyId);
         Course course;
         try {
-            Faculty faculty = facultyService.getFacultyByIdWithCourses(facultyId);
             course = courseService.getCourseById(courseId);
-            faculty.getCourses().remove(course);
-            facultyService.updateFaculty(faculty);
+            course.setFaculty(null);
+            courseService.updateCourse(course);
         } catch (ServiceException exception) {
             return ExceptionUtil.handleException(exception, LOGGER, model);
         }
@@ -236,8 +234,8 @@ public class FacultyController {
         try {
             Faculty faculty = facultyService.getFacultyByIdWithStudents(facultyId);
             student = studentService.getStudentById(studentId);
-            faculty.addStudentToFaculty(student);
-            facultyService.updateFaculty(faculty);
+            student.setFaculty(faculty);
+            studentService.updateStudent(student);
         } catch (ServiceException exception) {
             return ExceptionUtil.handleException(exception, LOGGER, model);
         }
@@ -252,10 +250,9 @@ public class FacultyController {
         LOGGER.info(Messages.TRY_REMOVE_STUDENT_FROM_FACULTY, studentId, facultyId);
         Student student;
         try {
-            Faculty faculty = facultyService.getFacultyByIdWithStudents(facultyId);
             student = studentService.getStudentById(studentId);
-            faculty.getStudents().remove(student);
-            facultyService.updateFaculty(faculty);
+            student.setFaculty(null);
+            studentService.updateStudent(student);
         } catch (ServiceException exception) {
             return ExceptionUtil.handleException(exception, LOGGER, model);
         }

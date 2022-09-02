@@ -20,14 +20,18 @@ public class Student {
     @Column(name = "last_name")
     private String lastName;
 
-    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE,
-            CascadeType.DETACH, CascadeType.REFRESH },
+    @ManyToMany(cascade = { CascadeType.DETACH, CascadeType.REFRESH },
             fetch = FetchType.LAZY)
     @JoinTable(name = "students_courses", schema = "university",
         joinColumns = @JoinColumn(name = "student_id"),
         inverseJoinColumns = @JoinColumn(name = "course_id"))
-    @OrderBy
+    @OrderBy(value = "id")
     private final List<Course> courses;
+
+    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH },
+            fetch = FetchType.LAZY)
+    @JoinColumn(name = "faculty_id")
+    private Faculty faculty;
 
     public Student() { this.courses = new ArrayList<>(); }
 
@@ -67,6 +71,14 @@ public class Student {
 
     public List<Course> getCourses() {
         return courses;
+    }
+
+    public Faculty getFaculty() {
+        return faculty;
+    }
+
+    public void setFaculty(Faculty faculty) {
+        this.faculty = faculty;
     }
 
     @Override

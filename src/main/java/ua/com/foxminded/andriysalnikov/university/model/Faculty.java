@@ -17,24 +17,18 @@ public class Faculty {
     @Column(name = "full_name")
     private String fullName;
 
-    @OneToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE,
-            CascadeType.DETACH, CascadeType.REFRESH },
-            fetch = FetchType.LAZY)
-    @JoinColumn(name = "faculty_id")
+    @OneToMany(cascade = { CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH },
+            mappedBy = "faculty")
     @OrderBy(value = "id")
     private final List<ClassRoom> classRooms;
 
-    @OneToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE,
-            CascadeType.DETACH, CascadeType.REFRESH },
-            fetch = FetchType.LAZY)
-    @JoinColumn(name = "faculty_id")
+    @OneToMany(cascade = { CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH },
+            mappedBy = "faculty")
     @OrderBy(value = "id")
     private final List<Course> courses;
 
-    @OneToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE,
-            CascadeType.DETACH, CascadeType.REFRESH },
-            fetch = FetchType.LAZY)
-    @JoinColumn(name = "faculty_id")
+    @OneToMany(cascade = { CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH },
+            mappedBy = "faculty")
     @OrderBy(value = "id")
     private final List<Student> students;
 

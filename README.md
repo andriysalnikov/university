@@ -67,5 +67,25 @@ Package will be automatically unpacked
 - Go to your browser and type `http://localhost:port/university` in address bar (`port` is usually `8080`)
 - Enjoy! 
 
+### Task 18 - Spring Boot
+Convert application to Spring Boot.
+
+#### Tools that were used
+- Oracle JDK (11.0.16)
+- PostgreSQL (14.5)
+- Spring Boot (2.7.3)
+  - Spring Web
+  - Spring Data JPA
+  - Thymeleaf
+  - PostgreSQL Driver
+  - H2 Database
+
+#### How to run this application
+- Clone or download repository
+- Initialize the database with `src/main/resources/create_database.sql`
+- Run `UniversityApplication.main`
+- Go to your browser and type `http://localhost:8080/university` in address bar
+- Enjoy! 
+
 
 

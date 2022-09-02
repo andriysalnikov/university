@@ -129,8 +129,8 @@ public class TeacherController {
         try {
             Teacher teacher = teacherService.getTeacherByIdWithCourses(teacherId);
             course = courseService.getCourseById(courseId);
-            teacher.addCourseToTeacher(course);
-            teacherService.updateTeacher(teacher);
+            course.setTeacher(teacher);
+            courseService.updateCourse(course);
         } catch (ServiceException exception) {
             return ExceptionUtil.handleException(exception, LOGGER, model);
         }
@@ -145,10 +145,9 @@ public class TeacherController {
         LOGGER.info(Messages.TRY_REMOVE_COURSE_FROM_TEACHER, courseId, teacherId);
         Course course;
         try {
-            Teacher teacher = teacherService.getTeacherByIdWithCourses(teacherId);
             course = courseService.getCourseById(courseId);
-            teacher.getCourses().remove(course);
-            teacherService.updateTeacher(teacher);
+            course.setTeacher(null);
+            courseService.updateCourse(course);
         } catch (ServiceException exception) {
             return ExceptionUtil.handleException(exception, LOGGER, model);
         }

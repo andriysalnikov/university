@@ -110,8 +110,9 @@ public class StudentController {
                                 Model model) {
         Student updatedStudent;
         try {
-            Student student = new Student(firstName, lastName);
-            student.setId(id);
+            Student student = studentService.getStudentById(id);
+            student.setFirstName(firstName);
+            student.setLastName(lastName);
             updatedStudent = studentService.updateStudent(student);
         } catch (ServiceException exception) {
             return ExceptionUtil.handleException(exception, LOGGER, model);
