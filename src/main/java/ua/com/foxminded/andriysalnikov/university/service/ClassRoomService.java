@@ -10,7 +10,7 @@ public interface ClassRoomService {
     List<ClassRoom> getAllClassRoomsWithoutFaculty();
     ClassRoom getClassRoomById(Integer id);
     ClassRoom createClassRoom(ClassRoom classRoom);
-    ClassRoom deleteClassRoomById(Integer id);
+    void deleteClassRoomById(Integer id);
     ClassRoom updateClassRoom(ClassRoom classRoom);
 
 }

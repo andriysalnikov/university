@@ -80,13 +80,12 @@ public class TeacherController {
     @PostMapping("/teacher/delete")
     public String deleteTeacher(@RequestParam("id") Integer id, Model model) {
         LOGGER.info(Messages.TRY_DELETE_TEACHER_BY_ID,id);
-        Teacher deletedTeacher;
         try {
-            deletedTeacher = teacherService.deleteTeacherById(id);
+            teacherService.deleteTeacherById(id);
         } catch (ServiceException exception) {
             return ExceptionUtil.handleException(exception, LOGGER, model);
         }
-        LOGGER.info(Messages.OK_DELETE_TEACHER_BY_ID, id, deletedTeacher);
+        LOGGER.info(Messages.OK_DELETE_TEACHER_BY_ID, id);
         return "redirect:/teachers";
     }
 

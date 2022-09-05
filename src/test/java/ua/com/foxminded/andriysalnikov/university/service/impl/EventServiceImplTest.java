@@ -10,9 +10,9 @@ import org.junit.jupiter.params.provider.NullSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import ua.com.foxminded.andriysalnikov.university.dao.EventDAO;
 import ua.com.foxminded.andriysalnikov.university.exceptions.ServiceException;
 import ua.com.foxminded.andriysalnikov.university.model.Event;
+import ua.com.foxminded.andriysalnikov.university.repository.EventRepository;
 import ua.com.foxminded.andriysalnikov.university.utils.TestDTOFactory;
 
 import java.time.LocalDate;
@@ -30,29 +30,29 @@ import static org.mockito.Mockito.times;
 class EventServiceImplTest {
 
     @Mock
-    EventDAO eventDAO;
+    private EventRepository eventRepository;
     @InjectMocks
-    EventServiceImpl eventServiceImpl;
+    private EventServiceImpl eventServiceImpl;
 
     @Test
     void getAllEvents_shouldReturnListOfAllEvents() {
         List<Event> expectedEvents = TestDTOFactory.createListOfAllEventsForTest();
-        when(eventDAO.getAllEvents()).thenReturn(expectedEvents);
+        when(eventRepository.getAllEvents()).thenReturn(expectedEvents);
         List<Event> returnedEvents = eventServiceImpl.getAllEvents();
         assertSame(expectedEvents, returnedEvents);
-        verify(eventDAO, times(1)).getAllEvents();
+        verify(eventRepository, times(1)).getAllEvents();
     }
 
     @Test
     void getAllEventsFromStartDateToEndDateByCourseId_shouldReturnListOfEventsConstrainedByStartDateEndDate_whenArgumentsContainInteger() {
         List<Event> expectedEvents
                 = TestDTOFactory.createListOfEventsConstrainedByStartDateEndDateForTest();
-        when(eventDAO.getAllEventsFromStartDateToEndDateByCourseId(LocalDate.MIN, LocalDate.MAX, 5))
+        when(eventRepository.getAllEventsFromStartDateToEndDateByCourseId(LocalDate.MIN, LocalDate.MAX, 5))
                 .thenReturn(expectedEvents);
         List<Event> returnedEvents = eventServiceImpl
                 .getAllEventsFromStartDateToEndDateByCourseId(LocalDate.MIN, LocalDate.MAX, 5);
         assertSame(expectedEvents, returnedEvents);
-        verify(eventDAO, times(1))
+        verify(eventRepository, times(1))
                 .getAllEventsFromStartDateToEndDateByCourseId(
                         any(LocalDate.class), any(LocalDate.class), any(Integer.class));
     }

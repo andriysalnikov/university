@@ -8,9 +8,9 @@ import org.junit.jupiter.params.provider.NullSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import ua.com.foxminded.andriysalnikov.university.dao.StudentDAO;
 import ua.com.foxminded.andriysalnikov.university.exceptions.ServiceException;
 import ua.com.foxminded.andriysalnikov.university.model.Student;
+import ua.com.foxminded.andriysalnikov.university.repository.StudentRepository;
 import ua.com.foxminded.andriysalnikov.university.utils.TestDTOFactory;
 
 import java.util.Optional;
@@ -26,16 +26,16 @@ import static org.mockito.Mockito.times;
 class StudentServiceImplTest {
 
     @Mock
-    StudentDAO studentDAO;
+    private StudentRepository studentRepository;
     @InjectMocks
-    StudentServiceImpl studentServiceImpl;
+    private StudentServiceImpl studentServiceImpl;
 
     @Test
     void getStudentById_shouldReturnStudent_whenArgumentIsInteger() {
         Student student = new Student("Elon", "Musk");
-        when(studentDAO.getStudentById(5)).thenReturn(Optional.of(student));
+        when(studentRepository.getStudentById(5)).thenReturn(Optional.of(student));
         assertSame(student, studentServiceImpl.getStudentById(5));
-        verify(studentDAO, times(1)).getStudentById(any(Integer.class));
+        verify(studentRepository, times(1)).getStudentById(any(Integer.class));
     }
 
     @ParameterizedTest
@@ -55,10 +55,10 @@ class StudentServiceImplTest {
     @Test
     void getTeacherByIdWithCourses_shouldReturnTeacherWithListOfCourses_whenArgumentIsInteger() {
         Student expectedStudent = TestDTOFactory.createStudentWithCoursesForTest();
-        when(studentDAO.getStudentByIdWithCourses(1)).thenReturn(Optional.of(expectedStudent));
+        when(studentRepository.getStudentByIdWithCourses(1)).thenReturn(Optional.of(expectedStudent));
         Student returnedStudent = studentServiceImpl.getStudentByIdWithCourses(1);
         assertSame(expectedStudent, returnedStudent);
-        verify(studentDAO, times(1)).getStudentByIdWithCourses(any(Integer.class));
+        verify(studentRepository, times(1)).getStudentByIdWithCourses(any(Integer.class));
     }
 
     @ParameterizedTest

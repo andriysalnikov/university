@@ -51,13 +51,12 @@ public class EventController {
     @PostMapping("/event/delete")
     public String deleteEvent(@RequestParam("id") Integer eventId, Model model) {
         LOGGER.info(Messages.TRY_DELETE_EVENT_BY_ID, eventId);
-        Event deletedEvent;
         try {
-            deletedEvent = eventService.deleteEventById(eventId);
+            eventService.deleteEventById(eventId);
         } catch (ServiceException exception) {
             return ExceptionUtil.handleException(exception, LOGGER, model);
         }
-        LOGGER.info(Messages.OK_DELETE_EVENT_BY_ID, eventId, deletedEvent);
+        LOGGER.info(Messages.OK_DELETE_EVENT_BY_ID, eventId);
         return "redirect:/events";
     }
 

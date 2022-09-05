@@ -60,13 +60,12 @@ public class CourseController {
     @PostMapping("/course/delete")
     public String deleteCourse(@RequestParam("id") Integer courseId, Model model) {
         LOGGER.info(Messages.TRY_DELETE_COURSE_BY_ID, courseId);
-        Course deletedCourse;
         try {
-            deletedCourse = courseService.deleteCourseById(courseId);
+            courseService.deleteCourseById(courseId);
         } catch (ServiceException exception) {
             return ExceptionUtil.handleException(exception, LOGGER, model);
         }
-        LOGGER.info(Messages.OK_DELETE_COURSE_BY_ID, courseId, deletedCourse);
+        LOGGER.info(Messages.OK_DELETE_COURSE_BY_ID, courseId);
         return "redirect:/courses";
     }
 

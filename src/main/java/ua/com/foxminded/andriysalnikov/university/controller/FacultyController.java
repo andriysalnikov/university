@@ -73,11 +73,11 @@ public class FacultyController {
         LOGGER.info(Messages.TRY_DELETE_FACULTY_BY_ID, facultyId);
         Faculty deletedFaculty;
         try {
-            deletedFaculty = facultyService.deleteFacultyById(facultyId);
+            facultyService.deleteFacultyById(facultyId);
         } catch (ServiceException exception) {
             return ExceptionUtil.handleException(exception, LOGGER, model);
         }
-        LOGGER.info(Messages.OK_DELETE_FACULTY_BY_ID, facultyId, deletedFaculty);
+        LOGGER.info(Messages.OK_DELETE_FACULTY_BY_ID, facultyId);
         return "redirect:/faculties";
     }
 
