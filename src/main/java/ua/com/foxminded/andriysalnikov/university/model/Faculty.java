@@ -43,18 +43,6 @@ public class Faculty {
         this.fullName = fullName;
     }
 
-    public void addClassRoomToFaculty(ClassRoom classRoom) {
-        classRooms.add(classRoom);
-    }
-
-    public void addCourseToFaculty(Course course) {
-        courses.add(course);
-    }
-
-    public void addStudentToFaculty(Student student) {
-        students.add(student);
-    }
-
     public Integer getId() {
         return id;
     }

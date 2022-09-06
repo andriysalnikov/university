@@ -32,7 +32,7 @@
         <td style="width: 100px; text-align: center" th:text="${event.getStartTime()}"></td>
         <td style="width: 100px; text-align: center" th:text="${event.getEndTime()}"></td>
         <td style="width: 200px; text-align: center" th:text="${event.getCourse().getName()}"></td>
-        <td style="width: 100px; text-align: center" th:text="${event.getClassRoom().getName()}"></td>
+        <td style="width: 100px; text-align: center" th:text="${event.classRoom?.getName()}"></td>
       </tr>
     </table>
     <div th:insert="go_to_main_page.html"></div>

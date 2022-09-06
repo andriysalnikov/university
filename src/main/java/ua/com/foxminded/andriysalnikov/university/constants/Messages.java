@@ -92,13 +92,13 @@ public final class Messages {
             "Trying to delete 'Teacher' by 'id'={}";
 
     public static final String OK_DELETE_TEACHER_BY_ID =
-            "'Teacher' delete by 'id'={} : {}";
+            "'Teacher' deleted by 'id'={}";
 
     public static final String TRY_DELETE_STUDENT_BY_ID =
             "Trying to delete 'Student' by 'id'={}";
 
     public static final String OK_DELETE_STUDENT_BY_ID =
-            "'Student' delete by 'id'={} : {}";
+            "'Student' deleted by 'id'={}";
 
     public static final String ERROR_DELETE_TEACHER_BY_ID =
             "Cannot delete 'Teacher' from storage";
@@ -155,7 +155,7 @@ public final class Messages {
             "Trying to delete 'Event' by 'id'={}";
 
     public static final String OK_DELETE_EVENT_BY_ID =
-            "'Event' delete by 'id'={} : {}";
+            "'Event' deleted by 'id'={}";
 
     public static final String ERROR_DELETE_EVENT_BY_ID =
             "Cannot delete 'Event' from storage";
@@ -227,7 +227,7 @@ public final class Messages {
             "Trying to delete 'Faculty' by 'id'={}";
 
     public static final String OK_DELETE_FACULTY_BY_ID =
-            "'Faculty' delete by 'id'={} : {}";
+            "'Faculty' deleted by 'id'={}";
 
     public static final String ERROR_DELETE_FACULTY_BY_ID =
             "Cannot delete 'Faculty' from storage";
@@ -275,7 +275,7 @@ public final class Messages {
             "Trying to delete 'Classroom' by 'id'={}";
 
     public static final String OK_DELETE_CLASSROOM_BY_ID =
-            "'Classroom' delete by 'id'={} : {}";
+            "'Classroom' deleted by 'id'={}";
 
     public static final String ERROR_DELETE_CLASSROOM_BY_ID =
             "Cannot delete 'Classroom' from storage";
@@ -302,7 +302,7 @@ public final class Messages {
             "Trying to remove 'Classroom'('id'={}) from 'Faculty'('id'={})";
 
     public static final String OK_REMOVE_CLASSROOM_FROM_FACULTY =
-            "It is OK removing 'Classroom'('id'={}) from 'Faculty'('id'={}) : {}";
+            "It is OK removing 'Classroom'('id'={}) from 'Faculty'('id'={})";
 
     public static final String TRY_GET_ALL_CLASSROOMS_WITHOUT_FACULTY =
             "Trying to get all 'Classrooms' without 'Faculty'";
@@ -353,7 +353,7 @@ public final class Messages {
             "Trying to delete 'Course' by 'id'={}";
 
     public static final String OK_DELETE_COURSE_BY_ID =
-            "'Course' delete by 'id'={} : {}";
+            "'Course' deleted by 'id'={}";
 
     public static final String ERROR_DELETE_COURSE_BY_ID =
             "Cannot delete 'Course' from storage";

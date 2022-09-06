@@ -10,7 +10,7 @@ public interface TeacherService {
     Teacher getTeacherById(Integer id);
     Teacher getTeacherByIdWithCourses(Integer id);
     Teacher createTeacher(Teacher teacher);
-    Teacher deleteTeacherById(Integer id);
+    void deleteTeacherById(Integer id);
     Teacher updateTeacher(Teacher teacher);
 
 }

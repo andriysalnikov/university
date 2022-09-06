@@ -80,13 +80,12 @@ public class StudentController {
     @PostMapping("/student/delete")
     public String deleteStudent(@RequestParam("id") Integer id, Model model) {
         LOGGER.info(Messages.TRY_DELETE_STUDENT_BY_ID,id);
-        Student deletedStudent;
         try {
-            deletedStudent = studentService.deleteStudentById(id);
+            studentService.deleteStudentById(id);
         } catch (ServiceException exception) {
             return ExceptionUtil.handleException(exception, LOGGER, model);
         }
-        LOGGER.info(Messages.OK_DELETE_STUDENT_BY_ID, id, deletedStudent);
+        LOGGER.info(Messages.OK_DELETE_STUDENT_BY_ID, id);
         return "redirect:/students";
     }
 
@@ -130,7 +129,7 @@ public class StudentController {
         try {
             Student student = studentService.getStudentByIdWithCourses(studentId);
             course = courseService.getCourseById(courseId);
-            student.addCourseToStudent(course);
+            student.getCourses().add(course);
             studentService.updateStudent(student);
         } catch (ServiceException exception) {
             return ExceptionUtil.handleException(exception, LOGGER, model);

@@ -14,14 +14,14 @@ public class TestDTOFactory {
     public static Teacher createTeacherWithCoursesForTest() {
         Teacher teacher = new Teacher("Ibragim", "Oganesyan");
         teacher.setId(1);
-        createListOfCoursesForTest().forEach(teacher::addCourseToTeacher);
+        teacher.getCourses().addAll(createListOfCoursesForTest());
         return teacher;
     }
 
     public static Student createStudentWithCoursesForTest() {
         Student student = new Student("Zalman", "Obojev");
         student.setId(1);
-        createListOfCoursesForTest().forEach(student::addCourseToStudent);
+        student.getCourses().addAll(createListOfCoursesForTest());
         return student;
     }
 

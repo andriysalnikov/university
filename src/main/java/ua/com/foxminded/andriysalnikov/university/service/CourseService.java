@@ -11,7 +11,7 @@ public interface CourseService {
     List<Course> getAllCoursesWithoutFaculty();
     Course getCourseById(Integer id);
     Course createCourse(Course course);
-    Course deleteCourseById(Integer id);
+    void deleteCourseById(Integer id);
     Course updateCourse(Course course);
 
 }

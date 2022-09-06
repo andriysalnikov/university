@@ -8,9 +8,9 @@ import org.junit.jupiter.params.provider.NullSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import ua.com.foxminded.andriysalnikov.university.dao.TeacherDAO;
 import ua.com.foxminded.andriysalnikov.university.exceptions.ServiceException;
 import ua.com.foxminded.andriysalnikov.university.model.Teacher;
+import ua.com.foxminded.andriysalnikov.university.repository.TeacherRepository;
 import ua.com.foxminded.andriysalnikov.university.utils.TestDTOFactory;
 
 import java.util.Optional;
@@ -26,7 +26,7 @@ import static org.mockito.Mockito.times;
 class TeacherServiceImplTest {
 
     @Mock
-    private TeacherDAO teacherDAO;
+    private TeacherRepository teacherRepository;
     @InjectMocks
     private TeacherServiceImpl teacherServiceImpl;
 
@@ -34,9 +34,9 @@ class TeacherServiceImplTest {
     void getTeacherById_shouldReturnTeacher_whenArgumentIsInteger() {
         Teacher teacher = new Teacher("Thor", "Heyerdahl");
         teacher.setId(1);
-        when(teacherDAO.getTeacherById(1)).thenReturn(Optional.of(teacher));
+        when(teacherRepository.getTeacherById(1)).thenReturn(Optional.of(teacher));
         assertSame(teacher, teacherServiceImpl.getTeacherById(1));
-        verify(teacherDAO, times(1)).getTeacherById(any(Integer.class));
+        verify(teacherRepository, times(1)).getTeacherById(any(Integer.class));
     }
 
     @ParameterizedTest
@@ -56,10 +56,10 @@ class TeacherServiceImplTest {
     @Test
     void getTeacherByIdWithCourses_shouldReturnTeacherWithListOfCourses_whenArgumentIsInteger() {
         Teacher expectedTeacher = TestDTOFactory.createTeacherWithCoursesForTest();
-        when(teacherDAO.getTeacherByIdWithCourses(1)).thenReturn(Optional.of(expectedTeacher));
+        when(teacherRepository.getTeacherByIdWithCourses(1)).thenReturn(Optional.of(expectedTeacher));
         Teacher returnedTeacher = teacherServiceImpl.getTeacherByIdWithCourses(1);
         assertSame(expectedTeacher, returnedTeacher);
-        verify(teacherDAO, times(1)).getTeacherByIdWithCourses(any(Integer.class));
+        verify(teacherRepository, times(1)).getTeacherByIdWithCourses(any(Integer.class));
     }
 
     @ParameterizedTest

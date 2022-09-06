@@ -12,7 +12,7 @@ public interface FacultyService {
     Faculty getFacultyByIdWithCourses(Integer id);
     Faculty getFacultyByIdWithStudents(Integer id);
     Faculty createFaculty(Faculty faculty);
-    Faculty deleteFacultyById(Integer id);
+    void deleteFacultyById(Integer id);
     Faculty updateFaculty(Faculty faculty);
 
 }

@@ -70,6 +70,9 @@ Package will be automatically unpacked
 ### Task 18 - Spring Boot
 Convert application to Spring Boot.
 
+### Task 19 - Spring Data JPA
+Rewrite the DAO layer. Use Spring Data JPA instead of Hibernate.
+
 #### Tools that were used
 - Oracle JDK (11.0.16)
 - PostgreSQL (14.5)

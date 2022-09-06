@@ -58,13 +58,12 @@ public class ClassRoomController {
     @PostMapping("/classroom/delete")
     public String deleteClassRoom(@RequestParam("id") Integer classRoomId, Model model) {
         LOGGER.info(Messages.TRY_DELETE_CLASSROOM_BY_ID, classRoomId);
-        ClassRoom deletedClassRoom;
         try {
-            deletedClassRoom = classRoomService.deleteClassRoomById(classRoomId);
+           classRoomService.deleteClassRoomById(classRoomId);
         } catch (ServiceException exception) {
             return ExceptionUtil.handleException(exception, LOGGER, model);
         }
-        LOGGER.info(Messages.OK_DELETE_CLASSROOM_BY_ID, classRoomId, deletedClassRoom);
+        LOGGER.info(Messages.OK_DELETE_CLASSROOM_BY_ID, classRoomId);
         return "redirect:/classrooms";
     }
 

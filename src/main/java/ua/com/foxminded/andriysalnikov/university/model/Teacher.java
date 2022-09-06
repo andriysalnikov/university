@@ -40,10 +40,6 @@ public class Teacher {
         return id;
     }
 
-    public void addCourseToTeacher(Course course) {
-        courses.add(course);
-    }
-
     public void setId(Integer id) {
         this.id = id;
     }
@@ -87,14 +83,4 @@ public class Teacher {
         return "Teacher{" + "id=" + id + ", firstName='" + firstName + '\'' + ", lastName='" + lastName + '\'' + '}';
     }
 
-    @OneToMany(mappedBy = "teacher")
-    private Collection<Course> course;
-
-    public Collection<Course> getCourse() {
-        return course;
-    }
-
-    public void setCourse(Collection<Course> course) {
-        this.course = course;
-    }
 }
