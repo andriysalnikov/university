@@ -105,7 +105,8 @@ class TimeTableManagerTest {
     private static Stream<Arguments> provideForStudentOrStudentParametersAreNull() {
         Student student1 = new Student("First Name", null);
         student1.setId(1);
-        Student student2 = new Student(null, "Last Name");
+        Student student2 = new Student();
+        student2.setLastName("Last Name");
         student2.setId(2);
         return Stream.of(
                 Arguments.of((Student) null),

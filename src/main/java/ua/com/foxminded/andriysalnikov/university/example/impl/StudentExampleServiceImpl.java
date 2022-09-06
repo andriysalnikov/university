@@ -3,7 +3,7 @@ package ua.com.foxminded.andriysalnikov.university.example.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ua.com.foxminded.andriysalnikov.university.example.StudentExampleRepository;
-import ua.com.foxminded.andriysalnikov.university.example.StudentIdAndLastName;
+import ua.com.foxminded.andriysalnikov.university.example.StudentIdAndLastNameProjection;
 import ua.com.foxminded.andriysalnikov.university.example.StudentExampleService;
 import ua.com.foxminded.andriysalnikov.university.model.Student;
 
@@ -18,7 +18,7 @@ public class StudentExampleServiceImpl implements StudentExampleService {
     }
 
     @Override
-    public StudentIdAndLastName getStudentById(Integer id) {
+    public StudentIdAndLastNameProjection getStudentById(Integer id) {
         return studentExampleRepository.getStudentById(id);
     }
 

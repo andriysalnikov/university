@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import ua.com.foxminded.andriysalnikov.university.example.StudentExampleService;
-import ua.com.foxminded.andriysalnikov.university.example.StudentIdAndLastName;
+import ua.com.foxminded.andriysalnikov.university.example.StudentIdAndLastNameProjection;
 import ua.com.foxminded.andriysalnikov.university.model.Student;
 
 @SpringBootApplication
@@ -21,7 +21,7 @@ public class UniversityApplication {
 
 		SpringApplication.run(UniversityApplication.class, args);
 
-		StudentIdAndLastName student = studentExampleService.getStudentById(3);
+		StudentIdAndLastNameProjection student = studentExampleService.getStudentById(3);
 		System.out.println("Student Id       : " + student.getId());
 		System.out.println("Student LastName : " + student.getLastName());
 

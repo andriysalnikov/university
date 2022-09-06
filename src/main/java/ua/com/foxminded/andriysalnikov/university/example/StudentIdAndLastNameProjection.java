@@ -1,6 +1,6 @@
 package ua.com.foxminded.andriysalnikov.university.example;
 
-public interface StudentIdAndLastName {
+public interface StudentIdAndLastNameProjection {
     Integer getId();
     String getLastName();
 }

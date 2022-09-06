@@ -8,7 +8,7 @@ import ua.com.foxminded.andriysalnikov.university.model.Student;
 @Repository
 public interface StudentExampleRepository extends JpaRepository<Student, Integer> {
 
-    StudentIdAndLastName getStudentById(Integer id);
+    StudentIdAndLastNameProjection getStudentById(Integer id);
 
     @Query("select new ua.com.foxminded.andriysalnikov.university.model.Student(s.id, s.lastName) " +
             "from Student s where s.id = :id")
