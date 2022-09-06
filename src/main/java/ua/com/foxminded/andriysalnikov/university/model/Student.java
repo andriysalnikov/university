@@ -41,6 +41,12 @@ public class Student {
         this.lastName = lastName;
     }
 
+    public Student(Integer id, String lastName) {
+        this();
+        this.id = id;
+        this.lastName = lastName;
+    }
+
     public Integer getId() {
         return id;
     }
