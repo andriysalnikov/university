@@ -129,7 +129,7 @@ public class StudentController {
         try {
             Student student = studentService.getStudentByIdWithCourses(studentId);
             course = courseService.getCourseById(courseId);
-            student.addCourseToStudent(course);
+            student.getCourses().add(course);
             studentService.updateStudent(student);
         } catch (ServiceException exception) {
             return ExceptionUtil.handleException(exception, LOGGER, model);

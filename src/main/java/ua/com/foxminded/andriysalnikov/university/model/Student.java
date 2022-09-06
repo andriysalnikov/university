@@ -41,10 +41,6 @@ public class Student {
         this.lastName = lastName;
     }
 
-    public void addCourseToStudent(Course course) {
-        courses.add(course);
-    }
-
     public Integer getId() {
         return id;
     }
