@@ -1,6 +1,9 @@
 package ua.com.foxminded.andriysalnikov.university.model;
 
 import javax.persistence.*;
+import javax.validation.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,9 +18,13 @@ public class Student {
     private Integer id;
 
     @Column(name = "first_name")
+    @NotBlank(message = "First Name cannot be blank")
+    @Size(max = 20, message = "First Name length must be no longer than 20 symbols")
     private String firstName;
 
     @Column(name = "last_name")
+    @NotBlank(message = "Last Name cannot be blank")
+    @Size(max = 20, message = "Last Name length must be no longer than 20 symbols")
     private String lastName;
 
     @ManyToMany(cascade = { CascadeType.DETACH, CascadeType.REFRESH },

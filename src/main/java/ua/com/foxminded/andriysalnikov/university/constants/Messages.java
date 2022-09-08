@@ -79,14 +79,14 @@ public final class Messages {
     public static final String ERROR_CREATE_TEACHER =
             "Cannot create 'Teacher' in storage";
 
+    public static final String ERROR_CREATE_TEACHER_SERVICE =
+            "Cannot create 'Teacher' in storage : {}";
+
     public static final String ERROR_CREATE_STUDENT =
             "Cannot create 'Student' in storage";
 
-    public static final String ERROR_ARGUMENT_TEACHER =
-            "'Teacher' or 'Teacher.firstName' or 'Teacher.lastName' or 'Teacher.id' cannot be null";
-
-    public static final String ERROR_ARGUMENT_STUDENT =
-            "'Student' or 'Student.firstName' or 'Student.lastName' or 'Student.id' cannot be null";
+    public static final String ERROR_CREATE_STUDENT_SERVICE =
+            "Cannot create 'Student' in storage : {}";
 
     public static final String TRY_DELETE_TEACHER_BY_ID =
             "Trying to delete 'Teacher' by 'id'={}";
@@ -121,8 +121,14 @@ public final class Messages {
     public static final String ERROR_UPDATE_TEACHER =
             "Cannot update 'Teacher' in storage";
 
+    public static final String ERROR_UPDATE_TEACHER_SERVICE =
+            "Cannot update 'Teacher' in storage : {}";
+
     public static final String ERROR_UPDATE_STUDENT =
             "Cannot update 'Student' in storage";
+
+    public static final String ERROR_UPDATE_STUDENT_SERVICE =
+            "Cannot update 'Student' in storage : {}";
 
     public static final String TRY_ADD_STUDENT_TO_FACULTY =
             "Trying to add 'Student'('id'={}) to 'Faculty'('id'={})";
@@ -169,6 +175,9 @@ public final class Messages {
     public static final String ERROR_CREATE_EVENT =
             "Cannot create 'Event' in storage";
 
+    public static final String ERROR_CREATE_EVENT_SERVICE =
+            "Cannot create 'Event' in storage : {}";
+
     public static final String ERROR_ARGUMENT_EVENT =
             "'Event' or 'Event.dayOfEvent' or 'Event.startTime' or 'Event.endTime' cannot be null";
 
@@ -180,6 +189,9 @@ public final class Messages {
 
     public static final String ERROR_UPDATE_EVENT =
             "Cannot update 'Event' in storage";
+
+    public static final String ERROR_UPDATE_EVENT_SERVICE =
+            "Cannot update 'Event' in storage : {}";
 
     public static final String TRY_GET_EVENT_BY_ID =
             "Trying to get 'Event' by 'id'={}";
@@ -214,6 +226,9 @@ public final class Messages {
     public static final String ERROR_CREATE_FACULTY =
             "Cannot create 'Faculty' in storage";
 
+    public static final String ERROR_CREATE_FACULTY_SERVICE =
+            "Cannot create 'Faculty' in storage : {}";
+
     public static final String TRY_GET_FACULTY_BY_ID =
             "Trying to get 'Faculty' by 'id'={}";
 
@@ -241,9 +256,8 @@ public final class Messages {
     public static final String ERROR_UPDATE_FACULTY =
             "Cannot update 'Faculty' in storage";
 
-    public static final String ERROR_ARGUMENT_FACULTY =
-            "'Faculty' or 'Faculty.fullName' cannot be null";
-
+    public static final String ERROR_UPDATE_FACULTY_SERVICE =
+            "Cannot update 'Faculty' in storage : {}";
 
     // Messages for 'Classrooms'
 
@@ -271,6 +285,9 @@ public final class Messages {
     public static final String ERROR_CREATE_CLASSROOM =
             "Cannot create 'Classroom' in storage";
 
+    public static final String ERROR_CREATE_CLASSROOM_SERVICE =
+            "Cannot create 'Classroom' in storage : {}";
+
     public static final String TRY_DELETE_CLASSROOM_BY_ID =
             "Trying to delete 'Classroom' by 'id'={}";
 
@@ -289,8 +306,8 @@ public final class Messages {
     public static final String ERROR_UPDATE_CLASSROOM =
             "Cannot update 'Classroom' in storage";
 
-    public static final String ERROR_ARGUMENT_CLASSROOM =
-            "'Classroom' or 'Classroom.name' cannot be null";
+    public static final String ERROR_UPDATE_CLASSROOM_SERVICE =
+            "Cannot update 'Classroom' in storage : {}";
 
     public static final String TRY_ADD_CLASSROOM_TO_FACULTY =
             "Trying to add 'Classroom'('id'={}) to 'Faculty'('id'={})";
@@ -349,6 +366,9 @@ public final class Messages {
     public static final String ERROR_CREATE_COURSE =
             "Cannot create 'Course' in storage";
 
+    public static final String ERROR_CREATE_COURSE_SERVICE =
+            "Cannot create 'Course' in storage : {}";
+
     public static final String TRY_DELETE_COURSE_BY_ID =
             "Trying to delete 'Course' by 'id'={}";
 
@@ -367,8 +387,8 @@ public final class Messages {
     public static final String ERROR_UPDATE_COURSE =
             "Cannot update 'Course' in storage";
 
-    public static final String ERROR_ARGUMENT_COURSE =
-            "'Course' or 'Course.name' cannot be null";
+    public static final String ERROR_UPDATE_COURSE_SERVICE =
+            "Cannot update 'Course' in storage : {}";
 
     public static final String TRY_ADD_COURSE_TO_TEACHER =
             "Trying to add 'Course'('id'={}) to 'Teacher'('id'={})";

@@ -30,7 +30,6 @@ public class TimeTableManager {
             LocalDate startDate, LocalDate endDate, Teacher teacher) {
         LOGGER.debug(Messages.TRY_GET_TIMETABLE_FROM_STARTDATE_TO_ENDDATE_BY_TEACHER,
                 startDate, endDate);
-        Validation.validateTeacher(teacher);
         List<Course> courses = teacher.getCourses();
         TimeTable timeTable = getTimeTableFromStartDateToEndDate(startDate, endDate, courses);
         LOGGER.debug(Messages.OK_GET_TIMETABLE_FROM_STARTDATE_TO_ENDDATE_BY_TEACHER,
@@ -42,7 +41,6 @@ public class TimeTableManager {
             LocalDate startDate, LocalDate endDate, Student student) {
         LOGGER.debug(Messages.TRY_GET_TIMETABLE_FROM_STARTDATE_TO_ENDDATE_BY_STUDENT,
                 startDate, endDate);
-        Validation.validateStudent(student);
         List<Course> courses = student.getCourses();
         TimeTable timeTable = getTimeTableFromStartDateToEndDate(startDate, endDate, courses);
         LOGGER.debug(Messages.OK_GET_TIMETABLE_FROM_STARTDATE_TO_ENDDATE_BY_STUDENT,

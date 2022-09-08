@@ -1,6 +1,10 @@
 package ua.com.foxminded.andriysalnikov.university.model;
 
+import ua.com.foxminded.andriysalnikov.university.validation.FacultyFullNameConstraint;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +19,9 @@ public class Faculty {
     private Integer id;
 
     @Column(name = "full_name")
+    @NotBlank(message = "Faculty Full Name cannot be blank")
+    @Size(max = 100, message = "Faculty Full Name length must be no longer than 100 symbols")
+    @FacultyFullNameConstraint
     private String fullName;
 
     @OneToMany(cascade = { CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH },

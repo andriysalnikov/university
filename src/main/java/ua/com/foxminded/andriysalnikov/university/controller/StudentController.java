@@ -69,7 +69,10 @@ public class StudentController {
                                 Model model) {
         Student createdStudent;
         try {
-            createdStudent = studentService.createStudent(new Student(firstName, lastName));
+            Student student = new Student();
+            student.setFirstName(firstName);
+            student.setLastName(lastName);
+            createdStudent = studentService.createStudent(student);
         } catch (ServiceException exception) {
             return ExceptionUtil.handleException(exception, LOGGER, model);
         }

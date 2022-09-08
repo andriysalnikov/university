@@ -1,6 +1,9 @@
 package ua.com.foxminded.andriysalnikov.university.model;
 
 import javax.persistence.*;
+import javax.validation.Constraint;
+import javax.validation.constraints.Future;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Objects;
@@ -14,12 +17,15 @@ public class Event {
     private Integer id;
 
     @Column(name = "date_of_event")
+    @NotNull(message = "Day of Event cannot be Null")
     private LocalDate dayOfEvent;
 
     @Column(name = "start_time")
+    @NotNull(message = "Start Time of Event cannot be Null")
     private LocalTime startTime;
 
     @Column(name = "end_time")
+    @NotNull(message = "End Time of Event cannot be Null")
     private LocalTime endTime;
 
     @OneToOne(cascade = { CascadeType.DETACH, CascadeType.REFRESH },
@@ -30,6 +36,7 @@ public class Event {
     @OneToOne(cascade = { CascadeType.DETACH, CascadeType.REFRESH },
             fetch = FetchType.EAGER)
     @JoinColumn(name = "course_id")
+    @NotNull(message = "Course in Event cannot be Null")
     private Course course;
 
     public Event() { }

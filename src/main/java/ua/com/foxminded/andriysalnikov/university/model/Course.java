@@ -1,9 +1,10 @@
 package ua.com.foxminded.andriysalnikov.university.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -15,9 +16,14 @@ public class Course {
     private Integer id;
 
     @Column(name = "name")
+    @NotBlank(message = "Course Name cannot be blank")
+    @Size(max = 20, message = "Course Name length must be no longer than 20 symbols")
     private String name;
 
+    // Description can be Blank
     @Column(name = "description")
+    @NotNull(message = "Description can not be Null")
+    @Size(max = 20, message = "Course Description length must be no longer than 100 symbols")
     private String description;
 
     @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH },

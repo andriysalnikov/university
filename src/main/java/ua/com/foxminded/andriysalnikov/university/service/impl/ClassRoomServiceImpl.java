@@ -12,7 +12,6 @@ import ua.com.foxminded.andriysalnikov.university.repository.ClassRoomRepository
 import ua.com.foxminded.andriysalnikov.university.exceptions.ServiceException;
 import ua.com.foxminded.andriysalnikov.university.model.ClassRoom;
 import ua.com.foxminded.andriysalnikov.university.service.ClassRoomService;
-import ua.com.foxminded.andriysalnikov.university.validation.Validation;
 
 import java.util.List;
 
@@ -48,7 +47,6 @@ public class ClassRoomServiceImpl implements ClassRoomService {
     @Override
     public ClassRoom getClassRoomById(Integer id) {
         LOGGER.debug(Messages.TRY_GET_CLASSROOM_BY_ID, id);
-        Validation.validateId(id);
         ClassRoom classRoom = classRoomRepository.getClassRoomById(id).orElseThrow(() -> {
             LOGGER.error(Messages.ERROR_GET_CLASSROOM_BY_ID);
             throw new ServiceException(Messages.ERROR_GET_CLASSROOM_BY_ID);
@@ -57,19 +55,17 @@ public class ClassRoomServiceImpl implements ClassRoomService {
         return classRoom;
     }
 
-
     @Modifying
     @Transactional
     @Override
     public ClassRoom createClassRoom(ClassRoom classRoom) {
         LOGGER.debug(Messages.TRY_CREATE_CLASSROOM);
-        Validation.validateClassRoom(classRoom);
         ClassRoom createdClassRoom;
         try {
             createdClassRoom = classRoomRepository.save(classRoom);
         } catch (RuntimeException exception) {
-            LOGGER.error(Messages.ERROR_CREATE_CLASSROOM);
-            throw new ServiceException(Messages.ERROR_CREATE_CLASSROOM);
+            LOGGER.error(Messages.ERROR_CREATE_CLASSROOM_SERVICE, exception.getMessage());
+            throw new ServiceException(Messages.ERROR_CREATE_CLASSROOM, exception);
         }
         LOGGER.debug(Messages.OK_CREATE_CLASSROOM, createdClassRoom);
         return createdClassRoom;
@@ -80,7 +76,6 @@ public class ClassRoomServiceImpl implements ClassRoomService {
     @Override
     public void deleteClassRoomById(Integer id) {
         LOGGER.debug(Messages.TRY_DELETE_CLASSROOM_BY_ID, id);
-        Validation.validateId(id);
         if (classRoomRepository.deleteClassRoomById(id) == 0) {
             LOGGER.error(Messages.ERROR_DELETE_CLASSROOM_BY_ID);
             throw new ServiceException(Messages.ERROR_DELETE_CLASSROOM_BY_ID);
@@ -93,13 +88,12 @@ public class ClassRoomServiceImpl implements ClassRoomService {
     @Override
     public ClassRoom updateClassRoom(ClassRoom classRoom) {
         LOGGER.debug(Messages.TRY_UPDATE_CLASSROOM, classRoom);
-        Validation.validateClassRoom(classRoom);
         ClassRoom updatedClassRoom;
         try {
             updatedClassRoom = classRoomRepository.save(classRoom);
         } catch (RuntimeException exception) {
-            LOGGER.error(Messages.ERROR_UPDATE_CLASSROOM);
-            throw new ServiceException(Messages.ERROR_UPDATE_CLASSROOM);
+            LOGGER.error(Messages.ERROR_UPDATE_CLASSROOM_SERVICE, exception.getMessage());
+            throw new ServiceException(Messages.ERROR_UPDATE_CLASSROOM, exception);
         }
         LOGGER.debug(Messages.OK_UPDATE_CLASSROOM, updatedClassRoom);
         return updatedClassRoom;

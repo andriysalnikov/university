@@ -12,7 +12,6 @@ import ua.com.foxminded.andriysalnikov.university.repository.StudentRepository;
 import ua.com.foxminded.andriysalnikov.university.exceptions.ServiceException;
 import ua.com.foxminded.andriysalnikov.university.model.Student;
 import ua.com.foxminded.andriysalnikov.university.service.StudentService;
-import ua.com.foxminded.andriysalnikov.university.validation.Validation;
 
 import java.util.List;
 
@@ -48,7 +47,6 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public Student getStudentById(Integer id) {
         LOGGER.debug(Messages.TRY_GET_STUDENT_BY_ID, id);
-        Validation.validateId(id);
         Student student = studentRepository.getStudentById(id).orElseThrow(() -> {
             LOGGER.error(Messages.ERROR_GET_STUDENT_BY_ID);
             throw new ServiceException(Messages.ERROR_GET_STUDENT_BY_ID);
@@ -60,7 +58,6 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public Student getStudentByIdWithCourses(Integer id) {
         LOGGER.debug(Messages.TRY_GET_STUDENT_BY_ID, id);
-        Validation.validateId(id);
         Student student = studentRepository.getStudentByIdWithCourses(id).orElseThrow(() -> {
             LOGGER.error(Messages.ERROR_GET_STUDENT_BY_ID);
             throw new ServiceException(Messages.ERROR_GET_STUDENT_BY_ID);
@@ -74,13 +71,12 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public Student createStudent(Student student) {
         LOGGER.debug(Messages.TRY_CREATE_STUDENT);
-        Validation.validateStudent(student);
         Student createdStudent;
         try {
             createdStudent = studentRepository.save(student);
         } catch (RuntimeException exception) {
-            LOGGER.error(Messages.ERROR_CREATE_STUDENT);
-            throw new ServiceException(Messages.ERROR_CREATE_STUDENT);
+            LOGGER.error(Messages.ERROR_CREATE_STUDENT_SERVICE, exception.getMessage());
+            throw new ServiceException(Messages.ERROR_CREATE_STUDENT, exception);
         }
         LOGGER.debug(Messages.OK_CREATE_STUDENT, createdStudent);
         return createdStudent;
@@ -91,7 +87,6 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public void deleteStudentById(Integer id) {
         LOGGER.debug(Messages.TRY_DELETE_STUDENT_BY_ID, id);
-        Validation.validateId(id);
         if(studentRepository.deleteStudentById(id) == 0) {
             LOGGER.error(Messages.ERROR_DELETE_STUDENT_BY_ID);
             throw new ServiceException(Messages.ERROR_DELETE_STUDENT_BY_ID);
@@ -104,13 +99,12 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public Student updateStudent(Student student) {
         LOGGER.debug(Messages.TRY_UPDATE_STUDENT, student);
-        Validation.validateStudent(student);
         Student updatedStudent;
         try {
             updatedStudent = studentRepository.save(student);
         } catch (RuntimeException exception) {
-            LOGGER.error(Messages.ERROR_UPDATE_STUDENT);
-            throw new ServiceException(Messages.ERROR_UPDATE_STUDENT);
+            LOGGER.error(Messages.ERROR_UPDATE_STUDENT_SERVICE, exception.getMessage());
+            throw new ServiceException(Messages.ERROR_UPDATE_STUDENT, exception);
         }
         LOGGER.debug(Messages.OK_UPDATE_STUDENT, updatedStudent);
         return updatedStudent;

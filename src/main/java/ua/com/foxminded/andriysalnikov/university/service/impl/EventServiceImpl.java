@@ -40,7 +40,6 @@ public class EventServiceImpl implements EventService {
     @Override
     public Event getEventById(Integer id) {
         LOGGER.debug(Messages.TRY_GET_EVENT_BY_ID, id);
-        Validation.validateId(id);
         Event event = eventRepository.findEventById(id).orElseThrow(() -> {
             LOGGER.error(Messages.ERROR_GET_EVENT_BY_ID);
             throw new ServiceException(Messages.ERROR_GET_EVENT_BY_ID);
@@ -54,13 +53,12 @@ public class EventServiceImpl implements EventService {
     @Override
     public Event createEvent(Event event) {
         LOGGER.debug(Messages.TRY_CREATE_EVENT);
-        Validation.validateEvent(event);
         Event createdEvent;
         try {
             createdEvent = eventRepository.save(event);
         } catch (RuntimeException exception) {
-            LOGGER.error(Messages.ERROR_CREATE_EVENT);
-            throw new ServiceException(Messages.ERROR_CREATE_EVENT);
+            LOGGER.error(Messages.ERROR_CREATE_EVENT_SERVICE, exception.getMessage());
+            throw new ServiceException(Messages.ERROR_CREATE_EVENT, exception);
         }
         LOGGER.debug(Messages.OK_CREATE_EVENT, createdEvent);
         return createdEvent;
@@ -71,7 +69,6 @@ public class EventServiceImpl implements EventService {
     @Override
     public void deleteEventById(Integer id) {
         LOGGER.debug(Messages.TRY_DELETE_EVENT_BY_ID, id);
-        Validation.validateId(id);
         if (eventRepository.deleteEventById(id) == 0) {
             LOGGER.error(Messages.ERROR_DELETE_EVENT_BY_ID);
             throw new ServiceException(Messages.ERROR_DELETE_EVENT_BY_ID);
@@ -84,14 +81,12 @@ public class EventServiceImpl implements EventService {
     @Override
     public Event updateEvent(Event event) {
         LOGGER.debug(Messages.TRY_UPDATE_EVENT, event);
-        Validation.validateEvent(event);
         Event updatedEvent;
         try {
             updatedEvent = eventRepository.save(event);
-
         } catch (RuntimeException exception) {
-            LOGGER.error(Messages.ERROR_UPDATE_EVENT);
-            throw new ServiceException(Messages.ERROR_UPDATE_EVENT);
+            LOGGER.error(Messages.ERROR_UPDATE_EVENT_SERVICE, exception.getMessage());
+            throw new ServiceException(Messages.ERROR_UPDATE_EVENT, exception);
         }
         LOGGER.debug(Messages.OK_UPDATE_EVENT, updatedEvent);
         return updatedEvent;
@@ -102,7 +97,6 @@ public class EventServiceImpl implements EventService {
             LocalDate startDate, LocalDate endDate, Integer courseId) {
         LOGGER.debug(Messages.TRY_GET_ALL_EVENTS_FROM_STARTDATE_TO_ENDDATE_BY_COURSE_ID,
                 startDate, endDate, courseId);
-        Validation.validateId(courseId);
         Validation.validateDate(startDate, endDate);
         List<Event> events = eventRepository.getAllEventsFromStartDateToEndDateByCourseId(
                         startDate, endDate, courseId);

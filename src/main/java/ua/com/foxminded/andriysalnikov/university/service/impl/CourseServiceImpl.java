@@ -12,7 +12,6 @@ import ua.com.foxminded.andriysalnikov.university.repository.CourseRepository;
 import ua.com.foxminded.andriysalnikov.university.exceptions.ServiceException;
 import ua.com.foxminded.andriysalnikov.university.model.Course;
 import ua.com.foxminded.andriysalnikov.university.service.CourseService;
-import ua.com.foxminded.andriysalnikov.university.validation.Validation;
 
 import java.util.List;
 
@@ -56,7 +55,6 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public Course getCourseById(Integer id) {
         LOGGER.debug(Messages.TRY_GET_COURSE_BY_ID, id);
-        Validation.validateId(id);
         Course course = courseRepository.getCourseById(id).orElseThrow(() -> {
             LOGGER.error(Messages.ERROR_GET_COURSE_BY_ID);
             throw new ServiceException(Messages.ERROR_GET_COURSE_BY_ID);
@@ -70,13 +68,12 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public Course createCourse(Course course) {
         LOGGER.debug(Messages.TRY_CREATE_COURSE);
-        Validation.validateCourse(course);
         Course createdCourse;
         try {
             createdCourse = courseRepository.save(course);
         } catch (RuntimeException exception) {
-            LOGGER.error(Messages.ERROR_CREATE_COURSE);
-            throw new ServiceException(Messages.ERROR_CREATE_COURSE);
+            LOGGER.error(Messages.ERROR_CREATE_COURSE_SERVICE, exception.getMessage());
+            throw new ServiceException(Messages.ERROR_CREATE_COURSE, exception);
         }
         LOGGER.debug(Messages.OK_CREATE_COURSE, createdCourse);
         return createdCourse;
@@ -86,7 +83,6 @@ public class CourseServiceImpl implements CourseService {
     @Transactional
     @Override
     public void deleteCourseById(Integer id) {
-        Validation.validateId(id);
         if (courseRepository.deleteCourseById(id) == 0) {
             LOGGER.error(Messages.ERROR_DELETE_COURSE_BY_ID);
             throw new ServiceException(Messages.ERROR_DELETE_COURSE_BY_ID);
@@ -99,13 +95,12 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public Course updateCourse(Course course) {
         LOGGER.debug(Messages.TRY_UPDATE_COURSE, course);
-        Validation.validateCourse(course);
         Course updatedCourse;
         try {
             updatedCourse = courseRepository.save(course);
         } catch (RuntimeException exception) {
-            LOGGER.error(Messages.ERROR_UPDATE_COURSE);
-            throw new ServiceException(Messages.ERROR_UPDATE_COURSE);
+            LOGGER.error(Messages.ERROR_UPDATE_COURSE_SERVICE, exception.getMessage());
+            throw new ServiceException(Messages.ERROR_UPDATE_COURSE, exception);
         }
         LOGGER.debug(Messages.OK_UPDATE_COURSE, updatedCourse);
         return updatedCourse;

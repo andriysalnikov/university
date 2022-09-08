@@ -19,8 +19,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.assertSame;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.verify;
@@ -61,9 +60,8 @@ class EventServiceImplTest {
     @NullSource
     void getAllEventsFromStartDateToEndDateByCourseId_shouldThrowIllegalArgumentException_whenArgumentsContainIntegerNull(
             Integer id) {
-        assertThrows(ServiceException.class,
-                () -> eventServiceImpl.getAllEventsFromStartDateToEndDateByCourseId(
-                        LocalDate.MIN, LocalDate.MAX, id));
+        assertTrue(eventServiceImpl.getAllEventsFromStartDateToEndDateByCourseId(
+                LocalDate.MIN, LocalDate.MAX, id).isEmpty());
     }
 
     @ParameterizedTest
@@ -72,9 +70,8 @@ class EventServiceImplTest {
             Integer id) {
         LocalDate startDate = LocalDate.now();
         LocalDate endDate = LocalDate.now().plusDays(1);
-        assertThrows(ServiceException.class,
-                () -> eventServiceImpl.getAllEventsFromStartDateToEndDateByCourseId(
-                        startDate, endDate, id));
+        assertTrue(eventServiceImpl.getAllEventsFromStartDateToEndDateByCourseId(
+                startDate, endDate, id).isEmpty());
     }
 
     @Test
