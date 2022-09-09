@@ -22,8 +22,7 @@ public class Course {
 
     // Description can be Blank
     @Column(name = "description")
-    @NotNull(message = "Description can not be Null")
-    @Size(max = 20, message = "Course Description length must be no longer than 100 symbols")
+    @Size(max = 100, message = "Course Description length must be no longer than 100 symbols")
     private String description;
 
     @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH },

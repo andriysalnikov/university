@@ -16,16 +16,13 @@ public class Event {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "date_of_event")
-    @NotNull(message = "Day of Event cannot be Null")
+    @Column(name = "date_of_event", nullable = false)
     private LocalDate dayOfEvent;
 
-    @Column(name = "start_time")
-    @NotNull(message = "Start Time of Event cannot be Null")
+    @Column(name = "start_time", nullable = false)
     private LocalTime startTime;
 
-    @Column(name = "end_time")
-    @NotNull(message = "End Time of Event cannot be Null")
+    @Column(name = "end_time", nullable = false)
     private LocalTime endTime;
 
     @OneToOne(cascade = { CascadeType.DETACH, CascadeType.REFRESH },

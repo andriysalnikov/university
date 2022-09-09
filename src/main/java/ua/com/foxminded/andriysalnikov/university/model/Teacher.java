@@ -31,7 +31,7 @@ public class Teacher {
     @OneToMany(cascade = { CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH },
             mappedBy = "teacher")
     @OrderBy(value = "id")
-    @Max(value = 5, message = "Every Teacher may have no more 5 Courses ")
+    @Max(value = 5, message = "Every Teacher may have maximum 5 Courses ")
     private final List<Course> courses;
 
     public Teacher() {

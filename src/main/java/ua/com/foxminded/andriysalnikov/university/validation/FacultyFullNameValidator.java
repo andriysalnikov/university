@@ -7,7 +7,6 @@ public class FacultyFullNameValidator implements ConstraintValidator<FacultyFull
 
     @Override
     public void initialize(FacultyFullNameConstraint constraintAnnotation) {
-//        ConstraintValidator.super.initialize(constraintAnnotation);
     }
 
     @Override
