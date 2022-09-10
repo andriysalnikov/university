@@ -16,6 +16,7 @@ import ua.com.foxminded.andriysalnikov.university.service.CourseService;
 import ua.com.foxminded.andriysalnikov.university.service.StudentService;
 import ua.com.foxminded.andriysalnikov.university.utils.ExceptionUtil;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
