@@ -1,6 +1,8 @@
 package ua.com.foxminded.andriysalnikov.university.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 import java.util.Objects;
 
@@ -13,6 +15,8 @@ public class ClassRoom {
     private Integer id;
 
     @Column(name = "name")
+    @NotBlank(message = "Classroom Name cannot be blank")
+    @Size(max = 5, message = "Classroom Name length must be no longer than 5 symbols")
     private String name;
 
     @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH },

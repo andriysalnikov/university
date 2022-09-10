@@ -12,7 +12,6 @@ import ua.com.foxminded.andriysalnikov.university.repository.FacultyRepository;
 import ua.com.foxminded.andriysalnikov.university.exceptions.ServiceException;
 import ua.com.foxminded.andriysalnikov.university.model.Faculty;
 import ua.com.foxminded.andriysalnikov.university.service.FacultyService;
-import ua.com.foxminded.andriysalnikov.university.validation.Validation;
 
 import java.util.List;
 
@@ -40,7 +39,6 @@ public class FacultyServiceImpl implements FacultyService {
     @Override
     public Faculty getFacultyById(Integer id) {
         LOGGER.debug(Messages.TRY_GET_FACULTY_BY_ID, id);
-        Validation.validateId(id);
         Faculty faculty = facultyRepository.getFacultyById(id).orElseThrow(() -> {
             LOGGER.error(Messages.ERROR_GET_FACULTY_BY_ID);
             throw new ServiceException(Messages.ERROR_GET_FACULTY_BY_ID);
@@ -52,7 +50,6 @@ public class FacultyServiceImpl implements FacultyService {
     @Override
     public Faculty getFacultyByIdWithClassRooms(Integer id) {
         LOGGER.debug(Messages.TRY_GET_FACULTY_BY_ID, id);
-        Validation.validateId(id);
         Faculty faculty = facultyRepository.getFacultyByIdWithClassRooms(id).orElseThrow(() -> {
             LOGGER.error(Messages.ERROR_GET_FACULTY_BY_ID);
             throw new ServiceException(Messages.ERROR_GET_FACULTY_BY_ID);
@@ -64,7 +61,6 @@ public class FacultyServiceImpl implements FacultyService {
     @Override
     public Faculty getFacultyByIdWithCourses(Integer id) {
         LOGGER.debug(Messages.TRY_GET_FACULTY_BY_ID, id);
-        Validation.validateId(id);
         Faculty faculty = facultyRepository.getFacultyByIdWithCourses(id).orElseThrow(() -> {
             LOGGER.error(Messages.ERROR_GET_FACULTY_BY_ID);
             throw new ServiceException(Messages.ERROR_GET_FACULTY_BY_ID);
@@ -76,7 +72,6 @@ public class FacultyServiceImpl implements FacultyService {
     @Override
     public Faculty getFacultyByIdWithStudents(Integer id) {
         LOGGER.debug(Messages.TRY_GET_FACULTY_BY_ID, id);
-        Validation.validateId(id);
         Faculty faculty = facultyRepository.getFacultyByIdWithStudents(id).orElseThrow(() -> {
             LOGGER.error(Messages.ERROR_GET_FACULTY_BY_ID);
             throw new ServiceException(Messages.ERROR_GET_FACULTY_BY_ID);
@@ -90,13 +85,12 @@ public class FacultyServiceImpl implements FacultyService {
     @Override
     public Faculty createFaculty(Faculty faculty) {
         LOGGER.debug(Messages.TRY_CREATE_FACULTY);
-        Validation.validateFaculty(faculty);
         Faculty createdFaculty;
         try {
             createdFaculty = facultyRepository.save(faculty);
         } catch (RuntimeException exception){
-            LOGGER.error(Messages.ERROR_CREATE_FACULTY);
-            throw new ServiceException(Messages.ERROR_CREATE_FACULTY);
+            LOGGER.error(Messages.ERROR_CREATE_FACULTY_SERVICE, exception.getMessage());
+            throw new ServiceException(Messages.ERROR_CREATE_FACULTY, exception);
         }
         LOGGER.debug(Messages.OK_CREATE_FACULTY, createdFaculty);
         return createdFaculty;
@@ -107,7 +101,6 @@ public class FacultyServiceImpl implements FacultyService {
     @Override
     public void deleteFacultyById(Integer id) {
         LOGGER.debug(Messages.TRY_DELETE_FACULTY_BY_ID, id);
-        Validation.validateId(id);
         if (facultyRepository.deleteFacultyById(id) == 0) {
             LOGGER.error(Messages.ERROR_DELETE_FACULTY_BY_ID);
             throw new ServiceException(Messages.ERROR_DELETE_FACULTY_BY_ID);
@@ -120,13 +113,12 @@ public class FacultyServiceImpl implements FacultyService {
     @Override
     public Faculty updateFaculty(Faculty faculty) {
         LOGGER.debug(Messages.TRY_UPDATE_FACULTY, faculty);
-        Validation.validateFaculty(faculty);
         Faculty updatedFaculty;
         try {
             updatedFaculty = facultyRepository.save(faculty);
-        } catch (RuntimeException runtimeException){
-            LOGGER.error(Messages.ERROR_UPDATE_FACULTY);
-            throw new ServiceException(Messages.ERROR_UPDATE_FACULTY);
+        } catch (RuntimeException exception){
+            LOGGER.error(Messages.ERROR_UPDATE_FACULTY_SERVICE, exception.getMessage());
+            throw new ServiceException(Messages.ERROR_UPDATE_FACULTY, exception);
         }
         LOGGER.debug(Messages.OK_UPDATE_FACULTY, updatedFaculty);
         return updatedFaculty;
