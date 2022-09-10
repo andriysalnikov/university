@@ -77,6 +77,9 @@ Rewrite the DAO layer. Use Spring Data JPA instead of Hibernate.
 Add validation to your models. It could be name validation, time validation, number of students in groups, etc. 
 Ask your mentor for validations that should be implemented in your code.
 
+### Task 21 - REST
+Add REST endpoints to your project. All UI functionality should be available in the REST endpoints.
+
 #### Tools that were used
 - Oracle JDK (11.0.16)
 - PostgreSQL (14.5)
