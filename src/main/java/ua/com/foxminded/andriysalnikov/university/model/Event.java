@@ -1,15 +1,16 @@
 package ua.com.foxminded.andriysalnikov.university.model;
 
+import com.fasterxml.jackson.annotation.JsonView;
+import ua.com.foxminded.andriysalnikov.university.marker.ViewWithoutDependencies;
+
 import javax.persistence.*;
-import javax.validation.Constraint;
-import javax.validation.constraints.Future;
-import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Objects;
 
 @Entity
 @Table(name = "events", schema = "university")
+@JsonView(ViewWithoutDependencies.class)
 public class Event {
 
     @Id
@@ -33,16 +34,19 @@ public class Event {
     @OneToOne(cascade = { CascadeType.DETACH, CascadeType.REFRESH },
             fetch = FetchType.EAGER)
     @JoinColumn(name = "course_id")
-    @NotNull(message = "Course in Event cannot be Null")
     private Course course;
 
     public Event() { }
 
-    public Event(LocalDate dayOfEvent, LocalTime startTime, LocalTime endTime,
-                 ClassRoom classRoom, Course course) {
+    public Event(LocalDate dayOfEvent, LocalTime startTime, LocalTime endTime) {
         this.dayOfEvent = dayOfEvent;
         this.startTime = startTime;
         this.endTime = endTime;
+    }
+
+    public Event(LocalDate dayOfEvent, LocalTime startTime, LocalTime endTime,
+                 ClassRoom classRoom, Course course) {
+        this(dayOfEvent, startTime, endTime);
         this.classRoom = classRoom;
         this.course = course;
     }
@@ -122,4 +126,5 @@ public class Event {
                 ", course=" + course +
                 '}';
     }
+
 }
