@@ -1,7 +1,8 @@
 package ua.com.foxminded.andriysalnikov.university.model;
 
 import com.fasterxml.jackson.annotation.JsonView;
-import ua.com.foxminded.andriysalnikov.university.marker.View;
+import ua.com.foxminded.andriysalnikov.university.marker.ViewWithDependencies;
+import ua.com.foxminded.andriysalnikov.university.marker.ViewWithoutDependencies;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -15,13 +16,13 @@ public class ClassRoom {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonView(View.WithoutDependencies.class)
+    @JsonView({ViewWithDependencies.class, ViewWithoutDependencies.class})
     private Integer id;
 
     @Column(name = "name")
     @NotBlank(message = "Classroom Name cannot be blank")
     @Size(max = 5, message = "Classroom Name length must be no longer than 5 symbols")
-    @JsonView(View.WithoutDependencies.class)
+    @JsonView({ViewWithDependencies.class, ViewWithoutDependencies.class})
     private String name;
 
     @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH },

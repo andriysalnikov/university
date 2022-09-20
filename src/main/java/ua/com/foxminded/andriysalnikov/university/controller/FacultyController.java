@@ -5,24 +5,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import ua.com.foxminded.andriysalnikov.university.constants.Messages;
 import ua.com.foxminded.andriysalnikov.university.exceptions.ServiceException;
-import ua.com.foxminded.andriysalnikov.university.marker.View;
 import ua.com.foxminded.andriysalnikov.university.marker.ViewWithCourses;
-import ua.com.foxminded.andriysalnikov.university.marker.ViewWithDependencies;
 import ua.com.foxminded.andriysalnikov.university.marker.ViewWithoutDependencies;
 import ua.com.foxminded.andriysalnikov.university.model.*;
 import ua.com.foxminded.andriysalnikov.university.service.ClassRoomService;
 import ua.com.foxminded.andriysalnikov.university.service.CourseService;
 import ua.com.foxminded.andriysalnikov.university.service.StudentService;
-import ua.com.foxminded.andriysalnikov.university.utils.ExceptionUtil;
 import ua.com.foxminded.andriysalnikov.university.service.FacultyService;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @RestController

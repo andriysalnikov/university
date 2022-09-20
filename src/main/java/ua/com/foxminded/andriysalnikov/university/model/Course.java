@@ -1,7 +1,9 @@
 package ua.com.foxminded.andriysalnikov.university.model;
 
 import com.fasterxml.jackson.annotation.JsonView;
-import ua.com.foxminded.andriysalnikov.university.marker.View;
+import ua.com.foxminded.andriysalnikov.university.marker.ViewWithCourses;
+import ua.com.foxminded.andriysalnikov.university.marker.ViewWithDependencies;
+import ua.com.foxminded.andriysalnikov.university.marker.ViewWithoutDependencies;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -15,19 +17,19 @@ public class Course {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonView({View.WithCourses.class, View.WithoutDependencies.class})
+    @JsonView({ViewWithDependencies.class, ViewWithoutDependencies.class})
     private Integer id;
 
     @Column(name = "name")
     @NotBlank(message = "Course Name cannot be blank")
     @Size(max = 20, message = "Course Name length must be no longer than 20 symbols")
-    @JsonView({View.WithCourses.class, View.WithoutDependencies.class})
+    @JsonView({ViewWithDependencies.class, ViewWithoutDependencies.class})
     private String name;
 
     // Description can be Blank
     @Column(name = "description")
     @Size(max = 100, message = "Course Description length must be no longer than 100 symbols")
-    @JsonView({View.WithCourses.class, View.WithoutDependencies.class})
+    @JsonView({ViewWithDependencies.class, ViewWithoutDependencies.class})
     private String description;
 
     @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH },

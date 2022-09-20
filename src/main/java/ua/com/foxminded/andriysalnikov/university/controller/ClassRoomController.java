@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.server.ResponseStatusException;
 import ua.com.foxminded.andriysalnikov.university.constants.Messages;
 import ua.com.foxminded.andriysalnikov.university.exceptions.ServiceException;
-import ua.com.foxminded.andriysalnikov.university.marker.View;
+import ua.com.foxminded.andriysalnikov.university.marker.ViewWithoutDependencies;
 import ua.com.foxminded.andriysalnikov.university.model.ClassRoom;
 import ua.com.foxminded.andriysalnikov.university.service.ClassRoomService;
 
@@ -36,7 +36,7 @@ public class ClassRoomController {
     }
 
     @GetMapping
-    @JsonView(View.WithoutDependencies.class)
+    @JsonView(ViewWithoutDependencies.class)
     public List<ClassRoom> getAllClassRooms() {
         LOGGER.info(Messages.TRY_GET_ALL_CLASSROOMS);
         List<ClassRoom> classRooms = classRoomService.getAllClassRooms();
@@ -45,7 +45,7 @@ public class ClassRoomController {
     }
 
     @GetMapping("/without-faculty")
-    @JsonView(View.WithoutDependencies.class)
+    @JsonView(ViewWithoutDependencies.class)
     public List<ClassRoom> getAllCoursesWithoutFaculty() {
         LOGGER.info(Messages.TRY_GET_ALL_CLASSROOMS_WITHOUT_FACULTY);
         List<ClassRoom> classRooms = classRoomService.getAllClassRoomsWithoutFaculty();
@@ -54,7 +54,7 @@ public class ClassRoomController {
     }
 
     @GetMapping("/{id}")
-    @JsonView(View.WithoutDependencies.class)
+    @JsonView(ViewWithoutDependencies.class)
     public ClassRoom getClassRoomById(@PathVariable Integer id) {
         LOGGER.info(Messages.TRY_GET_CLASSROOM_BY_ID, id);
         ClassRoom classRoom;
@@ -81,7 +81,7 @@ public class ClassRoomController {
 
     @PostMapping("/create")
     @ResponseStatus(HttpStatus.CREATED)
-    @JsonView(View.WithoutDependencies.class)
+    @JsonView(ViewWithoutDependencies.class)
     public ClassRoom createClassRoom(@Valid @RequestBody ClassRoom classRoom) {
         LOGGER.info(Messages.TRY_CREATE_CLASSROOM);
         ClassRoom createdClassRoom;
@@ -96,7 +96,7 @@ public class ClassRoomController {
 
     @PostMapping("/{id}/update")
     @ResponseStatus(HttpStatus.OK)
-    @JsonView(View.WithoutDependencies.class)
+    @JsonView(ViewWithoutDependencies.class)
     public ClassRoom updateClassRoom(@PathVariable Integer id, @Valid @RequestBody ClassRoom classRoom) {
         LOGGER.info(Messages.TRY_UPDATE_CLASSROOM, classRoom);
         ClassRoom updatedClassRoom;

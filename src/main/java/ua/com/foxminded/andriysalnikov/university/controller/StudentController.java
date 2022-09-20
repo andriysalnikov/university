@@ -15,7 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.server.ResponseStatusException;
 import ua.com.foxminded.andriysalnikov.university.constants.Messages;
 import ua.com.foxminded.andriysalnikov.university.exceptions.ServiceException;
-import ua.com.foxminded.andriysalnikov.university.marker.View;
+import ua.com.foxminded.andriysalnikov.university.marker.ViewWithCourses;
+import ua.com.foxminded.andriysalnikov.university.marker.ViewWithoutDependencies;
 import ua.com.foxminded.andriysalnikov.university.model.Course;
 import ua.com.foxminded.andriysalnikov.university.model.Student;
 import ua.com.foxminded.andriysalnikov.university.service.CourseService;
@@ -40,7 +41,7 @@ public class StudentController {
     }
 
     @GetMapping
-    @JsonView(View.WithoutCourses.class)
+    @JsonView(ViewWithoutDependencies.class)
     public List<Student> getAllStudents() {
         LOGGER.info(Messages.TRY_GET_ALL_STUDENTS);
         List<Student> students = studentService.getAllStudents();
@@ -49,7 +50,7 @@ public class StudentController {
     }
 
     @GetMapping("/without-faculty")
-    @JsonView(View.WithoutCourses.class)
+    @JsonView(ViewWithoutDependencies.class)
     public List<Student> getAllStudentsWithoutFaculty() {
         LOGGER.info(Messages.TRY_GET_ALL_STUDENTS_WITHOUT_FACULTY);
         List<Student> students = studentService.getAllStudentsWithoutFaculty();
@@ -58,7 +59,7 @@ public class StudentController {
     }
 
     @GetMapping("/{id}")
-    @JsonView(View.WithoutCourses.class)
+    @JsonView(ViewWithoutDependencies.class)
     public Student getStudentById(@PathVariable Integer id) {
         LOGGER.info(Messages.TRY_GET_STUDENT_BY_ID, id);
         Student student;
@@ -72,7 +73,7 @@ public class StudentController {
     }
 
     @GetMapping("/{id}/courses")
-    @JsonView(View.WithCourses.class)
+    @JsonView(ViewWithCourses.class)
     public Student getStudentByIdWithCourses(@PathVariable Integer id) {
         LOGGER.info(Messages.TRY_GET_STUDENT_BY_ID, id);
         Student student;
@@ -100,7 +101,7 @@ public class StudentController {
 
     @PostMapping("/create")
     @ResponseStatus(HttpStatus.CREATED)
-    @JsonView(View.WithoutCourses.class)
+    @JsonView(ViewWithoutDependencies.class)
     public Student createStudent(@Valid @RequestBody Student student) {
         LOGGER.info(Messages.TRY_CREATE_STUDENT);
         Student createdStudent;
@@ -115,7 +116,7 @@ public class StudentController {
 
     @PostMapping("/{id}/update")
     @ResponseStatus(HttpStatus.OK)
-    @JsonView(View.WithoutCourses.class)
+    @JsonView(ViewWithoutDependencies.class)
     public Student updateStudent(@PathVariable Integer id, @Valid @RequestBody Student student) {
         LOGGER.info(Messages.TRY_UPDATE_STUDENT, student);
         Student updatedStudent;
@@ -132,7 +133,7 @@ public class StudentController {
 
     @PostMapping("/{studentId}/add-course/{courseId}")
     @ResponseStatus(HttpStatus.OK)
-    @JsonView(View.WithCourses.class)
+    @JsonView(ViewWithCourses.class)
     public Student addCourseToStudent(@PathVariable Integer studentId, @PathVariable Integer courseId) {
         LOGGER.info(Messages.TRY_ADD_COURSE_TO_STUDENT, studentId, courseId);
         Course course;
@@ -152,7 +153,7 @@ public class StudentController {
 
     @PostMapping("/{studentId}/remove-course/{courseId}")
     @ResponseStatus(HttpStatus.OK)
-    @JsonView(View.WithCourses.class)
+    @JsonView(ViewWithCourses.class)
     public Student removeCourseFromStudent(@PathVariable Integer studentId, @PathVariable Integer courseId) {
         LOGGER.info(Messages.TRY_REMOVE_COURSE_FROM_STUDENT, courseId, studentId);
         Course course;

@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.server.ResponseStatusException;
 import ua.com.foxminded.andriysalnikov.university.constants.Messages;
 import ua.com.foxminded.andriysalnikov.university.exceptions.ServiceException;
-import ua.com.foxminded.andriysalnikov.university.marker.View;
+import ua.com.foxminded.andriysalnikov.university.marker.ViewWithoutDependencies;
 import ua.com.foxminded.andriysalnikov.university.model.Course;
 import ua.com.foxminded.andriysalnikov.university.service.CourseService;
 
@@ -36,7 +36,7 @@ public class CourseController {
     }
 
     @GetMapping
-    @JsonView(View.WithoutDependencies.class)
+    @JsonView(ViewWithoutDependencies.class)
     public List<Course> getAllCourses() {
         LOGGER.info(Messages.TRY_GET_ALL_COURSES);
         List<Course> courses = courseService.getAllCourses();
@@ -45,7 +45,7 @@ public class CourseController {
     }
 
     @GetMapping("/without-teacher")
-    @JsonView(View.WithoutDependencies.class)
+    @JsonView(ViewWithoutDependencies.class)
     public List<Course> getAllCoursesWithoutTeacher() {
         LOGGER.info(Messages.TRY_GET_ALL_COURSES_WITHOUT_TEACHER);
         List<Course> courses = courseService.getAllCoursesWithoutTeacher();
@@ -54,7 +54,7 @@ public class CourseController {
     }
 
     @GetMapping("/without-faculty")
-    @JsonView(View.WithoutDependencies.class)
+    @JsonView(ViewWithoutDependencies.class)
     public List<Course> getAllCoursesWithoutFaculty() {
         LOGGER.info(Messages.TRY_GET_ALL_COURSES_WITHOUT_FACULTY);
         List<Course> courses = courseService.getAllCoursesWithoutFaculty();
@@ -63,7 +63,7 @@ public class CourseController {
     }
 
     @GetMapping("/{id}")
-    @JsonView(View.WithoutDependencies.class)
+    @JsonView(ViewWithoutDependencies.class)
     public Course getCourseById(@PathVariable Integer id) {
         LOGGER.info(Messages.TRY_GET_COURSE_BY_ID, id);
         Course course;
@@ -90,7 +90,7 @@ public class CourseController {
 
     @PostMapping("/create")
     @ResponseStatus(HttpStatus.CREATED)
-    @JsonView(View.WithoutDependencies.class)
+    @JsonView(ViewWithoutDependencies.class)
     public Course createCourse(@Valid @RequestBody Course course) {
         LOGGER.info(Messages.TRY_CREATE_COURSE);
         Course createdCourse;
@@ -105,7 +105,7 @@ public class CourseController {
 
     @PostMapping("/{id}/update")
     @ResponseStatus(HttpStatus.OK)
-    @JsonView(View.WithoutDependencies.class)
+    @JsonView(ViewWithoutDependencies.class)
     public Course updateCourse(@PathVariable Integer id, @Valid @RequestBody Course course) {
         LOGGER.info(Messages.TRY_UPDATE_COURSE, course);
         Course updatedCourse;

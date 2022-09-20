@@ -15,7 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.server.ResponseStatusException;
 import ua.com.foxminded.andriysalnikov.university.constants.Messages;
 import ua.com.foxminded.andriysalnikov.university.exceptions.ServiceException;
-import ua.com.foxminded.andriysalnikov.university.marker.View;
+import ua.com.foxminded.andriysalnikov.university.marker.ViewWithCourses;
+import ua.com.foxminded.andriysalnikov.university.marker.ViewWithoutDependencies;
 import ua.com.foxminded.andriysalnikov.university.model.Course;
 import ua.com.foxminded.andriysalnikov.university.model.Teacher;
 import ua.com.foxminded.andriysalnikov.university.service.CourseService;
@@ -40,7 +41,7 @@ public class TeacherController {
     }
 
     @GetMapping
-    @JsonView(View.WithoutCourses.class)
+    @JsonView(ViewWithoutDependencies.class)
     public List<Teacher> getAllTeachers() {
         LOGGER.info(Messages.TRY_GET_ALL_TEACHERS);
         List<Teacher> teachers = teacherService.getAllTeachers();
@@ -49,7 +50,7 @@ public class TeacherController {
     }
 
     @GetMapping("/{id}")
-    @JsonView(View.WithoutCourses.class)
+    @JsonView(ViewWithoutDependencies.class)
     public Teacher getTeacherById(@PathVariable Integer id) {
         LOGGER.info(Messages.TRY_GET_TEACHER_BY_ID, id);
         Teacher teacher;
@@ -63,7 +64,7 @@ public class TeacherController {
     }
 
     @GetMapping("/{id}/courses")
-    @JsonView(View.WithCourses.class)
+    @JsonView(ViewWithCourses.class)
     public Teacher getTeacherByIdWithCourses(@PathVariable Integer id) {
         LOGGER.info(Messages.TRY_GET_TEACHER_BY_ID, id);
         Teacher teacher;
@@ -91,7 +92,7 @@ public class TeacherController {
 
     @PostMapping("/create")
     @ResponseStatus(HttpStatus.CREATED)
-    @JsonView(View.WithoutCourses.class)
+    @JsonView(ViewWithoutDependencies.class)
     public Teacher createTeacher(@Valid @RequestBody Teacher teacher) {
         LOGGER.info(Messages.TRY_CREATE_TEACHER);
         Teacher createdTeacher;
@@ -106,7 +107,7 @@ public class TeacherController {
 
     @PostMapping("/{id}/update")
     @ResponseStatus(HttpStatus.OK)
-    @JsonView(View.WithoutCourses.class)
+    @JsonView(ViewWithoutDependencies.class)
     public Teacher updateTeacher(@PathVariable Integer id, @Valid @RequestBody Teacher teacher) {
         LOGGER.info(Messages.TRY_UPDATE_TEACHER, teacher);
         Teacher updatedTeacher;
@@ -123,7 +124,7 @@ public class TeacherController {
 
     @PostMapping("/{teacherId}/add-course/{courseId}")
     @ResponseStatus(HttpStatus.OK)
-    @JsonView(View.WithCourses.class)
+    @JsonView(ViewWithCourses.class)
     public Teacher addCourseToTeacher(@PathVariable Integer teacherId, @PathVariable Integer courseId) {
         LOGGER.info(Messages.TRY_ADD_COURSE_TO_TEACHER, teacherId, courseId);
         Course course;
@@ -148,7 +149,7 @@ public class TeacherController {
 
     @PostMapping("/{teacherId}/remove-course/{courseId}")
     @ResponseStatus(HttpStatus.OK)
-    @JsonView(View.WithCourses.class)
+    @JsonView(ViewWithCourses.class)
     public Teacher removeCourseFromTeacher(@PathVariable Integer teacherId, @PathVariable Integer courseId) {
         LOGGER.info(Messages.TRY_REMOVE_COURSE_FROM_TEACHER, courseId, teacherId);
         Course course;
