@@ -80,7 +80,6 @@ public class StudentController {
         try {
             student = studentService.getStudentByIdWithCourses(id);
         } catch (ServiceException exception) {
-            System.out.println(exception.getMessage());
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, exception.getMessage());
         }
         LOGGER.info(Messages.OK_GET_STUDENT_BY_ID, id, student);

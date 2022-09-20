@@ -5,7 +5,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.server.ResponseStatusException;
 import ua.com.foxminded.andriysalnikov.university.constants.Messages;
 import ua.com.foxminded.andriysalnikov.university.exceptions.ServiceException;
@@ -13,7 +19,10 @@ import ua.com.foxminded.andriysalnikov.university.marker.ViewWithClassRooms;
 import ua.com.foxminded.andriysalnikov.university.marker.ViewWithCourses;
 import ua.com.foxminded.andriysalnikov.university.marker.ViewWithStudents;
 import ua.com.foxminded.andriysalnikov.university.marker.ViewWithoutDependencies;
-import ua.com.foxminded.andriysalnikov.university.model.*;
+import ua.com.foxminded.andriysalnikov.university.model.Course;
+import ua.com.foxminded.andriysalnikov.university.model.Student;
+import ua.com.foxminded.andriysalnikov.university.model.ClassRoom;
+import ua.com.foxminded.andriysalnikov.university.model.Faculty;
 import ua.com.foxminded.andriysalnikov.university.service.ClassRoomService;
 import ua.com.foxminded.andriysalnikov.university.service.CourseService;
 import ua.com.foxminded.andriysalnikov.university.service.StudentService;
@@ -291,4 +300,5 @@ public class FacultyController {
         LOGGER.info(Messages.OK_REMOVE_STUDENT_FROM_FACULTY, studentId, facultyId, student);
         return faculty;
     }
+
 }

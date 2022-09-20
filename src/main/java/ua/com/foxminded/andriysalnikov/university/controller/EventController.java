@@ -102,7 +102,7 @@ public class EventController {
     @PostMapping("/{id}/update/course/{courseId}/classroom/{classRoomId}")
     @ResponseStatus(HttpStatus.OK)
     @JsonView(ViewWithoutDependencies.class)
-    public Event createEvent(@PathVariable Integer id, @PathVariable Integer courseId,
+    public Event updateEvent(@PathVariable Integer id, @PathVariable Integer courseId,
                              @PathVariable Integer classRoomId, @Valid @RequestBody Event event) {
         LOGGER.info(Messages.TRY_UPDATE_EVENT, event);
         Event updatedEvent;
