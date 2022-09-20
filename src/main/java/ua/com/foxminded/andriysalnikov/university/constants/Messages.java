@@ -130,11 +130,17 @@ public final class Messages {
     public static final String OK_ADD_STUDENT_TO_FACULTY =
             "It is OK adding 'Student'('id'={}) to 'Faculty'('id'={}) : {}";
 
+    public static final String ERROR_ADD_STUDENT_TO_FACULTY =
+            "Cannot add 'Student' to 'Faculty'";
+
     public static final String TRY_REMOVE_STUDENT_FROM_FACULTY =
             "Trying to remove 'Student'('id'={}) from  'Faculty'('id'={})";
 
     public static final String OK_REMOVE_STUDENT_FROM_FACULTY =
             "It is OK removing 'Student'('id'={}) from  'Faculty'('id'={}) : {}";
+
+    public static final String ERROR_REMOVE_STUDENT_FROM_FACULTY =
+            "Cannot remove 'Student' from 'Faculty'";
 
     public static final String TRY_GET_ALL_STUDENTS_WITHOUT_FACULTY =
             "Trying to get all 'Students' without 'Faculty'";
@@ -306,11 +312,17 @@ public final class Messages {
     public static final String OK_ADD_CLASSROOM_TO_FACULTY =
             "It is OK adding 'Classroom'('id'={}) to 'Faculty'('id'={}) : {}";
 
+    public static final String ERROR_ADD_CLASSROOM_TO_FACULTY =
+            "Cannot add 'Classroom' to 'Faculty'";
+
     public static final String TRY_REMOVE_CLASSROOM_FROM_FACULTY =
             "Trying to remove 'Classroom'('id'={}) from 'Faculty'('id'={})";
 
     public static final String OK_REMOVE_CLASSROOM_FROM_FACULTY =
-            "It is OK removing 'Classroom'('id'={}) from 'Faculty'('id'={})";
+            "It is OK removing 'Classroom'('id'={}) from 'Faculty'('id'={}) : {}";
+
+    public static final String ERROR_REMOVE_CLASSROOM_FROM_FACULTY =
+            "Cannot remove 'Classroom' from 'Faculty'";
 
     public static final String TRY_GET_ALL_CLASSROOMS_WITHOUT_FACULTY =
             "Trying to get all 'Classrooms' without 'Faculty'";
@@ -405,11 +417,17 @@ public final class Messages {
     public static final String OK_ADD_COURSE_TO_FACULTY =
             "It is OK adding 'Course'('id'={}) to 'Faculty'('id'={}) : {}";
 
+    public static final String ERROR_ADD_COURSE_TO_FACULTY =
+            "Cannot add 'Course' to 'Faculty'";
+
     public static final String TRY_REMOVE_COURSE_FROM_FACULTY =
             "Trying to remove 'Course'('id'={}) from 'Faculty'('id'={})";
 
     public static final String OK_REMOVE_COURSE_FROM_FACULTY =
             "It is OK removing 'Course'('id'={}) from 'Faculty'('id'={}) : {}";
+
+    public static final String ERROR_REMOVE_COURSE_FROM_FACULTY =
+            "Cannot remove 'Course' from 'FACULTY'";
 
     public static final String TRY_ADD_COURSE_TO_STUDENT =
             "Trying to add 'Course'('id'={}) to 'Student'('id'={})";
