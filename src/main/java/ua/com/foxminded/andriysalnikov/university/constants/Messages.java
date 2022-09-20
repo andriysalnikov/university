@@ -4,12 +4,6 @@ public final class Messages {
 
     // Common ERROR messages
 
-    public static final String ERROR_ARGUMENT_NULL =
-            "'id' cannot be null";
-
-    public static final String ERROR_ARGUMENT_LESS_OR_EQUALS_ZERO =
-            "'id' cannot be less or equals 0";
-
     public static final String ERROR_DATE_NULL =
             "'StartDate' or 'EndDate' or both cannot be null";
 
@@ -177,9 +171,6 @@ public final class Messages {
 
     public static final String ERROR_CREATE_EVENT_SERVICE =
             "Cannot create 'Event' in storage : {}";
-
-    public static final String ERROR_ARGUMENT_EVENT =
-            "'Event' or 'Event.dayOfEvent' or 'Event.startTime' or 'Event.endTime' cannot be null";
 
     public static final String TRY_UPDATE_EVENT =
             "Trying to update a 'Event' : {}";
@@ -396,11 +387,17 @@ public final class Messages {
     public static final String OK_ADD_COURSE_TO_TEACHER =
             "It is OK adding 'Course'('id'={}) to 'Teacher'('id'={}) : {}";
 
+    public static final String ERROR_ADD_COURSE_TO_TEACHER =
+            "Cannot add 'Course' to 'Teacher'";
+
     public static final String TRY_REMOVE_COURSE_FROM_TEACHER =
             "Trying to remove 'Course'('id'={}) from 'Teacher'('id'={})";
 
     public static final String OK_REMOVE_COURSE_FROM_TEACHER =
             "It is OK removing 'Course'('id'={}) from 'Teacher'('id'={}) : {}";
+
+    public static final String ERROR_REMOVE_COURSE_FROM_TEACHER =
+            "Cannot remove 'Course' from 'Teacher'";
 
     public static final String TRY_ADD_COURSE_TO_FACULTY =
             "Trying to add 'Course'('id'={}) to 'Faculty'('id'={})";
