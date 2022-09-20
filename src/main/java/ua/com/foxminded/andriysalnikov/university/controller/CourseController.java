@@ -64,7 +64,7 @@ public class CourseController {
 
     @GetMapping("/{id}")
     @JsonView(View.WithoutDependencies.class)
-    public Course getTeacherById(@PathVariable Integer id) {
+    public Course getCourseById(@PathVariable Integer id) {
         LOGGER.info(Messages.TRY_GET_COURSE_BY_ID, id);
         Course course;
         try {
@@ -106,7 +106,7 @@ public class CourseController {
     @PostMapping("/{id}/update")
     @ResponseStatus(HttpStatus.OK)
     @JsonView(View.WithoutDependencies.class)
-    public Course updateTeacher(@PathVariable Integer id, @Valid @RequestBody Course course) {
+    public Course updateCourse(@PathVariable Integer id, @Valid @RequestBody Course course) {
         LOGGER.info(Messages.TRY_UPDATE_COURSE, course);
         Course updatedCourse;
         try {

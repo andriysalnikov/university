@@ -1,22 +1,29 @@
 package ua.com.foxminded.andriysalnikov.university.controller;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.server.ResponseStatusException;
 import ua.com.foxminded.andriysalnikov.university.constants.Messages;
 import ua.com.foxminded.andriysalnikov.university.exceptions.ServiceException;
-import ua.com.foxminded.andriysalnikov.university.utils.ExceptionUtil;
+import ua.com.foxminded.andriysalnikov.university.marker.View;
 import ua.com.foxminded.andriysalnikov.university.model.ClassRoom;
 import ua.com.foxminded.andriysalnikov.university.service.ClassRoomService;
 
+import javax.validation.Valid;
 import java.util.List;
 
-@Controller
+@RestController
+@RequestMapping("/classrooms")
 public class ClassRoomController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ClassRoomController.class);
@@ -28,72 +35,80 @@ public class ClassRoomController {
         this.classRoomService = classRoomService;
     }
 
-    @GetMapping("/classrooms")
-    public String getAllClassRooms(Model model) {
+    @GetMapping
+    @JsonView(View.WithoutDependencies.class)
+    public List<ClassRoom> getAllClassRooms() {
         LOGGER.info(Messages.TRY_GET_ALL_CLASSROOMS);
         List<ClassRoom> classRooms = classRoomService.getAllClassRooms();
         LOGGER.info(Messages.OK_GET_ALL_CLASSROOMS, classRooms);
-        model.addAttribute("classrooms", classRooms);
-        return "classroom/classrooms";
+        return classRooms;
     }
 
-    @GetMapping("/classroom/create")
-    public String getCreationClassRoomModalWindow() {
-        LOGGER.info(Messages.TRY_CREATE_CLASSROOM);
-        return "classroom/classroom_create";
+    @GetMapping("/without-faculty")
+    @JsonView(View.WithoutDependencies.class)
+    public List<ClassRoom> getAllCoursesWithoutFaculty() {
+        LOGGER.info(Messages.TRY_GET_ALL_CLASSROOMS_WITHOUT_FACULTY);
+        List<ClassRoom> classRooms = classRoomService.getAllClassRoomsWithoutFaculty();
+        LOGGER.info(Messages.OK_GET_ALL_CLASSROOMS_WITHOUT_FACULTY, classRooms);
+        return classRooms;
     }
 
-    @PostMapping("/classroom/create")
-    public String createClassRoom(@RequestParam("name") String name, Model model) {
-        ClassRoom createdClassRoom;
-        try {
-            createdClassRoom = classRoomService.createClassRoom(new ClassRoom(name));
-        } catch (ServiceException exception) {
-            return ExceptionUtil.handleException(exception, LOGGER, model);
-        }
-        LOGGER.info(Messages.OK_CREATE_CLASSROOM, createdClassRoom);
-        return "redirect:/classrooms";
-    }
-
-    @PostMapping("/classroom/delete")
-    public String deleteClassRoom(@RequestParam("id") Integer classRoomId, Model model) {
-        LOGGER.info(Messages.TRY_DELETE_CLASSROOM_BY_ID, classRoomId);
-        try {
-           classRoomService.deleteClassRoomById(classRoomId);
-        } catch (ServiceException exception) {
-            return ExceptionUtil.handleException(exception, LOGGER, model);
-        }
-        LOGGER.info(Messages.OK_DELETE_CLASSROOM_BY_ID, classRoomId);
-        return "redirect:/classrooms";
-    }
-
-    @GetMapping("/classroom/update")
-    public String getUpdationClassRoomModalWindow(@RequestParam("id") Integer classRoomId, Model model) {
+    @GetMapping("/{id}")
+    @JsonView(View.WithoutDependencies.class)
+    public ClassRoom getClassRoomById(@PathVariable Integer id) {
+        LOGGER.info(Messages.TRY_GET_CLASSROOM_BY_ID, id);
         ClassRoom classRoom;
         try {
-            classRoom = classRoomService.getClassRoomById(classRoomId);
+            classRoom = classRoomService.getClassRoomById(id);
         } catch (ServiceException exception) {
-            return ExceptionUtil.handleException(exception, LOGGER, model);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, exception.getMessage());
         }
-        LOGGER.info(Messages.TRY_UPDATE_CLASSROOM, classRoom);
-        model.addAttribute("classroom", classRoom);
-        return "classroom/classroom_update";
+        LOGGER.info(Messages.OK_GET_CLASSROOM_BY_ID, id, classRoom);
+        return classRoom;
     }
 
-    @PostMapping("/classroom/update")
-    public String updateClassRoom(@RequestParam("id") Integer classRoomId,
-                                  @RequestParam("name") String name,
-                                  Model model) {
+    @PostMapping("/{id}/delete")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteClassRoom(@PathVariable Integer id) {
+        LOGGER.info(Messages.TRY_DELETE_CLASSROOM_BY_ID,id);
+        try {
+            classRoomService.deleteClassRoomById(id);
+        } catch (ServiceException exception) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, exception.getMessage());
+        }
+        LOGGER.info(Messages.OK_DELETE_CLASSROOM_BY_ID, id);
+    }
+
+    @PostMapping("/create")
+    @ResponseStatus(HttpStatus.CREATED)
+    @JsonView(View.WithoutDependencies.class)
+    public ClassRoom createClassRoom(@Valid @RequestBody ClassRoom classRoom) {
+        LOGGER.info(Messages.TRY_CREATE_CLASSROOM);
+        ClassRoom createdClassRoom;
+        try {
+            createdClassRoom = classRoomService.createClassRoom(classRoom);
+        } catch (ServiceException exception) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, exception.getMessage());
+        }
+        LOGGER.info(Messages.OK_CREATE_CLASSROOM, createdClassRoom);
+        return createdClassRoom;
+    }
+
+    @PostMapping("/{id}/update")
+    @ResponseStatus(HttpStatus.OK)
+    @JsonView(View.WithoutDependencies.class)
+    public ClassRoom updateClassRoom(@PathVariable Integer id, @Valid @RequestBody ClassRoom classRoom) {
+        LOGGER.info(Messages.TRY_UPDATE_CLASSROOM, classRoom);
         ClassRoom updatedClassRoom;
         try {
-            ClassRoom classRoom = new ClassRoom(name);
-            classRoom.setId(classRoomId);
+            classRoomService.getClassRoomById(id);
+            classRoom.setId(id);
             updatedClassRoom = classRoomService.updateClassRoom(classRoom);
         } catch (ServiceException exception) {
-            return ExceptionUtil.handleException(exception, LOGGER, model);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, exception.getMessage());
         }
         LOGGER.info(Messages.OK_UPDATE_CLASSROOM, updatedClassRoom);
-        return "redirect:/classrooms";
+        return updatedClassRoom;
     }
 
 }

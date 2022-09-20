@@ -58,7 +58,6 @@ public class TeacherController {
         } catch (ServiceException exception) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, exception.getMessage());
         }
-
         LOGGER.info(Messages.OK_GET_TEACHER_BY_ID, id, teacher);
         return teacher;
     }
