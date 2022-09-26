@@ -1,7 +1,6 @@
 package ua.com.foxminded.andriysalnikov.university.model;
 
 import javax.persistence.*;
-
 import java.util.Objects;
 
 @Entity

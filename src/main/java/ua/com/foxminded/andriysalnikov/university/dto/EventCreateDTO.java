@@ -5,7 +5,6 @@ import javax.validation.constraints.NotNull;
 
 public class EventCreateDTO {
 
-
     @NotNull(message = "Day of Event cannot be Null")
     @NotBlank(message = "Day of Event cannot be Blank")
     private final String dayOfEvent;

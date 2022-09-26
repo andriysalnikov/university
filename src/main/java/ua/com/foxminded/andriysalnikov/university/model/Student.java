@@ -1,7 +1,5 @@
 package ua.com.foxminded.andriysalnikov.university.model;
 
-import com.fasterxml.jackson.annotation.JsonView;
-
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;

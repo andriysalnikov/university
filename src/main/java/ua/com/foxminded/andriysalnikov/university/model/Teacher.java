@@ -1,7 +1,6 @@
 package ua.com.foxminded.andriysalnikov.university.model;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 import java.util.ArrayList;

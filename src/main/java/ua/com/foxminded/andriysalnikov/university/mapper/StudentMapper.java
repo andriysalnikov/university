@@ -12,15 +12,18 @@ import java.util.stream.Collectors;
 @Component
 public class StudentMapper {
 
-    public StudentDTO toDTO(Student teacher) {
-        return new StudentDTO(teacher.getId().toString(), teacher.getFirstName(), teacher.getLastName());
+    public StudentDTO toDTO(Student student) {
+        return new StudentDTO(student.getId().toString(), student.getFirstName(), student.getLastName());
     }
 
     public StudentWithCoursesDTO toDTOWithCourses(Student student) {
         StudentWithCoursesDTO studentDTO =
                 new StudentWithCoursesDTO(student.getId().toString(), student.getFirstName(), student.getLastName());
         studentDTO.getCourses().addAll(
-                student.getCourses().stream().map(Course::getName).collect(Collectors.toList()));
+                student.getCourses()
+                        .stream()
+                        .map(Course::getName)
+                        .collect(Collectors.toList()));
         return studentDTO;
     }
 

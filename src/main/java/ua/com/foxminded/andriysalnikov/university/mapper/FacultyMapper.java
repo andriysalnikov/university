@@ -19,7 +19,10 @@ public class FacultyMapper {
         FacultyWithCoursesDTO facultyDTO =
                 new FacultyWithCoursesDTO(faculty.getId().toString(), faculty.getFullName());
         facultyDTO.getCourses().addAll(
-                    faculty.getCourses().stream().map(Course::getName).collect(Collectors.toList()));
+                    faculty.getCourses()
+                            .stream()
+                            .map(Course::getName)
+                            .collect(Collectors.toList()));
         return facultyDTO;
     }
 
@@ -27,7 +30,10 @@ public class FacultyMapper {
         FacultyWithClassRoomsDTO facultyDTO =
                 new FacultyWithClassRoomsDTO(faculty.getId().toString(), faculty.getFullName());
         facultyDTO.getClassRooms().addAll(
-                faculty.getClassRooms().stream().map(ClassRoom::getName).collect(Collectors.toList()));
+                faculty.getClassRooms()
+                        .stream()
+                        .map(ClassRoom::getName)
+                        .collect(Collectors.toList()));
         return facultyDTO;
     }
 
@@ -35,7 +41,8 @@ public class FacultyMapper {
         FacultyWithStudentsDTO facultyDTO =
                 new FacultyWithStudentsDTO(faculty.getId().toString(), faculty.getFullName());
         facultyDTO.getStudents().addAll(
-                faculty.getStudents().stream()
+                faculty.getStudents()
+                        .stream()
                         .map(student -> student.getFirstName() + " " + student.getLastName())
                         .collect(Collectors.toList()));
         return facultyDTO;

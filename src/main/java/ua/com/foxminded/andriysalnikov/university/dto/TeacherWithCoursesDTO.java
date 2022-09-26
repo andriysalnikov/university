@@ -35,11 +35,11 @@ public class TeacherWithCoursesDTO {
 
     @Override
     public String toString() {
-        return "TeacherDTO{" +
+        return "TeacherWithCoursesDTO{" +
                 "id='" + id + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
+                ", courses=" + courses +
                 '}';
     }
-
 }

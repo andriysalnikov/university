@@ -20,7 +20,10 @@ public class TeacherMapper {
         TeacherWithCoursesDTO teacherDTO =
                 new TeacherWithCoursesDTO(teacher.getId().toString(), teacher.getFirstName(), teacher.getLastName());
         teacherDTO.getCourses().addAll(
-                    teacher.getCourses().stream().map(Course::getName).collect(Collectors.toList()));
+                    teacher.getCourses()
+                            .stream()
+                            .map(Course::getName)
+                            .collect(Collectors.toList()));
         return teacherDTO;
     }
 

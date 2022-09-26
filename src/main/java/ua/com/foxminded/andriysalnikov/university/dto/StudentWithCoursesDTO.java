@@ -35,10 +35,11 @@ public class StudentWithCoursesDTO {
 
     @Override
     public String toString() {
-        return "StudentDTO{" +
+        return "StudentWithCoursesDTO{" +
                 "id='" + id + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
+                ", courses=" + courses +
                 '}';
     }
 
