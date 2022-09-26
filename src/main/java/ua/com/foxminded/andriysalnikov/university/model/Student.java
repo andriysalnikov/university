@@ -1,14 +1,8 @@
 package ua.com.foxminded.andriysalnikov.university.model;
 
 import com.fasterxml.jackson.annotation.JsonView;
-import ua.com.foxminded.andriysalnikov.university.marker.ViewWithCourses;
-import ua.com.foxminded.andriysalnikov.university.marker.ViewWithDependencies;
-import ua.com.foxminded.andriysalnikov.university.marker.ViewWithoutDependencies;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -19,19 +13,12 @@ public class Student {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonView({ViewWithDependencies.class, ViewWithoutDependencies.class})
     private Integer id;
 
     @Column(name = "first_name")
-    @NotBlank(message = "First Name cannot be blank")
-    @Size(max = 20, message = "First Name length must be no longer than 20 symbols")
-    @JsonView({ViewWithDependencies.class, ViewWithoutDependencies.class})
     private String firstName;
 
     @Column(name = "last_name")
-    @NotBlank(message = "Last Name cannot be blank")
-    @Size(max = 20, message = "Last Name length must be no longer than 20 symbols")
-    @JsonView({ViewWithDependencies.class, ViewWithoutDependencies.class})
     private String lastName;
 
     @ManyToMany(cascade = { CascadeType.DETACH, CascadeType.REFRESH },
@@ -40,7 +27,6 @@ public class Student {
         joinColumns = @JoinColumn(name = "student_id"),
         inverseJoinColumns = @JoinColumn(name = "course_id"))
     @OrderBy(value = "id")
-    @JsonView(ViewWithCourses.class)
     private final List<Course> courses;
 
     @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH },
