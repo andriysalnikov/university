@@ -1,26 +1,28 @@
 package ua.com.foxminded.andriysalnikov.university.controller;
 
-import com.fasterxml.jackson.annotation.JsonView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.server.ResponseStatusException;
 import ua.com.foxminded.andriysalnikov.university.constants.Messages;
+import ua.com.foxminded.andriysalnikov.university.dto.ClassRoomCreateDTO;
+import ua.com.foxminded.andriysalnikov.university.dto.ClassRoomDTO;
 import ua.com.foxminded.andriysalnikov.university.exceptions.ServiceException;
-import ua.com.foxminded.andriysalnikov.university.marker.ViewWithoutDependencies;
+import ua.com.foxminded.andriysalnikov.university.mapper.ClassRoomMapper;
 import ua.com.foxminded.andriysalnikov.university.model.ClassRoom;
 import ua.com.foxminded.andriysalnikov.university.service.ClassRoomService;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/classrooms")
@@ -29,33 +31,38 @@ public class ClassRoomController {
     private static final Logger LOGGER = LoggerFactory.getLogger(ClassRoomController.class);
 
     private final ClassRoomService classRoomService;
+    private final ClassRoomMapper classRoomMapper;
 
     @Autowired
-    public ClassRoomController (ClassRoomService classRoomService) {
+    public ClassRoomController (ClassRoomService classRoomService, ClassRoomMapper classRoomMapper) {
         this.classRoomService = classRoomService;
+        this.classRoomMapper = classRoomMapper;
     }
 
     @GetMapping
-    @JsonView(ViewWithoutDependencies.class)
-    public List<ClassRoom> getAllClassRooms() {
+    public ResponseEntity<List<ClassRoomDTO>> getAllClassRooms() {
         LOGGER.info(Messages.TRY_GET_ALL_CLASSROOMS);
         List<ClassRoom> classRooms = classRoomService.getAllClassRooms();
         LOGGER.info(Messages.OK_GET_ALL_CLASSROOMS, classRooms);
-        return classRooms;
+        return new ResponseEntity<>(classRooms.stream()
+                .map(classRoomMapper::toDTO)
+                .collect(Collectors.toList()),
+                HttpStatus.OK);
     }
 
     @GetMapping("/without-faculty")
-    @JsonView(ViewWithoutDependencies.class)
-    public List<ClassRoom> getAllCoursesWithoutFaculty() {
+    public ResponseEntity<List<ClassRoomDTO>> getAllClassRoomsWithoutFaculty() {
         LOGGER.info(Messages.TRY_GET_ALL_CLASSROOMS_WITHOUT_FACULTY);
         List<ClassRoom> classRooms = classRoomService.getAllClassRoomsWithoutFaculty();
         LOGGER.info(Messages.OK_GET_ALL_CLASSROOMS_WITHOUT_FACULTY, classRooms);
-        return classRooms;
+        return new ResponseEntity<>(classRooms.stream()
+                .map(classRoomMapper::toDTO)
+                .collect(Collectors.toList()),
+                HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    @JsonView(ViewWithoutDependencies.class)
-    public ClassRoom getClassRoomById(@PathVariable Integer id) {
+    public ResponseEntity<ClassRoomDTO> getClassRoomById(@PathVariable Integer id) {
         LOGGER.info(Messages.TRY_GET_CLASSROOM_BY_ID, id);
         ClassRoom classRoom;
         try {
@@ -64,11 +71,10 @@ public class ClassRoomController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, exception.getMessage());
         }
         LOGGER.info(Messages.OK_GET_CLASSROOM_BY_ID, id, classRoom);
-        return classRoom;
+        return new ResponseEntity<>(classRoomMapper.toDTO(classRoom), HttpStatus.OK);
     }
 
     @PostMapping("/{id}/delete")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteClassRoom(@PathVariable Integer id) {
         LOGGER.info(Messages.TRY_DELETE_CLASSROOM_BY_ID,id);
         try {
@@ -80,35 +86,33 @@ public class ClassRoomController {
     }
 
     @PostMapping("/create")
-    @ResponseStatus(HttpStatus.CREATED)
-    @JsonView(ViewWithoutDependencies.class)
-    public ClassRoom createClassRoom(@Valid @RequestBody ClassRoom classRoom) {
+    public ResponseEntity<ClassRoomDTO> createClassRoom(@Valid @RequestBody ClassRoomCreateDTO classRoomCreateDTO) {
         LOGGER.info(Messages.TRY_CREATE_CLASSROOM);
         ClassRoom createdClassRoom;
         try {
-            createdClassRoom = classRoomService.createClassRoom(classRoom);
+            createdClassRoom = classRoomService.createClassRoom(classRoomMapper.fromDTO(classRoomCreateDTO));
         } catch (ServiceException exception) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, exception.getMessage());
         }
         LOGGER.info(Messages.OK_CREATE_CLASSROOM, createdClassRoom);
-        return createdClassRoom;
+        return new ResponseEntity<>(classRoomMapper.toDTO(createdClassRoom), HttpStatus.CREATED);
     }
 
     @PostMapping("/{id}/update")
-    @ResponseStatus(HttpStatus.OK)
-    @JsonView(ViewWithoutDependencies.class)
-    public ClassRoom updateClassRoom(@PathVariable Integer id, @Valid @RequestBody ClassRoom classRoom) {
-        LOGGER.info(Messages.TRY_UPDATE_CLASSROOM, classRoom);
+    public ResponseEntity<ClassRoomDTO> updateClassRoom(@PathVariable Integer id,
+                                                        @Valid @RequestBody ClassRoomCreateDTO classRoomCreateDTO) {
+        LOGGER.info(Messages.TRY_UPDATE_CLASSROOM, classRoomCreateDTO);
         ClassRoom updatedClassRoom;
         try {
             classRoomService.getClassRoomById(id);
+            ClassRoom classRoom = classRoomMapper.fromDTO(classRoomCreateDTO);
             classRoom.setId(id);
             updatedClassRoom = classRoomService.updateClassRoom(classRoom);
         } catch (ServiceException exception) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, exception.getMessage());
         }
         LOGGER.info(Messages.OK_UPDATE_CLASSROOM, updatedClassRoom);
-        return updatedClassRoom;
+        return new ResponseEntity<>(classRoomMapper.toDTO(updatedClassRoom), HttpStatus.OK);
     }
 
 }
