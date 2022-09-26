@@ -1,13 +1,9 @@
 package ua.com.foxminded.andriysalnikov.university.model;
 
-import com.fasterxml.jackson.annotation.JsonView;
-import ua.com.foxminded.andriysalnikov.university.marker.ViewWithoutDependencies;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-@JsonView(ViewWithoutDependencies.class)
 public class TimeTable {
 
     private List<Event> events;
