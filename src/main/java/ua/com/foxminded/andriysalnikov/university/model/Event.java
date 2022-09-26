@@ -1,8 +1,5 @@
 package ua.com.foxminded.andriysalnikov.university.model;
 
-import com.fasterxml.jackson.annotation.JsonView;
-import ua.com.foxminded.andriysalnikov.university.marker.ViewWithoutDependencies;
-
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -10,7 +7,6 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "events", schema = "university")
-@JsonView(ViewWithoutDependencies.class)
 public class Event {
 
     @Id
