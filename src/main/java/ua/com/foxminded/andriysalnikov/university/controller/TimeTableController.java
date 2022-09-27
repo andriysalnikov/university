@@ -10,10 +10,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.server.ResponseStatusException;
 import ua.com.foxminded.andriysalnikov.university.constants.Messages;
 import ua.com.foxminded.andriysalnikov.university.dto.TimeTableDTO;
-import ua.com.foxminded.andriysalnikov.university.exceptions.ServiceException;
 import ua.com.foxminded.andriysalnikov.university.mapper.TimeTableMapper;
 import ua.com.foxminded.andriysalnikov.university.model.Student;
 import ua.com.foxminded.andriysalnikov.university.model.Teacher;
@@ -48,21 +46,11 @@ public class TimeTableController {
     public ResponseEntity<TimeTableDTO> showTeacherTimeTable(@PathVariable Integer id,
                 @PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
                 @PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate) {
-        Teacher teacher;
-        try {
-            teacher = teacherService.getTeacherByIdWithCourses(id);
-        } catch (ServiceException exception) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, exception.getMessage());
-        }
+        Teacher teacher = teacherService.getTeacherByIdWithCourses(id);
         LOGGER.info(Messages.TRY_GET_TIMETABLE_FROM_STARTDATE_TO_ENDDATE_BY_TEACHER,
                 startDate, endDate);
-        TimeTable timeTable;
-        try {
-            timeTable = timeTableManager.getTimeTableFromStartDateToEndDateByTeacher(
-                    startDate, endDate, teacher);
-        } catch (ServiceException exception) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, exception.getMessage());
-        }
+        TimeTable timeTable = timeTableManager.getTimeTableFromStartDateToEndDateByTeacher(
+                startDate, endDate, teacher);
         LOGGER.info(Messages.OK_GET_TIMETABLE_FROM_STARTDATE_TO_ENDDATE_BY_TEACHER,
                 startDate, endDate, timeTable);
         return new ResponseEntity<>(timeTableMapper.toDTO(timeTable), HttpStatus.OK);
@@ -72,21 +60,11 @@ public class TimeTableController {
     public ResponseEntity<TimeTableDTO> showStudentTimeTable(@PathVariable Integer id,
                 @PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
                 @PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate) {
-        Student student;
-        try {
-            student = studentService.getStudentByIdWithCourses(id);
-        } catch (ServiceException exception) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, exception.getMessage());
-        }
+        Student student = studentService.getStudentByIdWithCourses(id);
         LOGGER.info(Messages.TRY_GET_TIMETABLE_FROM_STARTDATE_TO_ENDDATE_BY_STUDENT,
                 startDate, endDate);
-        TimeTable timeTable;
-        try {
-            timeTable = timeTableManager.getTimeTableFromStartDateToEndDateByStudent(
-                    startDate, endDate, student);
-        } catch (ServiceException exception) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, exception.getMessage());
-        }
+        TimeTable timeTable = timeTableManager.getTimeTableFromStartDateToEndDateByStudent(
+                startDate, endDate, student);
         LOGGER.info(Messages.OK_GET_TIMETABLE_FROM_STARTDATE_TO_ENDDATE_BY_STUDENT,
                 startDate, endDate, timeTable);
         return new ResponseEntity<>(timeTableMapper.toDTO(timeTable), HttpStatus.OK);

@@ -6,11 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 import ua.com.foxminded.andriysalnikov.university.constants.Messages;
 import ua.com.foxminded.andriysalnikov.university.dto.ClassRoomCreateDTO;
 import ua.com.foxminded.andriysalnikov.university.dto.ClassRoomDTO;
-import ua.com.foxminded.andriysalnikov.university.exceptions.ServiceException;
 import ua.com.foxminded.andriysalnikov.university.mapper.ClassRoomMapper;
 import ua.com.foxminded.andriysalnikov.university.model.ClassRoom;
 import ua.com.foxminded.andriysalnikov.university.service.ClassRoomService;
@@ -59,12 +57,7 @@ public class ClassRoomController {
     @GetMapping("/{id}")
     public ResponseEntity<ClassRoomDTO> getClassRoomById(@PathVariable Integer id) {
         LOGGER.info(Messages.TRY_GET_CLASSROOM_BY_ID, id);
-        ClassRoom classRoom;
-        try {
-            classRoom = classRoomService.getClassRoomById(id);
-        } catch (ServiceException exception) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, exception.getMessage());
-        }
+        ClassRoom classRoom = classRoomService.getClassRoomById(id);
         LOGGER.info(Messages.OK_GET_CLASSROOM_BY_ID, id, classRoom);
         return new ResponseEntity<>(classRoomMapper.toDTO(classRoom), HttpStatus.OK);
     }
@@ -80,12 +73,8 @@ public class ClassRoomController {
     @PostMapping("/create")
     public ResponseEntity<ClassRoomDTO> createClassRoom(@Valid @RequestBody ClassRoomCreateDTO classRoomCreateDTO) {
         LOGGER.info(Messages.TRY_CREATE_CLASSROOM);
-        ClassRoom createdClassRoom;
-        try {
-            createdClassRoom = classRoomService.createClassRoom(classRoomMapper.fromDTO(classRoomCreateDTO));
-        } catch (ServiceException exception) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, exception.getMessage());
-        }
+        ClassRoom createdClassRoom =
+                classRoomService.createClassRoom(classRoomMapper.fromDTO(classRoomCreateDTO));
         LOGGER.info(Messages.OK_CREATE_CLASSROOM, createdClassRoom);
         return new ResponseEntity<>(classRoomMapper.toDTO(createdClassRoom), HttpStatus.CREATED);
     }
@@ -94,15 +83,10 @@ public class ClassRoomController {
     public ResponseEntity<ClassRoomDTO> updateClassRoom(@PathVariable Integer id,
                                                         @Valid @RequestBody ClassRoomCreateDTO classRoomCreateDTO) {
         LOGGER.info(Messages.TRY_UPDATE_CLASSROOM, classRoomCreateDTO);
-        ClassRoom updatedClassRoom;
-        try {
-            classRoomService.getClassRoomById(id);
-            ClassRoom classRoom = classRoomMapper.fromDTO(classRoomCreateDTO);
-            classRoom.setId(id);
-            updatedClassRoom = classRoomService.updateClassRoom(classRoom);
-        } catch (ServiceException exception) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, exception.getMessage());
-        }
+        classRoomService.getClassRoomById(id);
+        ClassRoom classRoom = classRoomMapper.fromDTO(classRoomCreateDTO);
+        classRoom.setId(id);
+        ClassRoom updatedClassRoom = classRoomService.updateClassRoom(classRoom);
         LOGGER.info(Messages.OK_UPDATE_CLASSROOM, updatedClassRoom);
         return new ResponseEntity<>(classRoomMapper.toDTO(updatedClassRoom), HttpStatus.OK);
     }

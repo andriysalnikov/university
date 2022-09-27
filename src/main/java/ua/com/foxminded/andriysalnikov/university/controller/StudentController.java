@@ -6,12 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 import ua.com.foxminded.andriysalnikov.university.constants.Messages;
 import ua.com.foxminded.andriysalnikov.university.dto.StudentCreateDTO;
 import ua.com.foxminded.andriysalnikov.university.dto.StudentDTO;
 import ua.com.foxminded.andriysalnikov.university.dto.StudentWithCoursesDTO;
-import ua.com.foxminded.andriysalnikov.university.exceptions.ServiceException;
 import ua.com.foxminded.andriysalnikov.university.mapper.StudentMapper;
 import ua.com.foxminded.andriysalnikov.university.model.Course;
 import ua.com.foxminded.andriysalnikov.university.model.Student;
@@ -65,12 +63,7 @@ public class StudentController {
     @GetMapping("/{id}")
     public ResponseEntity<StudentDTO> getStudentById(@PathVariable Integer id) {
         LOGGER.info(Messages.TRY_GET_STUDENT_BY_ID, id);
-        Student student;
-        try {
-            student = studentService.getStudentById(id);
-        } catch (ServiceException exception) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, exception.getMessage());
-        }
+        Student student = studentService.getStudentById(id);
         LOGGER.info(Messages.OK_GET_STUDENT_BY_ID, id, student);
         return new ResponseEntity<>(studentMapper.toDTO(student), HttpStatus.OK);
     }
@@ -78,12 +71,7 @@ public class StudentController {
     @GetMapping("/{id}/courses")
     public ResponseEntity<StudentWithCoursesDTO> getStudentByIdWithCourses(@PathVariable Integer id) {
         LOGGER.info(Messages.TRY_GET_STUDENT_BY_ID, id);
-        Student student;
-        try {
-            student = studentService.getStudentByIdWithCourses(id);
-        } catch (ServiceException exception) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, exception.getMessage());
-        }
+        Student student = studentService.getStudentByIdWithCourses(id);
         LOGGER.info(Messages.OK_GET_STUDENT_BY_ID, id, student);
         return new ResponseEntity<>(studentMapper.toDTOWithCourses(student), HttpStatus.OK);
     }
@@ -99,12 +87,8 @@ public class StudentController {
     @PostMapping("/create")
     public ResponseEntity<StudentDTO> createStudent(@Valid @RequestBody StudentCreateDTO studentCreateDTO) {
         LOGGER.info(Messages.TRY_CREATE_STUDENT);
-        Student createdStudent;
-        try {
-            createdStudent = studentService.createStudent(studentMapper.fromDTO(studentCreateDTO));
-        } catch (ServiceException exception) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, exception.getMessage());
-        }
+        Student createdStudent =
+                studentService.createStudent(studentMapper.fromDTO(studentCreateDTO));
         LOGGER.info(Messages.OK_CREATE_STUDENT, createdStudent);
         return new ResponseEntity<>(studentMapper.toDTO(createdStudent), HttpStatus.CREATED);
     }
@@ -113,15 +97,10 @@ public class StudentController {
     public ResponseEntity<StudentDTO> updateStudent(@PathVariable Integer id,
                                                     @Valid @RequestBody StudentCreateDTO studentCreateDTO) {
         LOGGER.info(Messages.TRY_UPDATE_STUDENT, studentCreateDTO);
-        Student updatedStudent;
-        try {
-            studentService.getStudentById(id);
-            Student student = studentMapper.fromDTO(studentCreateDTO);
-            student.setId(id);
-            updatedStudent = studentService.updateStudent(student);
-        } catch (ServiceException exception) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, exception.getMessage());
-        }
+        studentService.getStudentById(id);
+        Student student = studentMapper.fromDTO(studentCreateDTO);
+        student.setId(id);
+        Student updatedStudent = studentService.updateStudent(student);
         LOGGER.info(Messages.OK_UPDATE_STUDENT, updatedStudent);
         return new ResponseEntity<>(studentMapper.toDTO(updatedStudent), HttpStatus.OK);
     }
@@ -130,17 +109,11 @@ public class StudentController {
     public ResponseEntity<StudentWithCoursesDTO> addCourseToStudent(@PathVariable Integer studentId,
                                                                     @PathVariable Integer courseId) {
         LOGGER.info(Messages.TRY_ADD_COURSE_TO_STUDENT, studentId, courseId);
-        Course course;
-        Student student;
-        try {
-            course = courseService.getCourseById(courseId);
-            student = studentService.getStudentByIdWithCourses(studentId);
-            student.getCourses().add(course);
-            studentService.updateStudent(student);
-            student = studentService.getStudentByIdWithCourses(studentId);
-        } catch (ServiceException exception) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, exception.getMessage());
-        }
+        Course course = courseService.getCourseById(courseId);
+        Student student = studentService.getStudentByIdWithCourses(studentId);
+        student.getCourses().add(course);
+        studentService.updateStudent(student);
+        student = studentService.getStudentByIdWithCourses(studentId);
         LOGGER.info(Messages.OK_ADD_COURSE_TO_STUDENT, studentId, courseId, course);
         return new ResponseEntity<>(studentMapper.toDTOWithCourses(student), HttpStatus.OK);
     }
@@ -149,16 +122,10 @@ public class StudentController {
     public ResponseEntity<StudentWithCoursesDTO> removeCourseFromStudent(@PathVariable Integer studentId,
                                                                          @PathVariable Integer courseId) {
         LOGGER.info(Messages.TRY_REMOVE_COURSE_FROM_STUDENT, courseId, studentId);
-        Course course;
-        Student student;
-        try {
-            student = studentService.getStudentByIdWithCourses(studentId);
-            course = courseService.getCourseById(courseId);
-            student.getCourses().remove(course);
-            studentService.updateStudent(student);
-        } catch (ServiceException exception) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, exception.getMessage());
-        }
+        Student student = studentService.getStudentByIdWithCourses(studentId);
+        Course course = courseService.getCourseById(courseId);
+        student.getCourses().remove(course);
+        studentService.updateStudent(student);
         LOGGER.info(Messages.OK_REMOVE_COURSE_FROM_STUDENT, courseId, studentId, course);
         return new ResponseEntity<>(studentMapper.toDTOWithCourses(student), HttpStatus.OK);
     }

@@ -6,11 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 import ua.com.foxminded.andriysalnikov.university.constants.Messages;
 import ua.com.foxminded.andriysalnikov.university.dto.EventCreateDTO;
 import ua.com.foxminded.andriysalnikov.university.dto.EventDTO;
-import ua.com.foxminded.andriysalnikov.university.exceptions.ServiceException;
 import ua.com.foxminded.andriysalnikov.university.mapper.EventMapper;
 import ua.com.foxminded.andriysalnikov.university.model.ClassRoom;
 import ua.com.foxminded.andriysalnikov.university.model.Course;
@@ -57,12 +55,7 @@ public class EventController {
     @GetMapping("/{id}")
     public ResponseEntity<EventDTO> getEventById(@PathVariable Integer id) {
         LOGGER.info(Messages.TRY_GET_EVENT_BY_ID, id);
-        Event event;
-        try {
-            event = eventService.getEventById(id);
-        } catch (ServiceException exception) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, exception.getMessage());
-        }
+        Event event = eventService.getEventById(id);
         LOGGER.info(Messages.OK_GET_EVENT_BY_ID, id, event);
         return new ResponseEntity<>(eventMapper.toDTO(event), HttpStatus.OK);
     }
@@ -80,17 +73,12 @@ public class EventController {
                                                 @PathVariable Integer classRoomId,
                                                 @Valid @RequestBody EventCreateDTO eventCreateDTO) {
         LOGGER.info(Messages.TRY_CREATE_EVENT);
-        Event createdEvent;
-        try {
-            Course course = courseService.getCourseById(courseId);
-            ClassRoom classRoom = classRoomService.getClassRoomById(classRoomId);
-            Event event = eventMapper.fromDTO(eventCreateDTO);
-            event.setCourse(course);
-            event.setClassRoom(classRoom);
-            createdEvent = eventService.createEvent(event);
-        } catch (ServiceException exception) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, exception.getMessage());
-        }
+        Course course = courseService.getCourseById(courseId);
+        ClassRoom classRoom = classRoomService.getClassRoomById(classRoomId);
+        Event event = eventMapper.fromDTO(eventCreateDTO);
+        event.setCourse(course);
+        event.setClassRoom(classRoom);
+        Event createdEvent = eventService.createEvent(event);
         LOGGER.info(Messages.OK_CREATE_EVENT, createdEvent);
         return new ResponseEntity<>(eventMapper.toDTO(createdEvent), HttpStatus.CREATED);
     }
@@ -100,19 +88,14 @@ public class EventController {
                                                 @PathVariable Integer classRoomId,
                                                 @Valid @RequestBody EventCreateDTO eventCreateDTO) {
         LOGGER.info(Messages.TRY_UPDATE_EVENT, eventCreateDTO);
-        Event updatedEvent;
-        try {
-            eventService.getEventById(id);
-            Course course = courseService.getCourseById(courseId);
-            ClassRoom classRoom = classRoomService.getClassRoomById(classRoomId);
-            Event event = eventMapper.fromDTO(eventCreateDTO);
-            event.setCourse(course);
-            event.setClassRoom(classRoom);
-            event.setId(id);
-            updatedEvent = eventService.updateEvent(event);
-        } catch (ServiceException exception) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, exception.getMessage());
-        }
+        eventService.getEventById(id);
+        Course course = courseService.getCourseById(courseId);
+        ClassRoom classRoom = classRoomService.getClassRoomById(classRoomId);
+        Event event = eventMapper.fromDTO(eventCreateDTO);
+        event.setCourse(course);
+        event.setClassRoom(classRoom);
+        event.setId(id);
+        Event updatedEvent = eventService.updateEvent(event);
         LOGGER.info(Messages.OK_UPDATE_EVENT, updatedEvent);
         return new ResponseEntity<>(eventMapper.toDTO(updatedEvent), HttpStatus.OK);
     }

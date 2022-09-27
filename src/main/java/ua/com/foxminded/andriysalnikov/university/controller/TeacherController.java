@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 import ua.com.foxminded.andriysalnikov.university.constants.Messages;
 import ua.com.foxminded.andriysalnikov.university.dto.TeacherCreateDTO;
 import ua.com.foxminded.andriysalnikov.university.dto.TeacherDTO;
@@ -54,12 +53,7 @@ public class TeacherController {
     @GetMapping("/{id}")
     public ResponseEntity<TeacherDTO> getTeacherById(@PathVariable Integer id) {
         LOGGER.info(Messages.TRY_GET_TEACHER_BY_ID, id);
-        Teacher teacher;
-        try {
-            teacher = teacherService.getTeacherById(id);
-        } catch (ServiceException exception) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, exception.getMessage());
-        }
+        Teacher teacher = teacherService.getTeacherById(id);
         LOGGER.info(Messages.OK_GET_TEACHER_BY_ID, id, teacher);
         return new ResponseEntity<>(teacherMapper.toDTO(teacher), HttpStatus.OK);
     }
@@ -67,12 +61,7 @@ public class TeacherController {
     @GetMapping("/{id}/courses")
     public ResponseEntity<TeacherWithCoursesDTO> getTeacherByIdWithCourses(@PathVariable Integer id) {
         LOGGER.info(Messages.TRY_GET_TEACHER_BY_ID, id);
-        Teacher teacher;
-        try {
-            teacher = teacherService.getTeacherByIdWithCourses(id);
-        } catch (ServiceException exception) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, exception.getMessage());
-        }
+        Teacher teacher = teacherService.getTeacherByIdWithCourses(id);
         LOGGER.info(Messages.OK_GET_TEACHER_BY_ID, id, teacher);
         return new ResponseEntity<>(teacherMapper.toDTOWithCourses(teacher), HttpStatus.OK);
     }
@@ -88,12 +77,8 @@ public class TeacherController {
     @PostMapping("/create")
     public ResponseEntity<TeacherDTO> createTeacher(@Valid @RequestBody TeacherCreateDTO teacherCreateDTO) {
         LOGGER.info(Messages.TRY_CREATE_TEACHER);
-        Teacher createdTeacher;
-        try {
-            createdTeacher = teacherService.createTeacher(teacherMapper.fromDTO(teacherCreateDTO));
-        } catch (ServiceException exception) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, exception.getMessage());
-        }
+        Teacher createdTeacher =
+                teacherService.createTeacher(teacherMapper.fromDTO(teacherCreateDTO));
         LOGGER.info(Messages.OK_CREATE_TEACHER, createdTeacher);
         return new ResponseEntity<>(teacherMapper.toDTO(createdTeacher), HttpStatus.CREATED);
     }
@@ -102,40 +87,26 @@ public class TeacherController {
     public ResponseEntity<TeacherDTO> updateTeacher(@PathVariable Integer id,
                                                     @Valid @RequestBody TeacherCreateDTO teacherCreateDTO) {
         LOGGER.info(Messages.TRY_UPDATE_TEACHER, teacherCreateDTO);
-        Teacher updatedTeacher;
-        try {
-            teacherService.getTeacherById(id);
-            Teacher teacher = teacherMapper.fromDTO(teacherCreateDTO);
-            teacher.setId(id);
-            updatedTeacher = teacherService.updateTeacher(teacher);
-        } catch (ServiceException exception) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, exception.getMessage());
-        }
+        teacherService.getTeacherById(id);
+        Teacher teacher = teacherMapper.fromDTO(teacherCreateDTO);
+        teacher.setId(id);
+        Teacher updatedTeacher = teacherService.updateTeacher(teacher);
         LOGGER.info(Messages.OK_UPDATE_TEACHER, updatedTeacher);
         return new ResponseEntity<>(teacherMapper.toDTO(updatedTeacher), HttpStatus.OK);
     }
 
     @PostMapping("/{teacherId}/add-course/{courseId}")
-    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<TeacherWithCoursesDTO> addCourseToTeacher(@PathVariable Integer teacherId,
                                                                     @PathVariable Integer courseId) {
         LOGGER.info(Messages.TRY_ADD_COURSE_TO_TEACHER, teacherId, courseId);
-        Course course;
-        Teacher teacher;
-        try {
-            course = courseService.getCourseById(courseId);
-            System.out.println(course.getTeacher());
-            if (course.getTeacher() != null) {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                        Messages.ERROR_ADD_COURSE_TO_TEACHER);
-            }
-            teacher = teacherService.getTeacherById(teacherId);
-            course.setTeacher(teacher);
-            courseService.updateCourse(course);
-            teacher = teacherService.getTeacherByIdWithCourses(teacherId);
-        } catch (ServiceException exception) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, exception.getMessage());
+        Course course = courseService.getCourseById(courseId);
+        if (course.getTeacher() != null) {
+                throw new ServiceException(  Messages.ERROR_ADD_COURSE_TO_TEACHER);
         }
+        Teacher teacher = teacherService.getTeacherById(teacherId);
+        course.setTeacher(teacher);
+        courseService.updateCourse(course);
+        teacher = teacherService.getTeacherByIdWithCourses(teacherId);
         LOGGER.info(Messages.OK_ADD_COURSE_TO_TEACHER, teacherId, courseId, course);
         return new ResponseEntity<>(teacherMapper.toDTOWithCourses(teacher), HttpStatus.OK);
     }
@@ -145,21 +116,13 @@ public class TeacherController {
     public ResponseEntity<TeacherWithCoursesDTO> removeCourseFromTeacher(@PathVariable Integer teacherId,
                                                                          @PathVariable Integer courseId) {
         LOGGER.info(Messages.TRY_REMOVE_COURSE_FROM_TEACHER, courseId, teacherId);
-        Course course;
-        Teacher teacher;
-        try {
-            course = courseService.getCourseById(courseId);
-            System.out.println(course.getTeacher());
-            if (course.getTeacher() == null) {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                        Messages.ERROR_REMOVE_COURSE_FROM_TEACHER);
-            }
-            course.setTeacher(null);
-            courseService.updateCourse(course);
-            teacher = teacherService.getTeacherByIdWithCourses(teacherId);
-        } catch (ServiceException exception) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, exception.getMessage());
+        Course course = courseService.getCourseById(courseId);
+        if (course.getTeacher() == null) {
+            throw new ServiceException(Messages.ERROR_REMOVE_COURSE_FROM_TEACHER);
         }
+        course.setTeacher(null);
+        courseService.updateCourse(course);
+        Teacher teacher = teacherService.getTeacherByIdWithCourses(teacherId);
         LOGGER.info(Messages.OK_REMOVE_COURSE_FROM_TEACHER, courseId, teacherId, course);
         return new ResponseEntity<>(teacherMapper.toDTOWithCourses(teacher), HttpStatus.OK);
     }

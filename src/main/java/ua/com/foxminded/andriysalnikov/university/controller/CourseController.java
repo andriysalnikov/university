@@ -6,11 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 import ua.com.foxminded.andriysalnikov.university.constants.Messages;
 import ua.com.foxminded.andriysalnikov.university.dto.CourseCreateDTO;
 import ua.com.foxminded.andriysalnikov.university.dto.CourseDTO;
-import ua.com.foxminded.andriysalnikov.university.exceptions.ServiceException;
 import ua.com.foxminded.andriysalnikov.university.mapper.CourseMapper;
 import ua.com.foxminded.andriysalnikov.university.model.Course;
 import ua.com.foxminded.andriysalnikov.university.service.CourseService;
@@ -70,12 +68,7 @@ public class CourseController {
     @GetMapping("/{id}")
     public ResponseEntity<CourseDTO> getCourseById(@PathVariable Integer id) {
         LOGGER.info(Messages.TRY_GET_COURSE_BY_ID, id);
-        Course course;
-        try {
-            course = courseService.getCourseById(id);
-        } catch (ServiceException exception) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, exception.getMessage());
-        }
+        Course course = courseService.getCourseById(id);
         LOGGER.info(Messages.OK_GET_COURSE_BY_ID, id, course);
         return new ResponseEntity<>(courseMapper.toDTO(course), HttpStatus.OK);
     }
@@ -91,12 +84,8 @@ public class CourseController {
     @PostMapping("/create")
     public ResponseEntity<CourseDTO> createCourse(@Valid @RequestBody CourseCreateDTO courseCreateDTO) {
         LOGGER.info(Messages.TRY_CREATE_COURSE);
-        Course createdCourse;
-        try {
-            createdCourse = courseService.createCourse(courseMapper.fromDTO(courseCreateDTO));
-        } catch (ServiceException exception) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, exception.getMessage());
-        }
+        Course createdCourse =
+                courseService.createCourse(courseMapper.fromDTO(courseCreateDTO));
         LOGGER.info(Messages.OK_CREATE_COURSE, createdCourse);
         return new ResponseEntity<>(courseMapper.toDTO(createdCourse), HttpStatus.CREATED);
     }
@@ -106,15 +95,10 @@ public class CourseController {
     public ResponseEntity<CourseDTO> updateCourse(@PathVariable Integer id,
                                                   @Valid @RequestBody CourseCreateDTO courseCreateDTO) {
         LOGGER.info(Messages.TRY_UPDATE_COURSE, courseCreateDTO);
-        Course updatedCourse;
-        try {
-            courseService.getCourseById(id);
-            Course course = courseMapper.fromDTO(courseCreateDTO);
-            course.setId(id);
-            updatedCourse = courseService.updateCourse(course);
-        } catch (ServiceException exception) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, exception.getMessage());
-        }
+        courseService.getCourseById(id);
+        Course course = courseMapper.fromDTO(courseCreateDTO);
+        course.setId(id);
+        Course updatedCourse =  courseService.updateCourse(course);
         LOGGER.info(Messages.OK_UPDATE_COURSE, updatedCourse);
         return new ResponseEntity<>(courseMapper.toDTO(updatedCourse), HttpStatus.OK);
     }
