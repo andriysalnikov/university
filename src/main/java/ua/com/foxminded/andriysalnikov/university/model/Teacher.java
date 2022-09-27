@@ -1,5 +1,10 @@
 package ua.com.foxminded.andriysalnikov.university.model;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 
@@ -9,60 +14,34 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "teachers", schema = "university")
+@NoArgsConstructor
+@ToString
 public class Teacher {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Getter @Setter
     private Integer id;
 
     @Column(name = "first_name")
+    @Getter @Setter
     private String firstName;
 
     @Column(name = "last_name")
+    @Getter @Setter
     private String lastName;
 
     @OneToMany(cascade = { CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH },
             mappedBy = "teacher")
     @OrderBy(value = "id")
     @Size(max = 5, message = "Every Teacher may have maximum 5 Courses ")
-    private final List<Course> courses;
-
-    public Teacher() {
-        this.courses = new ArrayList<>();
-    }
+    @Getter
+    @ToString.Exclude
+    private final List<Course> courses = new ArrayList<>();
 
     public Teacher(String firstName, String lastName) {
-        this();
         this.firstName = firstName;
         this.lastName = lastName;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public List<Course> getCourses() {
-        return courses;
     }
 
     @Override
@@ -77,11 +56,6 @@ public class Teacher {
     @Override
     public int hashCode() {
         return Objects.hash(firstName, lastName);
-    }
-
-    @Override
-    public String toString() {
-        return "Teacher{" + "id=" + id + ", firstName='" + firstName + '\'' + ", lastName='" + lastName + '\'' + '}';
     }
 
 }

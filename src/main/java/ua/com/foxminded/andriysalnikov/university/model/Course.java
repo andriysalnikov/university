@@ -1,10 +1,19 @@
 package ua.com.foxminded.andriysalnikov.university.model;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+
 import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
 @Table(name = "courses", schema = "university")
+@Getter
+@Setter
+@NoArgsConstructor
+@ToString
 public class Course {
 
     @Id
@@ -21,58 +30,18 @@ public class Course {
     @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH },
             fetch = FetchType.LAZY)
     @JoinColumn(name = "teacher_id")
+    @ToString.Exclude
     private Teacher teacher;
 
     @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH },
             fetch = FetchType.LAZY)
     @JoinColumn(name = "faculty_id")
+    @ToString.Exclude
     private Faculty faculty;
-
-    public Course() { }
 
     public Course(String name, String description) {
         this.name = name;
         this.description = description;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public Teacher getTeacher() {
-        return teacher;
-    }
-
-    public void setTeacher(Teacher teacher) {
-        this.teacher = teacher;
-    }
-
-    public Faculty getFaculty() {
-        return faculty;
-    }
-
-    public void setFaculty(Faculty faculty) {
-        this.faculty = faculty;
     }
 
     @Override
@@ -87,11 +56,6 @@ public class Course {
     @Override
     public int hashCode() {
         return Objects.hash(name, description);
-    }
-
-    @Override
-    public String toString() {
-        return "Course{" + "id=" + id + ", name='" + name + '\'' + ", description='" + description + '\'' + '}';
     }
 
 }

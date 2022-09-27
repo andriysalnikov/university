@@ -1,10 +1,19 @@
 package ua.com.foxminded.andriysalnikov.university.model;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+
 import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
 @Table(name = "classrooms", schema = "university")
+@NoArgsConstructor
+@Getter
+@Setter
+@ToString
 public class ClassRoom {
 
     @Id
@@ -16,36 +25,11 @@ public class ClassRoom {
 
     @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH },
             fetch = FetchType.LAZY)
+    @ToString.Exclude
     private Faculty faculty;
-
-    public ClassRoom() { }
 
     public ClassRoom(String name) {
         this.name = name;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Faculty getFaculty() {
-        return faculty;
-    }
-
-    public void setFaculty(Faculty faculty) {
-        this.faculty = faculty;
     }
 
     @Override
@@ -59,11 +43,6 @@ public class ClassRoom {
     @Override
     public int hashCode() {
         return Objects.hash(name);
-    }
-
-    @Override
-    public String toString() {
-        return "ClassRoom{" + "id=" + id + ", name='" + name + '\'' + '}';
     }
 
 }

@@ -1,5 +1,10 @@
 package ua.com.foxminded.andriysalnikov.university.model;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -7,6 +12,10 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "events", schema = "university")
+@Getter
+@Setter
+@NoArgsConstructor
+@ToString
 public class Event {
 
     @Id
@@ -32,8 +41,6 @@ public class Event {
     @JoinColumn(name = "course_id")
     private Course course;
 
-    public Event() { }
-
     public Event(LocalDate dayOfEvent, LocalTime startTime, LocalTime endTime) {
         this.dayOfEvent = dayOfEvent;
         this.startTime = startTime;
@@ -44,54 +51,6 @@ public class Event {
                  ClassRoom classRoom, Course course) {
         this(dayOfEvent, startTime, endTime);
         this.classRoom = classRoom;
-        this.course = course;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public LocalDate getDayOfEvent() {
-        return dayOfEvent;
-    }
-
-    public void setDayOfEvent(LocalDate dayOfEvent) {
-        this.dayOfEvent = dayOfEvent;
-    }
-
-    public LocalTime getStartTime() {
-        return startTime;
-    }
-
-    public void setStartTime(LocalTime startTime) {
-        this.startTime = startTime;
-    }
-
-    public LocalTime getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(LocalTime endTime) {
-        this.endTime = endTime;
-    }
-
-    public ClassRoom getClassRoom() {
-        return classRoom;
-    }
-
-    public void setClassRoom(ClassRoom classRoom) {
-        this.classRoom = classRoom;
-    }
-
-    public Course getCourse() {
-        return course;
-    }
-
-    public void setCourse(Course course) {
         this.course = course;
     }
 
@@ -109,18 +68,6 @@ public class Event {
     @Override
     public int hashCode() {
         return Objects.hash(dayOfEvent, startTime, endTime, course);
-    }
-
-    @Override
-    public String toString() {
-        return "Event{" +
-                "id=" + id +
-                ", dayOfEvent=" + dayOfEvent +
-                ", startTime=" + startTime +
-                ", endTime=" + endTime +
-                ", classRoom=" + classRoom +
-                ", course=" + course +
-                '}';
     }
 
 }
