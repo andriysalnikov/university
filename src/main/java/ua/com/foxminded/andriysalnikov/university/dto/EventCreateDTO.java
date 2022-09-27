@@ -1,19 +1,15 @@
 package ua.com.foxminded.andriysalnikov.university.dto;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
 public class EventCreateDTO {
 
-    @NotNull(message = "Day of Event cannot be Null")
     @NotBlank(message = "Day of Event cannot be Blank")
     private final String dayOfEvent;
 
-    @NotNull(message = "Start Time of Event cannot be Null")
     @NotBlank(message = "Start Time of Event cannot be Blank")
     private final String startTime;
 
-    @NotNull(message = "End Time of Event cannot be Null")
     @NotBlank(message = "End Time of Event cannot be Blank")
     private final String endTime;
 
