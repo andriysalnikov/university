@@ -1,8 +1,17 @@
 package ua.com.foxminded.andriysalnikov.university.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.ToString;
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
+@AllArgsConstructor
+@Getter
+@EqualsAndHashCode
+@ToString
 public class CourseCreateDTO {
 
     @NotBlank(message = "Course Name cannot be blank")
@@ -12,26 +21,5 @@ public class CourseCreateDTO {
     // Description can be Blank
     @Size(max = 100, message = "Course Description length must be no longer than 100 symbols")
     private final String description;
-
-    public CourseCreateDTO(String name, String description) {
-        this.name = name;
-        this.description = description;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    @Override
-    public String toString() {
-        return "CourseCreateDTO{" +
-                "name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                '}';
-    }
 
 }

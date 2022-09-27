@@ -1,45 +1,22 @@
 package ua.com.foxminded.andriysalnikov.university.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.ToString;
+
 import java.util.ArrayList;
 import java.util.List;
 
+@AllArgsConstructor
+@Getter
+@EqualsAndHashCode
+@ToString
 public class TeacherDTOWithCourses {
 
     private final String id;
     private final String firstName;
     private final String lastName;
-    private final List<String> courses;
+    private final List<String> courses = new ArrayList<>();
 
-    public TeacherDTOWithCourses(String id, String firstName, String lastName) {
-        this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.courses = new ArrayList<>();
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public List<String> getCourses() {
-        return courses;
-    }
-
-    @Override
-    public String toString() {
-        return "TeacherWithCoursesDTO{" +
-                "id='" + id + '\'' +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", courses=" + courses +
-                '}';
-    }
 }
