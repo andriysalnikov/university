@@ -15,7 +15,6 @@ import ua.com.foxminded.andriysalnikov.university.dto.TimeTableDTO;
 import ua.com.foxminded.andriysalnikov.university.mapper.TimeTableMapper;
 import ua.com.foxminded.andriysalnikov.university.model.Student;
 import ua.com.foxminded.andriysalnikov.university.model.Teacher;
-import ua.com.foxminded.andriysalnikov.university.model.TimeTable;
 import ua.com.foxminded.andriysalnikov.university.service.StudentService;
 import ua.com.foxminded.andriysalnikov.university.service.TeacherService;
 import ua.com.foxminded.andriysalnikov.university.service.TimeTableManager;
@@ -29,7 +28,6 @@ public class TimeTableController {
     private static final Logger LOGGER = LoggerFactory.getLogger(TimeTableController.class);
 
     private final TimeTableManager timeTableManager;
-    private final TimeTableMapper timeTableMapper;
     private final StudentService studentService;
     private final TeacherService teacherService;
 
@@ -37,7 +35,6 @@ public class TimeTableController {
     public TimeTableController(TimeTableManager timeTableManager, TimeTableMapper timeTableMapper,
                                StudentService studentService, TeacherService teacherService) {
         this.timeTableManager = timeTableManager;
-        this.timeTableMapper = timeTableMapper;
         this.studentService = studentService;
         this.teacherService = teacherService;
     }
@@ -49,11 +46,11 @@ public class TimeTableController {
         Teacher teacher = teacherService.getTeacherByIdWithCourses(id);
         LOGGER.info(Messages.TRY_GET_TIMETABLE_FROM_STARTDATE_TO_ENDDATE_BY_TEACHER,
                 startDate, endDate);
-        TimeTable timeTable = timeTableManager.getTimeTableFromStartDateToEndDateByTeacher(
+        TimeTableDTO timeTableDTO = timeTableManager.getTimeTableDTOFromStartDateToEndDateByTeacher(
                 startDate, endDate, teacher);
         LOGGER.info(Messages.OK_GET_TIMETABLE_FROM_STARTDATE_TO_ENDDATE_BY_TEACHER,
-                startDate, endDate, timeTable);
-        return new ResponseEntity<>(timeTableMapper.toDTO(timeTable), HttpStatus.OK);
+                startDate, endDate, timeTableDTO);
+        return new ResponseEntity<>(timeTableDTO, HttpStatus.OK);
     }
 
     @GetMapping("/student/{id}/start-date/{startDate}/end-date/{endDate}")
@@ -63,11 +60,11 @@ public class TimeTableController {
         Student student = studentService.getStudentByIdWithCourses(id);
         LOGGER.info(Messages.TRY_GET_TIMETABLE_FROM_STARTDATE_TO_ENDDATE_BY_STUDENT,
                 startDate, endDate);
-        TimeTable timeTable = timeTableManager.getTimeTableFromStartDateToEndDateByStudent(
+        TimeTableDTO timeTableDTO = timeTableManager.getTimeTableDTOFromStartDateToEndDateByStudent(
                 startDate, endDate, student);
         LOGGER.info(Messages.OK_GET_TIMETABLE_FROM_STARTDATE_TO_ENDDATE_BY_STUDENT,
-                startDate, endDate, timeTable);
-        return new ResponseEntity<>(timeTableMapper.toDTO(timeTable), HttpStatus.OK);
+                startDate, endDate, timeTableDTO);
+        return new ResponseEntity<>(timeTableDTO, HttpStatus.OK);
     }
 
 }

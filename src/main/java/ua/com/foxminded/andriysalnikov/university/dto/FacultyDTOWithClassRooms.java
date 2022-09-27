@@ -3,16 +3,16 @@ package ua.com.foxminded.andriysalnikov.university.dto;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FacultyWithCoursesDTO {
+public class FacultyDTOWithClassRooms {
 
     private final String id;
     private final String fullName;
-    private final List<String> courses;
+    private final List<String> classRooms;
 
-    public FacultyWithCoursesDTO(String id, String fullName) {
+    public FacultyDTOWithClassRooms(String id, String fullName) {
         this.id = id;
         this.fullName = fullName;
-        this.courses = new ArrayList<>();
+        this.classRooms = new ArrayList<>();
     }
 
     public String getId() {
@@ -23,16 +23,16 @@ public class FacultyWithCoursesDTO {
         return fullName;
     }
 
-    public List<String> getCourses() {
-        return courses;
+    public List<String> getClassRooms() {
+        return classRooms;
     }
 
     @Override
     public String toString() {
-        return "FacultyWithCoursesDTO{" +
+        return "FacultyWithClassRoomsDTO{" +
                 "id='" + id + '\'' +
                 ", fullName='" + fullName + '\'' +
-                ", courses=" + courses +
+                ", classRooms=" + classRooms +
                 '}';
     }
 

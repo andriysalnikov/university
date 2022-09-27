@@ -4,9 +4,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ua.com.foxminded.andriysalnikov.university.constants.Messages;
+import ua.com.foxminded.andriysalnikov.university.dto.EventCreateDTO;
+import ua.com.foxminded.andriysalnikov.university.dto.EventDTO;
+import ua.com.foxminded.andriysalnikov.university.mapper.EventMapper;
+import ua.com.foxminded.andriysalnikov.university.model.ClassRoom;
+import ua.com.foxminded.andriysalnikov.university.model.Course;
 import ua.com.foxminded.andriysalnikov.university.repository.EventRepository;
 import ua.com.foxminded.andriysalnikov.university.exceptions.ServiceException;
 import ua.com.foxminded.andriysalnikov.university.model.Event;
@@ -15,6 +21,7 @@ import ua.com.foxminded.andriysalnikov.university.validation.Validation;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -23,10 +30,12 @@ public class EventServiceImpl implements EventService {
     private static final Logger LOGGER = LoggerFactory.getLogger(EventServiceImpl.class);
 
     private final EventRepository eventRepository;
+    private final EventMapper eventMapper;
 
     @Autowired
-    public EventServiceImpl(EventRepository eventRepository) {
+    public EventServiceImpl(EventRepository eventRepository, EventMapper eventMapper) {
         this.eventRepository = eventRepository;
+        this.eventMapper = eventMapper;
     }
 
     @Override
@@ -38,6 +47,14 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
+    public List<EventDTO> getAllEventDTOs() {
+        return getAllEvents()
+                .stream()
+                .map(eventMapper::toDTO)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public Event getEventById(Integer id) {
         LOGGER.debug(Messages.TRY_GET_EVENT_BY_ID, id);
         Event event = eventRepository.findEventById(id).orElseThrow(() -> {
@@ -46,6 +63,11 @@ public class EventServiceImpl implements EventService {
         });
         LOGGER.debug(Messages.OK_GET_EVENT_BY_ID, id, event);
         return event;
+    }
+
+    @Override
+    public EventDTO getEventDTOById(Integer id) {
+        return eventMapper.toDTO(getEventById(id));
     }
 
     @Modifying
@@ -62,6 +84,16 @@ public class EventServiceImpl implements EventService {
         }
         LOGGER.debug(Messages.OK_CREATE_EVENT, createdEvent);
         return createdEvent;
+    }
+
+    @Modifying
+    @Transactional
+    @Override
+    public EventDTO createEventDTO(EventCreateDTO eventCreateDTO, Course course, ClassRoom classRoom) {
+        Event eventToCreate = eventMapper.fromDTO(eventCreateDTO);
+        eventToCreate.setCourse(course);
+        eventToCreate.setClassRoom(classRoom);
+        return eventMapper.toDTO(createEvent(eventToCreate));
     }
 
     @Modifying
@@ -90,6 +122,18 @@ public class EventServiceImpl implements EventService {
         }
         LOGGER.debug(Messages.OK_UPDATE_EVENT, updatedEvent);
         return updatedEvent;
+    }
+
+    @Modifying
+    @Transactional
+    @Override
+    public EventDTO updateEventDTO(Integer id, EventCreateDTO eventCreateDTO,
+                                   Course course, ClassRoom classRoom) {
+        Event eventToUpdate = eventMapper.fromDTO(eventCreateDTO);
+        eventToUpdate.setCourse(course);
+        eventToUpdate.setClassRoom(classRoom);
+        eventToUpdate.setId(id);
+        return eventMapper.toDTO(updateEvent(eventToUpdate));
     }
 
     @Override

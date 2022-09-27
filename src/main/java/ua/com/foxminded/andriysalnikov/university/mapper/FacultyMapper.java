@@ -15,9 +15,9 @@ public class FacultyMapper {
         return new FacultyDTO(faculty.getId().toString(), faculty.getFullName());
     }
 
-    public FacultyWithCoursesDTO toDTOWithCourses(Faculty faculty) {
-        FacultyWithCoursesDTO facultyDTO =
-                new FacultyWithCoursesDTO(faculty.getId().toString(), faculty.getFullName());
+    public FacultyDTOWithCourses toDTOWithCourses(Faculty faculty) {
+        FacultyDTOWithCourses facultyDTO =
+                new FacultyDTOWithCourses(faculty.getId().toString(), faculty.getFullName());
         facultyDTO.getCourses().addAll(
                     faculty.getCourses()
                             .stream()
@@ -26,9 +26,9 @@ public class FacultyMapper {
         return facultyDTO;
     }
 
-    public FacultyWithClassRoomsDTO toDTOWithClassRooms(Faculty faculty) {
-        FacultyWithClassRoomsDTO facultyDTO =
-                new FacultyWithClassRoomsDTO(faculty.getId().toString(), faculty.getFullName());
+    public FacultyDTOWithClassRooms toDTOWithClassRooms(Faculty faculty) {
+        FacultyDTOWithClassRooms facultyDTO =
+                new FacultyDTOWithClassRooms(faculty.getId().toString(), faculty.getFullName());
         facultyDTO.getClassRooms().addAll(
                 faculty.getClassRooms()
                         .stream()
@@ -37,9 +37,9 @@ public class FacultyMapper {
         return facultyDTO;
     }
 
-    public FacultyWithStudentsDTO toDTOWithStudents(Faculty faculty) {
-        FacultyWithStudentsDTO facultyDTO =
-                new FacultyWithStudentsDTO(faculty.getId().toString(), faculty.getFullName());
+    public FacultyDTOWithStudents toDTOWithStudents(Faculty faculty) {
+        FacultyDTOWithStudents facultyDTO =
+                new FacultyDTOWithStudents(faculty.getId().toString(), faculty.getFullName());
         facultyDTO.getStudents().addAll(
                 faculty.getStudents()
                         .stream()

@@ -3,7 +3,7 @@ package ua.com.foxminded.andriysalnikov.university.mapper;
 import org.springframework.stereotype.Component;
 import ua.com.foxminded.andriysalnikov.university.dto.TeacherCreateDTO;
 import ua.com.foxminded.andriysalnikov.university.dto.TeacherDTO;
-import ua.com.foxminded.andriysalnikov.university.dto.TeacherWithCoursesDTO;
+import ua.com.foxminded.andriysalnikov.university.dto.TeacherDTOWithCourses;
 import ua.com.foxminded.andriysalnikov.university.model.Course;
 import ua.com.foxminded.andriysalnikov.university.model.Teacher;
 
@@ -16,9 +16,9 @@ public class TeacherMapper {
         return new TeacherDTO(teacher.getId().toString(), teacher.getFirstName(), teacher.getLastName());
     }
 
-    public TeacherWithCoursesDTO toDTOWithCourses(Teacher teacher) {
-        TeacherWithCoursesDTO teacherDTO =
-                new TeacherWithCoursesDTO(teacher.getId().toString(), teacher.getFirstName(), teacher.getLastName());
+    public TeacherDTOWithCourses toDTOWithCourses(Teacher teacher) {
+        TeacherDTOWithCourses teacherDTO =
+                new TeacherDTOWithCourses(teacher.getId().toString(), teacher.getFirstName(), teacher.getLastName());
         teacherDTO.getCourses().addAll(
                     teacher.getCourses()
                             .stream()

@@ -9,13 +9,11 @@ import org.springframework.web.bind.annotation.*;
 import ua.com.foxminded.andriysalnikov.university.constants.Messages;
 import ua.com.foxminded.andriysalnikov.university.dto.CourseCreateDTO;
 import ua.com.foxminded.andriysalnikov.university.dto.CourseDTO;
-import ua.com.foxminded.andriysalnikov.university.mapper.CourseMapper;
 import ua.com.foxminded.andriysalnikov.university.model.Course;
 import ua.com.foxminded.andriysalnikov.university.service.CourseService;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/courses")
@@ -24,53 +22,42 @@ public class CourseController {
     private static final Logger LOGGER = LoggerFactory.getLogger(CourseController.class);
 
     private final CourseService courseService;
-    private final CourseMapper courseMapper;
 
     @Autowired
-    public CourseController(CourseService courseService, CourseMapper courseMapper) {
+    public CourseController(CourseService courseService) {
         this.courseService = courseService;
-        this.courseMapper = courseMapper;
     }
 
     @GetMapping
     public ResponseEntity<List<CourseDTO>> getAllCourses() {
         LOGGER.info(Messages.TRY_GET_ALL_COURSES);
-        List<Course> courses = courseService.getAllCourses();
-        LOGGER.info(Messages.OK_GET_ALL_COURSES, courses);
-        return new ResponseEntity<>(courses.stream()
-                .map(courseMapper::toDTO)
-                .collect(Collectors.toList()),
-                HttpStatus.OK);
+        List<CourseDTO> courseDTOs = courseService.getAllCourseDTOs();
+        LOGGER.info(Messages.OK_GET_ALL_COURSES, courseDTOs);
+        return new ResponseEntity<>(courseDTOs, HttpStatus.OK);
     }
 
     @GetMapping("/without-teacher")
     public ResponseEntity<List<CourseDTO>> getAllCoursesWithoutTeacher() {
         LOGGER.info(Messages.TRY_GET_ALL_COURSES_WITHOUT_TEACHER);
-        List<Course> courses = courseService.getAllCoursesWithoutTeacher();
-        LOGGER.info(Messages.OK_GET_ALL_COURSES_WITHOUT_TEACHER, courses);
-        return new ResponseEntity<>(courses.stream()
-                .map(courseMapper::toDTO)
-                .collect(Collectors.toList()),
-                HttpStatus.OK);
+        List<CourseDTO> courseDTOs = courseService.getAllCourseDTOsWithoutTeacher();
+        LOGGER.info(Messages.OK_GET_ALL_COURSES_WITHOUT_TEACHER, courseDTOs);
+        return new ResponseEntity<>(courseDTOs, HttpStatus.OK);
     }
 
     @GetMapping("/without-faculty")
     public ResponseEntity<List<CourseDTO>> getAllCoursesWithoutFaculty() {
         LOGGER.info(Messages.TRY_GET_ALL_COURSES_WITHOUT_FACULTY);
-        List<Course> courses = courseService.getAllCoursesWithoutFaculty();
-        LOGGER.info(Messages.OK_GET_ALL_COURSES_WITHOUT_FACULTY, courses);
-        return new ResponseEntity<>(courses.stream()
-                .map(courseMapper::toDTO)
-                .collect(Collectors.toList()),
-                HttpStatus.OK);
+        List<CourseDTO> courseDTOs = courseService.getAllCourseDTOsWithoutFaculty();
+        LOGGER.info(Messages.OK_GET_ALL_COURSES_WITHOUT_FACULTY, courseDTOs);
+        return new ResponseEntity<>(courseDTOs, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<CourseDTO> getCourseById(@PathVariable Integer id) {
         LOGGER.info(Messages.TRY_GET_COURSE_BY_ID, id);
-        Course course = courseService.getCourseById(id);
-        LOGGER.info(Messages.OK_GET_COURSE_BY_ID, id, course);
-        return new ResponseEntity<>(courseMapper.toDTO(course), HttpStatus.OK);
+        CourseDTO courseDTO = courseService.getCourseDTOById(id);
+        LOGGER.info(Messages.OK_GET_COURSE_BY_ID, id, courseDTO);
+        return new ResponseEntity<>(courseDTO, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}/delete")
@@ -84,10 +71,10 @@ public class CourseController {
     @PostMapping("/create")
     public ResponseEntity<CourseDTO> createCourse(@Valid @RequestBody CourseCreateDTO courseCreateDTO) {
         LOGGER.info(Messages.TRY_CREATE_COURSE);
-        Course createdCourse =
-                courseService.createCourse(courseMapper.fromDTO(courseCreateDTO));
-        LOGGER.info(Messages.OK_CREATE_COURSE, createdCourse);
-        return new ResponseEntity<>(courseMapper.toDTO(createdCourse), HttpStatus.CREATED);
+        CourseDTO createdCourseDTO =
+                courseService.createCourseDTO(courseCreateDTO);
+        LOGGER.info(Messages.OK_CREATE_COURSE, createdCourseDTO);
+        return new ResponseEntity<>(createdCourseDTO, HttpStatus.CREATED);
     }
 
     @PostMapping("/{id}/update")
@@ -96,11 +83,9 @@ public class CourseController {
                                                   @Valid @RequestBody CourseCreateDTO courseCreateDTO) {
         LOGGER.info(Messages.TRY_UPDATE_COURSE, courseCreateDTO);
         courseService.getCourseById(id);
-        Course course = courseMapper.fromDTO(courseCreateDTO);
-        course.setId(id);
-        Course updatedCourse =  courseService.updateCourse(course);
-        LOGGER.info(Messages.OK_UPDATE_COURSE, updatedCourse);
-        return new ResponseEntity<>(courseMapper.toDTO(updatedCourse), HttpStatus.OK);
+        CourseDTO updatedCourseDTO =  courseService.updateCourseDTO(id, courseCreateDTO);
+        LOGGER.info(Messages.OK_UPDATE_COURSE, updatedCourseDTO);
+        return new ResponseEntity<>(updatedCourseDTO, HttpStatus.OK);
     }
 
 }

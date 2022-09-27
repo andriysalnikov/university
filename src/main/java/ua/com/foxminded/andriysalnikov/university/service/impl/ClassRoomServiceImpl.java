@@ -5,15 +5,20 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ua.com.foxminded.andriysalnikov.university.constants.Messages;
+import ua.com.foxminded.andriysalnikov.university.dto.ClassRoomCreateDTO;
+import ua.com.foxminded.andriysalnikov.university.dto.ClassRoomDTO;
+import ua.com.foxminded.andriysalnikov.university.mapper.ClassRoomMapper;
 import ua.com.foxminded.andriysalnikov.university.repository.ClassRoomRepository;
 import ua.com.foxminded.andriysalnikov.university.exceptions.ServiceException;
 import ua.com.foxminded.andriysalnikov.university.model.ClassRoom;
 import ua.com.foxminded.andriysalnikov.university.service.ClassRoomService;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -22,10 +27,12 @@ public class ClassRoomServiceImpl implements ClassRoomService {
     private static final Logger LOGGER = LoggerFactory.getLogger(ClassRoomServiceImpl.class);
 
     private final ClassRoomRepository classRoomRepository;
+    private final ClassRoomMapper classRoomMapper;
 
     @Autowired
-    public ClassRoomServiceImpl(ClassRoomRepository classRoomRepository) {
+    public ClassRoomServiceImpl(ClassRoomRepository classRoomRepository, ClassRoomMapper classRoomMapper) {
         this.classRoomRepository = classRoomRepository;
+        this.classRoomMapper = classRoomMapper;
     }
 
     @Override
@@ -37,11 +44,27 @@ public class ClassRoomServiceImpl implements ClassRoomService {
     }
 
     @Override
+    public List<ClassRoomDTO> getAllClassRoomDTOs() {
+        return getAllClassRooms()
+                .stream()
+                .map(classRoomMapper::toDTO)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public List<ClassRoom> getAllClassRoomsWithoutFaculty() {
         LOGGER.debug(Messages.TRY_GET_ALL_CLASSROOMS_WITHOUT_FACULTY);
         List<ClassRoom> classRooms = classRoomRepository.findClassRoomsByFacultyIsNullOrderByIdAsc();
         LOGGER.debug(Messages.OK_GET_ALL_CLASSROOMS_WITHOUT_FACULTY, classRooms);
         return classRooms;
+    }
+
+    @Override
+    public List<ClassRoomDTO> getAllClassRoomDTOsWithoutFaculty() {
+        return getAllClassRoomsWithoutFaculty()
+                .stream()
+                .map(classRoomMapper::toDTO)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -53,6 +76,11 @@ public class ClassRoomServiceImpl implements ClassRoomService {
         });
         LOGGER.debug(Messages.OK_GET_CLASSROOM_BY_ID, id, classRoom);
         return classRoom;
+    }
+
+    @Override
+    public ClassRoomDTO getClassRoomDTOById(Integer id) {
+        return classRoomMapper.toDTO(getClassRoomById(id));
     }
 
     @Modifying
@@ -69,6 +97,13 @@ public class ClassRoomServiceImpl implements ClassRoomService {
         }
         LOGGER.debug(Messages.OK_CREATE_CLASSROOM, createdClassRoom);
         return createdClassRoom;
+    }
+
+    @Modifying
+    @Transactional
+    @Override
+    public ClassRoomDTO createClassRoomDTO(ClassRoomCreateDTO classRoomCreateDTO) {
+        return classRoomMapper.toDTO(createClassRoom(classRoomMapper.fromDTO(classRoomCreateDTO)));
     }
 
     @Modifying
@@ -97,6 +132,15 @@ public class ClassRoomServiceImpl implements ClassRoomService {
         }
         LOGGER.debug(Messages.OK_UPDATE_CLASSROOM, updatedClassRoom);
         return updatedClassRoom;
+    }
+
+    @Modifying
+    @Transactional
+    @Override
+    public ClassRoomDTO updateClassRoomDTO(Integer id, ClassRoomCreateDTO classRoomCreateDTO) {
+        ClassRoom classRoomToUpdate = classRoomMapper.fromDTO(classRoomCreateDTO);
+        classRoomToUpdate.setId(id);
+        return classRoomMapper.toDTO(updateClassRoom(classRoomToUpdate));
     }
 
 }

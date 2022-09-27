@@ -8,12 +8,15 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ua.com.foxminded.andriysalnikov.university.constants.Messages;
+import ua.com.foxminded.andriysalnikov.university.dto.*;
+import ua.com.foxminded.andriysalnikov.university.mapper.StudentMapper;
 import ua.com.foxminded.andriysalnikov.university.repository.StudentRepository;
 import ua.com.foxminded.andriysalnikov.university.exceptions.ServiceException;
 import ua.com.foxminded.andriysalnikov.university.model.Student;
 import ua.com.foxminded.andriysalnikov.university.service.StudentService;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -22,10 +25,12 @@ public class StudentServiceImpl implements StudentService {
     private static final Logger LOGGER = LoggerFactory.getLogger(StudentServiceImpl.class);
 
     private final StudentRepository studentRepository;
+    private final StudentMapper studentMapper;
 
     @Autowired
-    public StudentServiceImpl(StudentRepository studentRepository) {
+    public StudentServiceImpl(StudentRepository studentRepository, StudentMapper studentMapper) {
         this.studentRepository = studentRepository;
+        this.studentMapper = studentMapper;
     }
 
     @Override
@@ -37,11 +42,27 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
+    public List<StudentDTO> getAllStudentDTOs() {
+        return getAllStudents()
+                .stream()
+                .map(studentMapper::toDTO)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public List<Student> getAllStudentsWithoutFaculty() {
         LOGGER.debug(Messages.TRY_GET_ALL_STUDENTS_WITHOUT_FACULTY);
         List<Student> students = studentRepository.findStudentsByFacultyIsNullOrderByIdAsc();
         LOGGER.debug(Messages.OK_GET_ALL_STUDENTS_WITHOUT_FACULTY, students);
         return students;
+    }
+
+    @Override
+    public List<StudentDTO> getAllStudentDTOsWithoutFaculty() {
+        return getAllStudentsWithoutFaculty()
+                .stream()
+                .map(studentMapper::toDTO)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -56,6 +77,11 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
+    public StudentDTO getStudentDTOById(Integer id) {
+        return studentMapper.toDTO(getStudentById(id));
+    }
+
+    @Override
     public Student getStudentByIdWithCourses(Integer id) {
         LOGGER.debug(Messages.TRY_GET_STUDENT_BY_ID, id);
         Student student = studentRepository.getStudentByIdWithCourses(id).orElseThrow(() -> {
@@ -64,6 +90,11 @@ public class StudentServiceImpl implements StudentService {
         });
         LOGGER.debug(Messages.OK_GET_STUDENT_BY_ID, id, student);
         return student;
+    }
+
+    @Override
+    public StudentDTOWithCourses getStudentDTOByIdWithCourses(Integer id) {
+        return studentMapper.toDTOWithCourses(getStudentByIdWithCourses(id));
     }
 
     @Modifying
@@ -80,6 +111,13 @@ public class StudentServiceImpl implements StudentService {
         }
         LOGGER.debug(Messages.OK_CREATE_STUDENT, createdStudent);
         return createdStudent;
+    }
+
+    @Modifying
+    @Transactional
+    @Override
+    public StudentDTO createStudentDTO(StudentCreateDTO studentCreateDTO) {
+        return studentMapper.toDTO(createStudent(studentMapper.fromDTO(studentCreateDTO)));
     }
 
     @Modifying
@@ -108,6 +146,15 @@ public class StudentServiceImpl implements StudentService {
         }
         LOGGER.debug(Messages.OK_UPDATE_STUDENT, updatedStudent);
         return updatedStudent;
+    }
+
+    @Modifying
+    @Transactional
+    @Override
+    public StudentDTO updateStudentDTO(Integer id, StudentCreateDTO studentCreateDTO) {
+        Student studentToUpdate = studentMapper.fromDTO(studentCreateDTO);
+        studentToUpdate.setId(id);
+        return studentMapper.toDTO(updateStudent(studentToUpdate));
     }
 
 }

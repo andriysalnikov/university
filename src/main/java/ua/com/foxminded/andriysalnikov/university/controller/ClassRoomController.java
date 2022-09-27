@@ -9,13 +9,11 @@ import org.springframework.web.bind.annotation.*;
 import ua.com.foxminded.andriysalnikov.university.constants.Messages;
 import ua.com.foxminded.andriysalnikov.university.dto.ClassRoomCreateDTO;
 import ua.com.foxminded.andriysalnikov.university.dto.ClassRoomDTO;
-import ua.com.foxminded.andriysalnikov.university.mapper.ClassRoomMapper;
 import ua.com.foxminded.andriysalnikov.university.model.ClassRoom;
 import ua.com.foxminded.andriysalnikov.university.service.ClassRoomService;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/classrooms")
@@ -24,42 +22,34 @@ public class ClassRoomController {
     private static final Logger LOGGER = LoggerFactory.getLogger(ClassRoomController.class);
 
     private final ClassRoomService classRoomService;
-    private final ClassRoomMapper classRoomMapper;
 
     @Autowired
-    public ClassRoomController (ClassRoomService classRoomService, ClassRoomMapper classRoomMapper) {
+    public ClassRoomController (ClassRoomService classRoomService) {
         this.classRoomService = classRoomService;
-        this.classRoomMapper = classRoomMapper;
     }
 
     @GetMapping
     public ResponseEntity<List<ClassRoomDTO>> getAllClassRooms() {
         LOGGER.info(Messages.TRY_GET_ALL_CLASSROOMS);
-        List<ClassRoom> classRooms = classRoomService.getAllClassRooms();
-        LOGGER.info(Messages.OK_GET_ALL_CLASSROOMS, classRooms);
-        return new ResponseEntity<>(classRooms.stream()
-                .map(classRoomMapper::toDTO)
-                .collect(Collectors.toList()),
-                HttpStatus.OK);
+        List<ClassRoomDTO> classRoomDTOs = classRoomService.getAllClassRoomDTOs();
+        LOGGER.info(Messages.OK_GET_ALL_CLASSROOMS, classRoomDTOs);
+        return new ResponseEntity<>(classRoomDTOs, HttpStatus.OK);
     }
 
     @GetMapping("/without-faculty")
     public ResponseEntity<List<ClassRoomDTO>> getAllClassRoomsWithoutFaculty() {
         LOGGER.info(Messages.TRY_GET_ALL_CLASSROOMS_WITHOUT_FACULTY);
-        List<ClassRoom> classRooms = classRoomService.getAllClassRoomsWithoutFaculty();
-        LOGGER.info(Messages.OK_GET_ALL_CLASSROOMS_WITHOUT_FACULTY, classRooms);
-        return new ResponseEntity<>(classRooms.stream()
-                .map(classRoomMapper::toDTO)
-                .collect(Collectors.toList()),
-                HttpStatus.OK);
+        List<ClassRoomDTO> classRoomDTOs = classRoomService.getAllClassRoomDTOsWithoutFaculty();
+        LOGGER.info(Messages.OK_GET_ALL_CLASSROOMS_WITHOUT_FACULTY, classRoomDTOs);
+        return new ResponseEntity<>(classRoomDTOs, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<ClassRoomDTO> getClassRoomById(@PathVariable Integer id) {
         LOGGER.info(Messages.TRY_GET_CLASSROOM_BY_ID, id);
-        ClassRoom classRoom = classRoomService.getClassRoomById(id);
-        LOGGER.info(Messages.OK_GET_CLASSROOM_BY_ID, id, classRoom);
-        return new ResponseEntity<>(classRoomMapper.toDTO(classRoom), HttpStatus.OK);
+        ClassRoomDTO classRoomDTO = classRoomService.getClassRoomDTOById(id);
+        LOGGER.info(Messages.OK_GET_CLASSROOM_BY_ID, id, classRoomDTO);
+        return new ResponseEntity<>(classRoomDTO, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}/delete")
@@ -73,10 +63,10 @@ public class ClassRoomController {
     @PostMapping("/create")
     public ResponseEntity<ClassRoomDTO> createClassRoom(@Valid @RequestBody ClassRoomCreateDTO classRoomCreateDTO) {
         LOGGER.info(Messages.TRY_CREATE_CLASSROOM);
-        ClassRoom createdClassRoom =
-                classRoomService.createClassRoom(classRoomMapper.fromDTO(classRoomCreateDTO));
-        LOGGER.info(Messages.OK_CREATE_CLASSROOM, createdClassRoom);
-        return new ResponseEntity<>(classRoomMapper.toDTO(createdClassRoom), HttpStatus.CREATED);
+        ClassRoomDTO createdClassRoomDTO =
+                classRoomService.createClassRoomDTO(classRoomCreateDTO);
+        LOGGER.info(Messages.OK_CREATE_CLASSROOM, createdClassRoomDTO);
+        return new ResponseEntity<>(createdClassRoomDTO, HttpStatus.CREATED);
     }
 
     @PostMapping("/{id}/update")
@@ -84,11 +74,10 @@ public class ClassRoomController {
                                                         @Valid @RequestBody ClassRoomCreateDTO classRoomCreateDTO) {
         LOGGER.info(Messages.TRY_UPDATE_CLASSROOM, classRoomCreateDTO);
         classRoomService.getClassRoomById(id);
-        ClassRoom classRoom = classRoomMapper.fromDTO(classRoomCreateDTO);
-        classRoom.setId(id);
-        ClassRoom updatedClassRoom = classRoomService.updateClassRoom(classRoom);
-        LOGGER.info(Messages.OK_UPDATE_CLASSROOM, updatedClassRoom);
-        return new ResponseEntity<>(classRoomMapper.toDTO(updatedClassRoom), HttpStatus.OK);
+        ClassRoomDTO updatedClassRoomDTO =
+                classRoomService.updateClassRoomDTO(id, classRoomCreateDTO);
+        LOGGER.info(Messages.OK_UPDATE_CLASSROOM, updatedClassRoomDTO);
+        return new ResponseEntity<>(updatedClassRoomDTO, HttpStatus.OK);
     }
 
 }

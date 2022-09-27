@@ -9,17 +9,14 @@ import org.springframework.web.bind.annotation.*;
 import ua.com.foxminded.andriysalnikov.university.constants.Messages;
 import ua.com.foxminded.andriysalnikov.university.dto.EventCreateDTO;
 import ua.com.foxminded.andriysalnikov.university.dto.EventDTO;
-import ua.com.foxminded.andriysalnikov.university.mapper.EventMapper;
 import ua.com.foxminded.andriysalnikov.university.model.ClassRoom;
 import ua.com.foxminded.andriysalnikov.university.model.Course;
-import ua.com.foxminded.andriysalnikov.university.model.Event;
 import ua.com.foxminded.andriysalnikov.university.service.ClassRoomService;
 import ua.com.foxminded.andriysalnikov.university.service.CourseService;
 import ua.com.foxminded.andriysalnikov.university.service.EventService;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/events")
@@ -30,34 +27,29 @@ public class EventController {
     private final EventService eventService;
     private final ClassRoomService classRoomService;
     private final CourseService courseService;
-    private final EventMapper eventMapper;
 
     @Autowired
     public EventController(EventService eventService, ClassRoomService classRoomService,
-                           CourseService courseService, EventMapper eventMapper) {
+                           CourseService courseService) {
         this.eventService = eventService;
         this.classRoomService = classRoomService;
         this.courseService = courseService;
-        this.eventMapper = eventMapper;
     }
 
     @GetMapping
     public ResponseEntity<List<EventDTO>> getAllEvents() {
         LOGGER.info(Messages.TRY_GET_ALL_EVENTS);
-        List<Event> events = eventService.getAllEvents();
-        LOGGER.info(Messages.OK_GET_ALL_EVENTS, events);
-        return new ResponseEntity<>(events.stream()
-                .map(eventMapper::toDTO)
-                .collect(Collectors.toList()),
-                HttpStatus.OK);
+        List<EventDTO> eventDTOs = eventService.getAllEventDTOs();
+        LOGGER.info(Messages.OK_GET_ALL_EVENTS, eventDTOs);
+        return new ResponseEntity<>(eventDTOs, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<EventDTO> getEventById(@PathVariable Integer id) {
         LOGGER.info(Messages.TRY_GET_EVENT_BY_ID, id);
-        Event event = eventService.getEventById(id);
-        LOGGER.info(Messages.OK_GET_EVENT_BY_ID, id, event);
-        return new ResponseEntity<>(eventMapper.toDTO(event), HttpStatus.OK);
+        EventDTO eventDTO = eventService.getEventDTOById(id);
+        LOGGER.info(Messages.OK_GET_EVENT_BY_ID, id, eventDTO);
+        return new ResponseEntity<>(eventDTO, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}/delete")
@@ -75,12 +67,9 @@ public class EventController {
         LOGGER.info(Messages.TRY_CREATE_EVENT);
         Course course = courseService.getCourseById(courseId);
         ClassRoom classRoom = classRoomService.getClassRoomById(classRoomId);
-        Event event = eventMapper.fromDTO(eventCreateDTO);
-        event.setCourse(course);
-        event.setClassRoom(classRoom);
-        Event createdEvent = eventService.createEvent(event);
-        LOGGER.info(Messages.OK_CREATE_EVENT, createdEvent);
-        return new ResponseEntity<>(eventMapper.toDTO(createdEvent), HttpStatus.CREATED);
+        EventDTO createdEventDTO = eventService.createEventDTO(eventCreateDTO, course, classRoom);
+        LOGGER.info(Messages.OK_CREATE_EVENT, createdEventDTO);
+        return new ResponseEntity<>(createdEventDTO, HttpStatus.CREATED);
     }
 
     @PostMapping("/{id}/update/course/{courseId}/classroom/{classRoomId}")
@@ -91,13 +80,9 @@ public class EventController {
         eventService.getEventById(id);
         Course course = courseService.getCourseById(courseId);
         ClassRoom classRoom = classRoomService.getClassRoomById(classRoomId);
-        Event event = eventMapper.fromDTO(eventCreateDTO);
-        event.setCourse(course);
-        event.setClassRoom(classRoom);
-        event.setId(id);
-        Event updatedEvent = eventService.updateEvent(event);
-        LOGGER.info(Messages.OK_UPDATE_EVENT, updatedEvent);
-        return new ResponseEntity<>(eventMapper.toDTO(updatedEvent), HttpStatus.OK);
+        EventDTO updatedEventDTO = eventService.updateEventDTO(id, eventCreateDTO, course, classRoom);
+        LOGGER.info(Messages.OK_UPDATE_EVENT, updatedEventDTO);
+        return new ResponseEntity<>(updatedEventDTO, HttpStatus.OK);
     }
 
 }

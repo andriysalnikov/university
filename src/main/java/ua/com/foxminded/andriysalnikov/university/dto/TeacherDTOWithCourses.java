@@ -3,14 +3,14 @@ package ua.com.foxminded.andriysalnikov.university.dto;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TeacherWithCoursesDTO {
+public class TeacherDTOWithCourses {
 
     private final String id;
     private final String firstName;
     private final String lastName;
     private final List<String> courses;
 
-    public TeacherWithCoursesDTO(String id, String firstName, String lastName) {
+    public TeacherDTOWithCourses(String id, String firstName, String lastName) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
