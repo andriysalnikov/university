@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import ua.com.foxminded.andriysalnikov.university.constants.Messages;
@@ -65,7 +66,7 @@ public class CourseController {
         return new ResponseEntity<>(courseDTO, HttpStatus.OK);
     }
 
-    @DeleteMapping("/{id}/delete")
+    @DeleteMapping("/{id}")
     public ResponseEntity<HttpStatus> deleteCourse(@PathVariable Integer id) {
         LOGGER.info(Messages.TRY_DELETE_COURSE_BY_ID,id);
         courseService.deleteCourseById(id);
@@ -73,7 +74,7 @@ public class CourseController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @PostMapping("/create")
+    @PostMapping
     public ResponseEntity<CourseDTO> createCourse(@Valid @RequestBody CourseCreateDTO courseCreateDTO) {
         LOGGER.info(Messages.TRY_CREATE_COURSE);
         CourseDTO createdCourseDTO =
@@ -82,7 +83,7 @@ public class CourseController {
         return new ResponseEntity<>(createdCourseDTO, HttpStatus.CREATED);
     }
 
-    @PostMapping("/{id}/update")
+    @PutMapping("/{id}")
     public ResponseEntity<CourseDTO> updateCourse(@PathVariable Integer id,
                                                   @Valid @RequestBody CourseCreateDTO courseCreateDTO) {
         LOGGER.info(Messages.TRY_UPDATE_COURSE, courseCreateDTO);

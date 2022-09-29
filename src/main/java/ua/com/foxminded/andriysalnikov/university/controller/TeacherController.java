@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import ua.com.foxminded.andriysalnikov.university.constants.Messages;
@@ -65,7 +66,7 @@ public class TeacherController {
         return new ResponseEntity<>(teacherDTOWithCourses, HttpStatus.OK);
     }
 
-    @DeleteMapping("/{id}/delete")
+    @DeleteMapping("/{id}")
     public ResponseEntity<HttpStatus> deleteTeacher(@PathVariable Integer id) {
         LOGGER.info(Messages.TRY_DELETE_TEACHER_BY_ID,id);
         teacherService.deleteTeacherById(id);
@@ -73,7 +74,7 @@ public class TeacherController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @PostMapping("/create")
+    @PostMapping
     public ResponseEntity<TeacherDTO> createTeacher(@Valid @RequestBody TeacherCreateDTO teacherCreateDTO) {
         LOGGER.info(Messages.TRY_CREATE_TEACHER);
         TeacherDTO createdTeacherDTO = teacherService.createTeacherDTO(teacherCreateDTO);
@@ -81,7 +82,7 @@ public class TeacherController {
         return new ResponseEntity<>(createdTeacherDTO, HttpStatus.CREATED);
     }
 
-    @PostMapping("/{id}/update")
+    @PutMapping("/{id}")
     public ResponseEntity<TeacherDTO> updateTeacher(@PathVariable Integer id,
                                                     @Valid @RequestBody TeacherCreateDTO teacherCreateDTO) {
         LOGGER.info(Messages.TRY_UPDATE_TEACHER, teacherCreateDTO);

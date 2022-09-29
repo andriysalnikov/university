@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import ua.com.foxminded.andriysalnikov.university.constants.Messages;
@@ -58,7 +59,7 @@ public class EventController {
         return new ResponseEntity<>(eventDTO, HttpStatus.OK);
     }
 
-    @DeleteMapping("/{id}/delete")
+    @DeleteMapping("/{id}")
     public ResponseEntity<HttpStatus> deleteEvent(@PathVariable Integer id) {
         LOGGER.info(Messages.TRY_DELETE_EVENT_BY_ID,id);
         eventService.deleteEventById(id);
@@ -66,7 +67,7 @@ public class EventController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @PostMapping("/create/course/{courseId}/classroom/{classRoomId}")
+    @PostMapping("/course/{courseId}/classroom/{classRoomId}")
     public ResponseEntity<EventDTO> createEvent(@PathVariable Integer courseId,
                                                 @PathVariable Integer classRoomId,
                                                 @Valid @RequestBody EventCreateDTO eventCreateDTO) {
@@ -78,7 +79,7 @@ public class EventController {
         return new ResponseEntity<>(createdEventDTO, HttpStatus.CREATED);
     }
 
-    @PostMapping("/{id}/update/course/{courseId}/classroom/{classRoomId}")
+    @PutMapping("/{id}/course/{courseId}/classroom/{classRoomId}")
     public ResponseEntity<EventDTO> updateEvent(@PathVariable Integer id, @PathVariable Integer courseId,
                                                 @PathVariable Integer classRoomId,
                                                 @Valid @RequestBody EventCreateDTO eventCreateDTO) {
