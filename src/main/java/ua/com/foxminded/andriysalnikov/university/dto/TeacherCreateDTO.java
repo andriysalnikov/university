@@ -1,17 +1,13 @@
 package ua.com.foxminded.andriysalnikov.university.dto;
 
 import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 @AllArgsConstructor
-@Getter
-@EqualsAndHashCode
-@ToString
+@Data
 public class TeacherCreateDTO {
 
     @NotBlank(message = "First Name cannot be blank")

@@ -1,17 +1,13 @@
 package ua.com.foxminded.andriysalnikov.university.dto;
 
 import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.Data;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
-@Getter
-@EqualsAndHashCode
-@ToString
+@Data
 public class FacultyDTOWithCourses {
 
     private final String id;

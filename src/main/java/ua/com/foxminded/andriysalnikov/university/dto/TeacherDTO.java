@@ -1,14 +1,10 @@
 package ua.com.foxminded.andriysalnikov.university.dto;
 
 import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.Data;
 
 @AllArgsConstructor
-@Getter
-@EqualsAndHashCode
-@ToString
+@Data
 public class TeacherDTO {
 
     private final String id;
