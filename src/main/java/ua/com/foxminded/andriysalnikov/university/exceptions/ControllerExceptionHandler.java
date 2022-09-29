@@ -6,7 +6,8 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 
-import java.util.Date;
+import java.time.LocalDateTime;
+
 
 @ControllerAdvice
 public class ControllerExceptionHandler {
@@ -16,7 +17,7 @@ public class ControllerExceptionHandler {
             ServiceException serviceException, WebRequest request) {
         ErrorMessage message = new ErrorMessage(
                 HttpStatus.BAD_REQUEST.value(),
-                new Date(),
+                LocalDateTime.now(),
                 serviceException.getMessage(),
                 request.getDescription(false));
         return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
@@ -24,10 +25,10 @@ public class ControllerExceptionHandler {
 
     private static class ErrorMessage {
         private final int statusCode;
-        private final Date timestamp;
+        private final LocalDateTime timestamp;
         private final String message;
         private final String description;
-        public ErrorMessage(int statusCode, Date timestamp, String message, String description) {
+        public ErrorMessage(int statusCode, LocalDateTime timestamp, String message, String description) {
             this.statusCode = statusCode;
             this.timestamp = timestamp;
             this.message = message;
@@ -36,7 +37,7 @@ public class ControllerExceptionHandler {
         public int getStatusCode() {
             return statusCode;
         }
-        public Date getTimestamp() {
+        public LocalDateTime getTimestamp() {
             return timestamp;
         }
         public String getMessage() {

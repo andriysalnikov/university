@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import ua.com.foxminded.andriysalnikov.university.constants.Messages;
 import ua.com.foxminded.andriysalnikov.university.dto.TimeTableDTO;
-import ua.com.foxminded.andriysalnikov.university.mapper.TimeTableMapper;
 import ua.com.foxminded.andriysalnikov.university.model.Student;
 import ua.com.foxminded.andriysalnikov.university.model.Teacher;
 import ua.com.foxminded.andriysalnikov.university.service.StudentService;
@@ -32,7 +31,7 @@ public class TimeTableController {
     private final TeacherService teacherService;
 
     @Autowired
-    public TimeTableController(TimeTableManager timeTableManager, TimeTableMapper timeTableMapper,
+    public TimeTableController(TimeTableManager timeTableManager,
                                StudentService studentService, TeacherService teacherService) {
         this.timeTableManager = timeTableManager;
         this.studentService = studentService;

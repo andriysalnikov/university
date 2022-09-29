@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ua.com.foxminded.andriysalnikov.university.constants.Messages;
+import ua.com.foxminded.andriysalnikov.university.dto.TimeTable;
 import ua.com.foxminded.andriysalnikov.university.dto.TimeTableDTO;
 import ua.com.foxminded.andriysalnikov.university.mapper.TimeTableMapper;
 import ua.com.foxminded.andriysalnikov.university.model.*;

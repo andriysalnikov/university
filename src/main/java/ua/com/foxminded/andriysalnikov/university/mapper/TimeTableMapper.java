@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ua.com.foxminded.andriysalnikov.university.dto.EventDTO;
 import ua.com.foxminded.andriysalnikov.university.dto.TimeTableDTO;
-import ua.com.foxminded.andriysalnikov.university.model.TimeTable;
+import ua.com.foxminded.andriysalnikov.university.dto.TimeTable;
 
 import java.util.List;
 import java.util.stream.Collectors;

@@ -1,6 +1,7 @@
-package ua.com.foxminded.andriysalnikov.university.model;
+package ua.com.foxminded.andriysalnikov.university.dto;
 
 import lombok.Data;
+import ua.com.foxminded.andriysalnikov.university.model.Event;
 
 import java.util.ArrayList;
 import java.util.List;
