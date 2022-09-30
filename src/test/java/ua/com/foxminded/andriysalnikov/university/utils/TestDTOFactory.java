@@ -1,5 +1,6 @@
 package ua.com.foxminded.andriysalnikov.university.utils;
 
+import ua.com.foxminded.andriysalnikov.university.dto.TimeTable;
 import ua.com.foxminded.andriysalnikov.university.model.*;
 
 import java.time.LocalDate;

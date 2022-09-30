@@ -8,12 +8,16 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ua.com.foxminded.andriysalnikov.university.constants.Messages;
+import ua.com.foxminded.andriysalnikov.university.dto.CourseCreateDTO;
+import ua.com.foxminded.andriysalnikov.university.dto.CourseDTO;
+import ua.com.foxminded.andriysalnikov.university.mapper.CourseMapper;
 import ua.com.foxminded.andriysalnikov.university.repository.CourseRepository;
 import ua.com.foxminded.andriysalnikov.university.exceptions.ServiceException;
 import ua.com.foxminded.andriysalnikov.university.model.Course;
 import ua.com.foxminded.andriysalnikov.university.service.CourseService;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -22,10 +26,12 @@ public class CourseServiceImpl implements CourseService {
     private static final Logger LOGGER = LoggerFactory.getLogger(CourseServiceImpl.class);
 
     private final CourseRepository courseRepository;
+    private final CourseMapper courseMapper;
 
     @Autowired
-    public CourseServiceImpl(CourseRepository courseRepository) {
+    public CourseServiceImpl(CourseRepository courseRepository, CourseMapper courseMapper) {
         this.courseRepository = courseRepository;
+        this.courseMapper = courseMapper;
     }
 
     @Override
@@ -37,11 +43,27 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
+    public List<CourseDTO> getAllCourseDTOs() {
+        return getAllCourses()
+                .stream()
+                .map(courseMapper::toDTO)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public List<Course> getAllCoursesWithoutTeacher() {
         LOGGER.debug(Messages.TRY_GET_ALL_COURSES_WITHOUT_TEACHER);
         List<Course> courses = courseRepository.findCoursesByTeacherIsNullOrderByIdAsc();
         LOGGER.debug(Messages.OK_GET_ALL_COURSES_WITHOUT_TEACHER, courses);
         return courses;
+    }
+
+    @Override
+    public List<CourseDTO> getAllCourseDTOsWithoutTeacher() {
+        return getAllCoursesWithoutTeacher()
+                .stream()
+                .map(courseMapper::toDTO)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -53,6 +75,14 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
+    public List<CourseDTO> getAllCourseDTOsWithoutFaculty() {
+        return getAllCoursesWithoutFaculty()
+                .stream()
+                .map(courseMapper::toDTO)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public Course getCourseById(Integer id) {
         LOGGER.debug(Messages.TRY_GET_COURSE_BY_ID, id);
         Course course = courseRepository.getCourseById(id).orElseThrow(() -> {
@@ -61,6 +91,11 @@ public class CourseServiceImpl implements CourseService {
         });
         LOGGER.debug(Messages.OK_GET_COURSE_BY_ID, id, course);
         return course;
+    }
+
+    @Override
+    public CourseDTO getCourseDTOById(Integer id) {
+        return courseMapper.toDTO(getCourseById(id));
     }
 
     @Modifying
@@ -77,6 +112,13 @@ public class CourseServiceImpl implements CourseService {
         }
         LOGGER.debug(Messages.OK_CREATE_COURSE, createdCourse);
         return createdCourse;
+    }
+
+    @Modifying
+    @Transactional
+    @Override
+    public CourseDTO createCourseDTO(CourseCreateDTO courseCreateDTO) {
+        return courseMapper.toDTO(createCourse(courseMapper.fromDTO(courseCreateDTO)));
     }
 
     @Modifying
@@ -104,6 +146,15 @@ public class CourseServiceImpl implements CourseService {
         }
         LOGGER.debug(Messages.OK_UPDATE_COURSE, updatedCourse);
         return updatedCourse;
+    }
+
+    @Modifying
+    @Transactional
+    @Override
+    public CourseDTO updateCourseDTO(Integer id, CourseCreateDTO courseCreateDTO) {
+        Course courseToUpdate = courseMapper.fromDTO(courseCreateDTO);
+        courseToUpdate.setId(id);
+        return courseMapper.toDTO(updateCourse(courseToUpdate));
     }
 
 }
