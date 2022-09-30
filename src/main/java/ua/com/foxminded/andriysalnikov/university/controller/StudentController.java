@@ -3,23 +3,30 @@ package ua.com.foxminded.andriysalnikov.university.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import ua.com.foxminded.andriysalnikov.university.constants.Messages;
-import ua.com.foxminded.andriysalnikov.university.exceptions.ServiceException;
+import ua.com.foxminded.andriysalnikov.university.dto.StudentCreateDTO;
+import ua.com.foxminded.andriysalnikov.university.dto.StudentDTO;
+import ua.com.foxminded.andriysalnikov.university.dto.StudentDTOWithCourses;
 import ua.com.foxminded.andriysalnikov.university.model.Course;
 import ua.com.foxminded.andriysalnikov.university.model.Student;
 import ua.com.foxminded.andriysalnikov.university.service.CourseService;
 import ua.com.foxminded.andriysalnikov.university.service.StudentService;
-import ua.com.foxminded.andriysalnikov.university.utils.ExceptionUtil;
 
 import javax.validation.Valid;
 import java.util.List;
 
-@Controller
+@RestController
+@RequestMapping("/students")
 public class StudentController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(StudentController.class);
@@ -33,128 +40,91 @@ public class StudentController {
         this.courseService = courseService;
     }
 
-    @GetMapping("/students")
-    public String getAllStudents(Model model) {
+    @GetMapping
+    public ResponseEntity<List<StudentDTO>> getAllStudents() {
         LOGGER.info(Messages.TRY_GET_ALL_STUDENTS);
-        List<Student> students = studentService.getAllStudents();
-        LOGGER.info(Messages.OK_GET_ALL_STUDENTS, students);
-        model.addAttribute("students", students);
-        return "student/students";
+        List<StudentDTO> studentDTOs = studentService.getAllStudentDTOs();
+        LOGGER.info(Messages.OK_GET_ALL_STUDENTS, studentDTOs);
+        return new ResponseEntity<>(studentDTOs, HttpStatus.OK);
     }
 
-    @GetMapping("/student")
-    public String showStudent(@RequestParam("id") Integer id, Model model) {
-        Student student;
-        List<Course> otherAvailableCourses;
-        try {
-            student = studentService.getStudentByIdWithCourses(id);
-            otherAvailableCourses = courseService.getAllCourses();
-            otherAvailableCourses.removeAll(student.getCourses());
-        } catch (ServiceException exception) {
-            return ExceptionUtil.handleException(exception, LOGGER, model);
-        }
-        model.addAttribute("student", student);
-        model.addAttribute("othercourses", otherAvailableCourses);
-        return "student/student";
+    @GetMapping("/without-faculty")
+    public ResponseEntity<List<StudentDTO>> getAllStudentsWithoutFaculty() {
+        LOGGER.info(Messages.TRY_GET_ALL_STUDENTS_WITHOUT_FACULTY);
+        List<StudentDTO> studentDTOs = studentService.getAllStudentDTOsWithoutFaculty();
+        LOGGER.info(Messages.OK_GET_ALL_STUDENTS_WITHOUT_FACULTY, studentDTOs);
+        return new ResponseEntity<>(studentDTOs, HttpStatus.OK);
     }
 
-    @GetMapping("/student/create")
-    public String getCreationStudentModalWindow(Model model) {
-        LOGGER.info(Messages.TRY_CREATE_STUDENT);
-        return "student/student_create";
+    @GetMapping("/{id}")
+    public ResponseEntity<StudentDTO> getStudentById(@PathVariable Integer id) {
+        LOGGER.info(Messages.TRY_GET_STUDENT_BY_ID, id);
+        StudentDTO studentDTO = studentService.getStudentDTOById(id);
+        LOGGER.info(Messages.OK_GET_STUDENT_BY_ID, id, studentDTO);
+        return new ResponseEntity<>(studentDTO, HttpStatus.OK);
     }
 
-    @PostMapping("/student/create")
-    public String createStudent(@RequestParam("first_name") String firstName,
-                                @RequestParam("last_name") String lastName,
-                                Model model) {
-        Student createdStudent;
-        try {
-            createdStudent = studentService.createStudent(new Student(firstName, lastName));
-        } catch (ServiceException exception) {
-            return ExceptionUtil.handleException(exception, LOGGER, model);
-        }
-        LOGGER.info(Messages.OK_CREATE_STUDENT, createdStudent);
-        return "redirect:/students";
+    @GetMapping("/{id}/courses")
+    public ResponseEntity<StudentDTOWithCourses> getStudentByIdWithCourses(@PathVariable Integer id) {
+        LOGGER.info(Messages.TRY_GET_STUDENT_BY_ID, id);
+        StudentDTOWithCourses studentDTOWithCourses =
+                studentService.getStudentDTOByIdWithCourses(id);
+        LOGGER.info(Messages.OK_GET_STUDENT_BY_ID, id, studentDTOWithCourses);
+        return new ResponseEntity<>(studentDTOWithCourses, HttpStatus.OK);
     }
 
-    @PostMapping("/student/delete")
-    public String deleteStudent(@RequestParam("id") Integer id, Model model) {
+    @DeleteMapping("/{id}")
+    public ResponseEntity<HttpStatus> deleteStudent(@PathVariable Integer id) {
         LOGGER.info(Messages.TRY_DELETE_STUDENT_BY_ID,id);
-        try {
-            studentService.deleteStudentById(id);
-        } catch (ServiceException exception) {
-            return ExceptionUtil.handleException(exception, LOGGER, model);
-        }
+        studentService.deleteStudentById(id);
         LOGGER.info(Messages.OK_DELETE_STUDENT_BY_ID, id);
-        return "redirect:/students";
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @GetMapping("/student/update")
-    public String getUpdationStudentModalWindow(@RequestParam("id") Integer id, Model model) {
-        Student student;
-        try {
-            student = studentService.getStudentById(id);
-        } catch (ServiceException exception) {
-            return ExceptionUtil.handleException(exception, LOGGER, model);
-        }
-        LOGGER.info(Messages.TRY_UPDATE_STUDENT, student);
-        model.addAttribute("student", student);
-        return "student/student_update";
+    @PostMapping
+    public ResponseEntity<StudentDTO> createStudent(@Valid @RequestBody StudentCreateDTO studentCreateDTO) {
+        LOGGER.info(Messages.TRY_CREATE_STUDENT);
+        StudentDTO createdStudentDTO = studentService.createStudentDTO(studentCreateDTO);
+        LOGGER.info(Messages.OK_CREATE_STUDENT, createdStudentDTO);
+        return new ResponseEntity<>(createdStudentDTO, HttpStatus.CREATED);
     }
 
-    @PostMapping("/student/update")
-    public String updateStudent(@RequestParam("id") Integer id,
-                                @RequestParam("first_name") String firstName,
-                                @RequestParam("last_name") String lastName,
-                                Model model) {
-        Student updatedStudent;
-        try {
-            Student student = studentService.getStudentById(id);
-            student.setFirstName(firstName);
-            student.setLastName(lastName);
-            updatedStudent = studentService.updateStudent(student);
-        } catch (ServiceException exception) {
-            return ExceptionUtil.handleException(exception, LOGGER, model);
-        }
-        LOGGER.info(Messages.OK_UPDATE_STUDENT, updatedStudent);
-        return "redirect:/students";
+    @PutMapping("/{id}")
+    public ResponseEntity<StudentDTO> updateStudent(@PathVariable Integer id,
+                                                    @Valid @RequestBody StudentCreateDTO studentCreateDTO) {
+        LOGGER.info(Messages.TRY_UPDATE_STUDENT, studentCreateDTO);
+        studentService.getStudentById(id);
+        StudentDTO updatedStudentDTO = studentService.updateStudentDTO(id, studentCreateDTO);
+        LOGGER.info(Messages.OK_UPDATE_STUDENT, updatedStudentDTO);
+        return new ResponseEntity<>(updatedStudentDTO, HttpStatus.OK);
     }
 
-    @PostMapping("/student/add_course")
-    public String addCourseToStudent(@RequestParam("student_id") Integer studentId,
-                                     @RequestParam("course_id") Integer courseId,
-                                     Model model) {
-        LOGGER.info(Messages.TRY_ADD_COURSE_TO_STUDENT, courseId, studentId);
-        Course course;
-        try {
-            Student student = studentService.getStudentByIdWithCourses(studentId);
-            course = courseService.getCourseById(courseId);
-            student.getCourses().add(course);
-            studentService.updateStudent(student);
-        } catch (ServiceException exception) {
-            return ExceptionUtil.handleException(exception, LOGGER, model);
-        }
-        LOGGER.info(Messages.OK_ADD_COURSE_TO_STUDENT, courseId, studentId, course);
-        return "redirect:/student?&id=" + studentId;
+    @PostMapping("/{studentId}/add-course/{courseId}")
+    public ResponseEntity<StudentDTOWithCourses> addCourseToStudent(@PathVariable Integer studentId,
+                                                                    @PathVariable Integer courseId) {
+        LOGGER.info(Messages.TRY_ADD_COURSE_TO_STUDENT, studentId, courseId);
+        Course course = courseService.getCourseById(courseId);
+        Student student = studentService.getStudentByIdWithCourses(studentId);
+        student.getCourses().add(course);
+        studentService.updateStudent(student);
+        StudentDTOWithCourses studentDTOWithCourses =
+                studentService.getStudentDTOByIdWithCourses(studentId);
+        LOGGER.info(Messages.OK_ADD_COURSE_TO_STUDENT, studentId, courseId, course);
+        return new ResponseEntity<>(studentDTOWithCourses, HttpStatus.OK);
     }
 
-    @PostMapping("/student/remove_course")
-    public String removeCourseFromStudent(@RequestParam("student_id") Integer studentId,
-                                          @RequestParam("course_id") Integer courseId,
-                                          Model model) {
+    @PostMapping("/{studentId}/remove-course/{courseId}")
+    public ResponseEntity<StudentDTOWithCourses> removeCourseFromStudent(@PathVariable Integer studentId,
+                                                                         @PathVariable Integer courseId) {
         LOGGER.info(Messages.TRY_REMOVE_COURSE_FROM_STUDENT, courseId, studentId);
-        Course course;
-        try {
-            Student student = studentService.getStudentByIdWithCourses(studentId);
-            course = courseService.getCourseById(courseId);
-            student.getCourses().remove(course);
-            studentService.updateStudent(student);
-        } catch (ServiceException exception) {
-            return ExceptionUtil.handleException(exception, LOGGER, model);
-        }
+        Student student = studentService.getStudentByIdWithCourses(studentId);
+        Course course = courseService.getCourseById(courseId);
+        student.getCourses().remove(course);
+        studentService.updateStudent(student);
+        StudentDTOWithCourses studentDTOWithCourses =
+                studentService.getStudentDTOByIdWithCourses(studentId);
         LOGGER.info(Messages.OK_REMOVE_COURSE_FROM_STUDENT, courseId, studentId, course);
-        return "redirect:/student?&id=" + studentId;
+        return new ResponseEntity<>(studentDTOWithCourses, HttpStatus.OK);
     }
 
 }

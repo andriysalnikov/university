@@ -8,12 +8,17 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ua.com.foxminded.andriysalnikov.university.constants.Messages;
+import ua.com.foxminded.andriysalnikov.university.dto.TeacherCreateDTO;
+import ua.com.foxminded.andriysalnikov.university.dto.TeacherDTO;
+import ua.com.foxminded.andriysalnikov.university.dto.TeacherDTOWithCourses;
+import ua.com.foxminded.andriysalnikov.university.mapper.TeacherMapper;
 import ua.com.foxminded.andriysalnikov.university.repository.TeacherRepository;
 import ua.com.foxminded.andriysalnikov.university.exceptions.ServiceException;
 import ua.com.foxminded.andriysalnikov.university.model.Teacher;
 import ua.com.foxminded.andriysalnikov.university.service.TeacherService;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -22,10 +27,13 @@ public class TeacherServiceImpl implements TeacherService {
     private static final Logger LOGGER = LoggerFactory.getLogger(TeacherServiceImpl.class);
 
     private final TeacherRepository teacherRepository;
+    private final TeacherMapper teacherMapper;
 
     @Autowired
-    public TeacherServiceImpl(TeacherRepository teacherRepository) {
+    public TeacherServiceImpl(TeacherRepository teacherRepository, TeacherMapper teacherMapper) {
         this.teacherRepository = teacherRepository;
+        this.teacherMapper = teacherMapper;
+
     }
 
     @Override
@@ -34,6 +42,14 @@ public class TeacherServiceImpl implements TeacherService {
         List<Teacher> teachers = teacherRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
         LOGGER.debug(Messages.OK_GET_ALL_TEACHERS, teachers);
         return teachers;
+    }
+
+    @Override
+    public List<TeacherDTO> getAllTeacherDTOs() {
+        return getAllTeachers()
+                .stream()
+                .map(teacherMapper::toDTO)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -48,6 +64,11 @@ public class TeacherServiceImpl implements TeacherService {
     }
 
     @Override
+    public TeacherDTO getTeacherDTOById(Integer id) {
+        return teacherMapper.toDTO(getTeacherById(id));
+    }
+
+    @Override
     public Teacher getTeacherByIdWithCourses(Integer id) {
         LOGGER.debug(Messages.TRY_GET_TEACHER_BY_ID, id);
         Teacher teacher = teacherRepository.getTeacherByIdWithCourses(id).orElseThrow(() -> {
@@ -56,6 +77,11 @@ public class TeacherServiceImpl implements TeacherService {
         });
         LOGGER.debug(Messages.OK_GET_TEACHER_BY_ID, id, teacher);
         return teacher;
+    }
+
+    @Override
+    public TeacherDTOWithCourses getTeacherDTOByIdWithCourses(Integer id) {
+        return teacherMapper.toDTOWithCourses(getTeacherByIdWithCourses(id));
     }
 
     @Modifying
@@ -72,6 +98,13 @@ public class TeacherServiceImpl implements TeacherService {
         }
         LOGGER.debug(Messages.OK_CREATE_TEACHER, createdTeacher);
         return createdTeacher;
+    }
+
+    @Modifying
+    @Transactional
+    @Override
+    public TeacherDTO createTeacherDTO(TeacherCreateDTO teacherCreateDTO) {
+        return teacherMapper.toDTO(createTeacher(teacherMapper.fromDTO(teacherCreateDTO)));
     }
 
     @Modifying
@@ -100,6 +133,15 @@ public class TeacherServiceImpl implements TeacherService {
         }
         LOGGER.debug(Messages.OK_UPDATE_TEACHER, updatedTeacher);
         return updatedTeacher;
+    }
+
+    @Modifying
+    @Transactional
+    @Override
+    public TeacherDTO updateTeacherDTO(Integer id, TeacherCreateDTO teacherCreateDTO) {
+        Teacher teacherToUpdate = teacherMapper.fromDTO(teacherCreateDTO);
+        teacherToUpdate.setId(id);
+        return teacherMapper.toDTO(updateTeacher(teacherToUpdate));
     }
 
 }

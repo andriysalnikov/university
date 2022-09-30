@@ -3,26 +3,30 @@ package ua.com.foxminded.andriysalnikov.university.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import ua.com.foxminded.andriysalnikov.university.constants.Messages;
-import ua.com.foxminded.andriysalnikov.university.exceptions.ServiceException;
-import ua.com.foxminded.andriysalnikov.university.utils.ExceptionUtil;
+import ua.com.foxminded.andriysalnikov.university.dto.EventCreateDTO;
+import ua.com.foxminded.andriysalnikov.university.dto.EventDTO;
 import ua.com.foxminded.andriysalnikov.university.model.ClassRoom;
 import ua.com.foxminded.andriysalnikov.university.model.Course;
-import ua.com.foxminded.andriysalnikov.university.model.Event;
 import ua.com.foxminded.andriysalnikov.university.service.ClassRoomService;
 import ua.com.foxminded.andriysalnikov.university.service.CourseService;
 import ua.com.foxminded.andriysalnikov.university.service.EventService;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
+import javax.validation.Valid;
 import java.util.List;
 
-@Controller
+@RestController
+@RequestMapping("/events")
 public class EventController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(EventController.class);
@@ -39,99 +43,53 @@ public class EventController {
         this.courseService = courseService;
     }
 
-    @GetMapping("/events")
-    public String getAllEvents(Model model) {
+    @GetMapping
+    public ResponseEntity<List<EventDTO>> getAllEvents() {
         LOGGER.info(Messages.TRY_GET_ALL_EVENTS);
-        List<Event> events = eventService.getAllEvents();
-        LOGGER.info(Messages.OK_GET_ALL_EVENTS, events);
-        model.addAttribute("events", events);
-        return "event/events";
+        List<EventDTO> eventDTOs = eventService.getAllEventDTOs();
+        LOGGER.info(Messages.OK_GET_ALL_EVENTS, eventDTOs);
+        return new ResponseEntity<>(eventDTOs, HttpStatus.OK);
     }
 
-    @PostMapping("/event/delete")
-    public String deleteEvent(@RequestParam("id") Integer eventId, Model model) {
-        LOGGER.info(Messages.TRY_DELETE_EVENT_BY_ID, eventId);
-        try {
-            eventService.deleteEventById(eventId);
-        } catch (ServiceException exception) {
-            return ExceptionUtil.handleException(exception, LOGGER, model);
-        }
-        LOGGER.info(Messages.OK_DELETE_EVENT_BY_ID, eventId);
-        return "redirect:/events";
+    @GetMapping("/{id}")
+    public ResponseEntity<EventDTO> getEventById(@PathVariable Integer id) {
+        LOGGER.info(Messages.TRY_GET_EVENT_BY_ID, id);
+        EventDTO eventDTO = eventService.getEventDTOById(id);
+        LOGGER.info(Messages.OK_GET_EVENT_BY_ID, id, eventDTO);
+        return new ResponseEntity<>(eventDTO, HttpStatus.OK);
     }
 
-    @GetMapping("/event/create")
-    public String getCreationEventModalWindow(Model model) {
+    @DeleteMapping("/{id}")
+    public ResponseEntity<HttpStatus> deleteEvent(@PathVariable Integer id) {
+        LOGGER.info(Messages.TRY_DELETE_EVENT_BY_ID,id);
+        eventService.deleteEventById(id);
+        LOGGER.info(Messages.OK_DELETE_EVENT_BY_ID, id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @PostMapping("/course/{courseId}/classroom/{classRoomId}")
+    public ResponseEntity<EventDTO> createEvent(@PathVariable Integer courseId,
+                                                @PathVariable Integer classRoomId,
+                                                @Valid @RequestBody EventCreateDTO eventCreateDTO) {
         LOGGER.info(Messages.TRY_CREATE_EVENT);
-        List<ClassRoom> classRooms = classRoomService.getAllClassRooms();
-        List<Course> courses = courseService.getAllCourses();
-        model.addAttribute("classrooms", classRooms);
-        model.addAttribute("courses", courses);
-        return "event/event_create";
+        Course course = courseService.getCourseById(courseId);
+        ClassRoom classRoom = classRoomService.getClassRoomById(classRoomId);
+        EventDTO createdEventDTO = eventService.createEventDTO(eventCreateDTO, course, classRoom);
+        LOGGER.info(Messages.OK_CREATE_EVENT, createdEventDTO);
+        return new ResponseEntity<>(createdEventDTO, HttpStatus.CREATED);
     }
 
-    @PostMapping("/event/create")
-    public String createEvent(@RequestParam("date_of_event") String date,
-                              @RequestParam("start_time") String time,
-                              @RequestParam("course_id") Integer courseId,
-                              @RequestParam("classroom_id") Integer classRoomId,
-                              Model model) {
-        Event createdEvent;
-        try {
-            createdEvent = eventService.createEvent(
-                    collectEventFromParameters(null, date, time,courseId, classRoomId));
-        } catch (ServiceException exception) {
-            return ExceptionUtil.handleException(exception, LOGGER, model);
-        }
-        LOGGER.info(Messages.OK_CREATE_EVENT, createdEvent);
-        return "redirect:/events";
-    }
-
-    @GetMapping("/event/update")
-    public String getUpdationEventModalWindow(@RequestParam("id") Integer eventId, Model model) {
-        List<ClassRoom> classRooms = classRoomService.getAllClassRooms();
-        List<Course> courses = courseService.getAllCourses();
-        Event event;
-        try {
-            event = eventService.getEventById(eventId);
-        } catch (ServiceException exception) {
-            return ExceptionUtil.handleException(exception, LOGGER, model);
-        }
-        LOGGER.info(Messages.TRY_UPDATE_EVENT, event);
-        model.addAttribute("classrooms", classRooms);
-        model.addAttribute("courses", courses);
-        model.addAttribute("event", event);
-        return "event/event_update";
-    }
-
-    @PostMapping("/event/update")
-    public String updateEvent(@RequestParam("id") Integer eventId,
-                              @RequestParam("date_of_event") String date,
-                              @RequestParam("start_time") String time,
-                              @RequestParam("course_id") Integer courseId,
-                              @RequestParam("classroom_id") Integer classRoomId,
-                              Model model) {
-        Event updatedEvent;
-        try {
-            updatedEvent = eventService.updateEvent(
-                    collectEventFromParameters(eventId, date, time,courseId, classRoomId));
-        } catch (ServiceException exception) {
-            return ExceptionUtil.handleException(exception, LOGGER, model);
-        }
-        LOGGER.info(Messages.OK_UPDATE_EVENT, updatedEvent);
-        return "redirect:/events";
-    }
-
-    private Event collectEventFromParameters(Integer eventId,String date, String time,
-                                             Integer courseId, Integer classRoomId) {
-        Event event = new Event(
-                LocalDate.parse(date),
-                LocalTime.parse(time.replace('_', ':')),
-                LocalTime.parse(time.replace('_', ':')).plusHours(2),
-                classRoomService.getClassRoomById(classRoomId),
-                courseService.getCourseById(courseId));
-        event.setId(eventId);
-        return event;
+    @PutMapping("/{id}/course/{courseId}/classroom/{classRoomId}")
+    public ResponseEntity<EventDTO> updateEvent(@PathVariable Integer id, @PathVariable Integer courseId,
+                                                @PathVariable Integer classRoomId,
+                                                @Valid @RequestBody EventCreateDTO eventCreateDTO) {
+        LOGGER.info(Messages.TRY_UPDATE_EVENT, eventCreateDTO);
+        eventService.getEventById(id);
+        Course course = courseService.getCourseById(courseId);
+        ClassRoom classRoom = classRoomService.getClassRoomById(classRoomId);
+        EventDTO updatedEventDTO = eventService.updateEventDTO(id, eventCreateDTO, course, classRoom);
+        LOGGER.info(Messages.OK_UPDATE_EVENT, updatedEventDTO);
+        return new ResponseEntity<>(updatedEventDTO, HttpStatus.OK);
     }
 
 }

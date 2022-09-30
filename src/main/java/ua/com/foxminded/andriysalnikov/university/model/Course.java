@@ -1,14 +1,28 @@
 package ua.com.foxminded.andriysalnikov.university.model;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import javax.persistence.Id;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Column;
+import javax.persistence.ManyToOne;
+import javax.persistence.JoinColumn;
+import javax.persistence.GenerationType;
+import javax.persistence.CascadeType;
+import javax.persistence.FetchType;
 import java.util.Objects;
 
 @Entity
 @Table(name = "courses", schema = "university")
+@Getter
+@Setter
+@NoArgsConstructor
+@ToString
 public class Course {
 
     @Id
@@ -16,70 +30,27 @@ public class Course {
     private Integer id;
 
     @Column(name = "name")
-    @NotBlank(message = "Course Name cannot be blank")
-    @Size(max = 20, message = "Course Name length must be no longer than 20 symbols")
     private String name;
 
     // Description can be Blank
     @Column(name = "description")
-    @Size(max = 100, message = "Course Description length must be no longer than 100 symbols")
     private String description;
 
     @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH },
             fetch = FetchType.LAZY)
     @JoinColumn(name = "teacher_id")
+    @ToString.Exclude
     private Teacher teacher;
 
     @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH },
             fetch = FetchType.LAZY)
     @JoinColumn(name = "faculty_id")
+    @ToString.Exclude
     private Faculty faculty;
-
-    public Course() { }
 
     public Course(String name, String description) {
         this.name = name;
         this.description = description;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public Teacher getTeacher() {
-        return teacher;
-    }
-
-    public void setTeacher(Teacher teacher) {
-        this.teacher = teacher;
-    }
-
-    public Faculty getFaculty() {
-        return faculty;
-    }
-
-    public void setFaculty(Faculty faculty) {
-        this.faculty = faculty;
     }
 
     @Override
@@ -94,11 +65,6 @@ public class Course {
     @Override
     public int hashCode() {
         return Objects.hash(name, description);
-    }
-
-    @Override
-    public String toString() {
-        return "Course{" + "id=" + id + ", name='" + name + '\'' + ", description='" + description + '\'' + '}';
     }
 
 }

@@ -1,15 +1,30 @@
 package ua.com.foxminded.andriysalnikov.university.model;
 
-import javax.persistence.*;
-import javax.validation.Constraint;
-import javax.validation.constraints.Future;
-import javax.validation.constraints.NotNull;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import javax.persistence.Id;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Column;
+import javax.persistence.OneToOne;
+import javax.persistence.JoinColumn;
+import javax.persistence.GenerationType;
+import javax.persistence.CascadeType;
+import javax.persistence.FetchType;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Objects;
 
 @Entity
 @Table(name = "events", schema = "university")
+@Getter
+@Setter
+@NoArgsConstructor
+@ToString
 public class Event {
 
     @Id
@@ -33,65 +48,18 @@ public class Event {
     @OneToOne(cascade = { CascadeType.DETACH, CascadeType.REFRESH },
             fetch = FetchType.EAGER)
     @JoinColumn(name = "course_id")
-    @NotNull(message = "Course in Event cannot be Null")
     private Course course;
 
-    public Event() { }
+    public Event(LocalDate dayOfEvent, LocalTime startTime, LocalTime endTime) {
+        this.dayOfEvent = dayOfEvent;
+        this.startTime = startTime;
+        this.endTime = endTime;
+    }
 
     public Event(LocalDate dayOfEvent, LocalTime startTime, LocalTime endTime,
                  ClassRoom classRoom, Course course) {
-        this.dayOfEvent = dayOfEvent;
-        this.startTime = startTime;
-        this.endTime = endTime;
+        this(dayOfEvent, startTime, endTime);
         this.classRoom = classRoom;
-        this.course = course;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public LocalDate getDayOfEvent() {
-        return dayOfEvent;
-    }
-
-    public void setDayOfEvent(LocalDate dayOfEvent) {
-        this.dayOfEvent = dayOfEvent;
-    }
-
-    public LocalTime getStartTime() {
-        return startTime;
-    }
-
-    public void setStartTime(LocalTime startTime) {
-        this.startTime = startTime;
-    }
-
-    public LocalTime getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(LocalTime endTime) {
-        this.endTime = endTime;
-    }
-
-    public ClassRoom getClassRoom() {
-        return classRoom;
-    }
-
-    public void setClassRoom(ClassRoom classRoom) {
-        this.classRoom = classRoom;
-    }
-
-    public Course getCourse() {
-        return course;
-    }
-
-    public void setCourse(Course course) {
         this.course = course;
     }
 
@@ -111,15 +79,4 @@ public class Event {
         return Objects.hash(dayOfEvent, startTime, endTime, course);
     }
 
-    @Override
-    public String toString() {
-        return "Event{" +
-                "id=" + id +
-                ", dayOfEvent=" + dayOfEvent +
-                ", startTime=" + startTime +
-                ", endTime=" + endTime +
-                ", classRoom=" + classRoom +
-                ", course=" + course +
-                '}';
-    }
 }
