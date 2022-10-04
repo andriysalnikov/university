@@ -82,8 +82,7 @@ Add REST endpoints to your project. All UI functionality should be available in 
 
 ### Task 22 - Swagger
 Add Swagger documentation to your project. You can use 2 or 3 versions or ask your mentor.
-http://localhost:8080/university/v2/api-docs
-http://localhost:8080/university/swagger-ui
+Go to your browser and type `http://localhost:8080/university/swagger-ui/` in address bar
 
 #### Tools that were used
 - Oracle JDK (11.0.16)
