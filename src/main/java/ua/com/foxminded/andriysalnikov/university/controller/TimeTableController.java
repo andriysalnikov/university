@@ -1,5 +1,8 @@
 package ua.com.foxminded.andriysalnikov.university.controller;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +25,7 @@ import java.time.LocalDate;
 
 @RestController
 @RequestMapping("/timetable")
+@Api("Controller to work with 'Timetables'")
 public class TimeTableController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TimeTableController.class);
@@ -39,9 +43,13 @@ public class TimeTableController {
     }
 
     @GetMapping("/teacher/{id}/start-date/{startDate}/end-date/{endDate}")
-    public ResponseEntity<TimeTableDTO> showTeacherTimeTable(@PathVariable Integer id,
-                @PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
-                @PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate) {
+    @ApiOperation("Getting the 'Timetable' (All 'Events') from start date to end date for 'Teacher' by Teacher 'id'")
+    public ResponseEntity<TimeTableDTO> showTeacherTimeTable(
+            @ApiParam(value = "The Teacher id", required = true) @PathVariable Integer id,
+            @ApiParam(value = "Start date (in ISO)", required = true)
+                    @PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
+            @ApiParam(value = "End date (in ISO)", required = true)
+                    @PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate) {
         Teacher teacher = teacherService.getTeacherByIdWithCourses(id);
         LOGGER.info(Messages.TRY_GET_TIMETABLE_FROM_STARTDATE_TO_ENDDATE_BY_TEACHER,
                 startDate, endDate);
@@ -53,9 +61,13 @@ public class TimeTableController {
     }
 
     @GetMapping("/student/{id}/start-date/{startDate}/end-date/{endDate}")
-    public ResponseEntity<TimeTableDTO> showStudentTimeTable(@PathVariable Integer id,
-                @PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
-                @PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate) {
+    @ApiOperation("Getting the 'Timetable' (All 'Events') from start date to end date for 'Student' by Student 'id'")
+    public ResponseEntity<TimeTableDTO> showStudentTimeTable(
+            @ApiParam(value = "The Student id", required = true) @PathVariable Integer id,
+            @ApiParam(value = "Start date (in ISO)", required = true)
+                    @PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
+            @ApiParam(value = "End date (in ISO)", required = true)
+                    @PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate) {
         Student student = studentService.getStudentByIdWithCourses(id);
         LOGGER.info(Messages.TRY_GET_TIMETABLE_FROM_STARTDATE_TO_ENDDATE_BY_STUDENT,
                 startDate, endDate);

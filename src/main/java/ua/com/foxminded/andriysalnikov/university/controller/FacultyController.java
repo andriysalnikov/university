@@ -1,5 +1,8 @@
 package ua.com.foxminded.andriysalnikov.university.controller;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +37,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/faculties")
+@Api("Controller to work with 'Faculties'")
 public class FacultyController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(FacultyController.class);
@@ -53,6 +57,7 @@ public class FacultyController {
     }
 
     @GetMapping
+    @ApiOperation("Getting the List of All 'Faculties'")
     public ResponseEntity<List<FacultyDTO>> getAllFaculties() {
         LOGGER.info(Messages.TRY_GET_ALL_FACULTIES);
         List<FacultyDTO> facultyDTOs = facultyService.getAllFacultyDTOs();
@@ -61,7 +66,9 @@ public class FacultyController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<FacultyDTO> getFacultyById(@PathVariable Integer id) {
+    @ApiOperation("Getting the 'Faculty' by 'id'")
+    public ResponseEntity<FacultyDTO> getFacultyById(
+            @ApiParam(value = "The Faculty id", required = true) @PathVariable Integer id) {
         LOGGER.info(Messages.TRY_GET_FACULTY_BY_ID, id);
         FacultyDTO facultyDTO = facultyService.getFacultyDTOById(id);
         LOGGER.info(Messages.OK_GET_FACULTY_BY_ID, id, facultyDTO);
@@ -69,7 +76,9 @@ public class FacultyController {
     }
 
     @GetMapping("/{id}/courses")
-    public ResponseEntity<FacultyDTOWithCourses> getFacultyByIdWithCourses(@PathVariable Integer id) {
+    @ApiOperation("Getting the 'Faculty' by 'id' with List of 'Courses'")
+    public ResponseEntity<FacultyDTOWithCourses> getFacultyByIdWithCourses(
+            @ApiParam(value = "The Faculty id", required = true) @PathVariable Integer id) {
         LOGGER.info(Messages.TRY_GET_FACULTY_BY_ID, id);
         FacultyDTOWithCourses facultyDTOWithCourses =
                 facultyService.getFacultyDTOByIdWithCourses(id);
@@ -78,7 +87,9 @@ public class FacultyController {
     }
 
     @GetMapping("/{id}/classrooms")
-    public ResponseEntity<FacultyDTOWithClassRooms> getFacultyByIdWithClassRooms(@PathVariable Integer id) {
+    @ApiOperation("Getting the 'Faculty' by 'id' with List of 'Classrooms'")
+    public ResponseEntity<FacultyDTOWithClassRooms> getFacultyByIdWithClassRooms(
+            @ApiParam(value = "The Faculty id", required = true) @PathVariable Integer id) {
         LOGGER.info(Messages.TRY_GET_FACULTY_BY_ID, id);
         FacultyDTOWithClassRooms facultyDTOWithClassRooms
                 = facultyService.getFacultyDTOByIdWithClassRooms(id);
@@ -87,7 +98,9 @@ public class FacultyController {
     }
 
     @GetMapping("/{id}/students")
-    public ResponseEntity<FacultyDTOWithStudents> getFacultyByIdWithStudents(@PathVariable Integer id) {
+    @ApiOperation("Getting the 'Faculty' by 'id' with List of 'Students'")
+    public ResponseEntity<FacultyDTOWithStudents> getFacultyByIdWithStudents(
+            @ApiParam(value = "The Faculty id", required = true) @PathVariable Integer id) {
         LOGGER.info(Messages.TRY_GET_FACULTY_BY_ID, id);
         FacultyDTOWithStudents facultyDTOWithStudents =
                 facultyService.getFacultyDTOByIdWithStudents(id);
@@ -96,7 +109,9 @@ public class FacultyController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<HttpStatus> deleteFaculty(@PathVariable Integer id) {
+    @ApiOperation("Deleting the 'Faculty' by 'id'")
+    public ResponseEntity<HttpStatus> deleteFaculty(
+            @ApiParam(value = "The Faculty id", required = true) @PathVariable Integer id) {
         LOGGER.info(Messages.TRY_DELETE_FACULTY_BY_ID,id);
         facultyService.deleteFacultyById(id);
         LOGGER.info(Messages.OK_DELETE_FACULTY_BY_ID, id);
@@ -104,6 +119,7 @@ public class FacultyController {
     }
 
     @PostMapping
+    @ApiOperation("Creating the 'Faculty'")
     public ResponseEntity<FacultyDTO> createFaculty(@Valid @RequestBody FacultyCreateDTO facultyCreateDTO) {
         LOGGER.info(Messages.TRY_CREATE_FACULTY);
         FacultyDTO createdFacultyDTO =
@@ -113,7 +129,9 @@ public class FacultyController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<FacultyDTO> updateFaculty(@PathVariable Integer id,
+    @ApiOperation("Updating the 'Faculty' by 'id'")
+    public ResponseEntity<FacultyDTO> updateFaculty(
+            @ApiParam(value = "The Faculty id", required = true) @PathVariable Integer id,
                                                     @Valid @RequestBody FacultyCreateDTO facultyCreateDTO) {
         LOGGER.info(Messages.TRY_UPDATE_FACULTY, facultyCreateDTO);
         facultyService.getFacultyById(id);
@@ -123,8 +141,10 @@ public class FacultyController {
     }
 
     @PostMapping("/{facultyId}/add-course/{courseId}")
-    public ResponseEntity<FacultyDTOWithCourses> addCourseToFaculty(@PathVariable Integer facultyId,
-                                                                    @PathVariable Integer courseId) {
+    @ApiOperation("Adding the 'Course' by 'id' to 'Faculty' by 'id'")
+    public ResponseEntity<FacultyDTOWithCourses> addCourseToFaculty(
+            @ApiParam(value = "The Faculty id", required = true) @PathVariable Integer facultyId,
+            @ApiParam(value = "The Course id", required = true) @PathVariable Integer courseId) {
         LOGGER.info(Messages.TRY_ADD_COURSE_TO_FACULTY, facultyId, courseId);
         Course course = courseService.getCourseById(courseId);
         if (course.getFaculty() != null) {
@@ -140,8 +160,10 @@ public class FacultyController {
     }
 
     @PostMapping("/{facultyId}/remove-course/{courseId}")
-    public ResponseEntity<FacultyDTOWithCourses> removeCourseFromFaculty(@PathVariable Integer facultyId,
-                                                                         @PathVariable Integer courseId) {
+    @ApiOperation("Removing the 'Course' by 'id' from 'Faculty' by 'id'")
+    public ResponseEntity<FacultyDTOWithCourses> removeCourseFromFaculty(
+            @ApiParam(value = "The Faculty id", required = true) @PathVariable Integer facultyId,
+            @ApiParam(value = "The Course id", required = true) @PathVariable Integer courseId) {
         LOGGER.info(Messages.TRY_REMOVE_COURSE_FROM_FACULTY, courseId, facultyId);
         Course course = courseService.getCourseById(courseId);
         if (course.getFaculty() == null) {
@@ -156,8 +178,10 @@ public class FacultyController {
     }
 
     @PostMapping("/{facultyId}/add-classroom/{classRoomId}")
-    public ResponseEntity<FacultyDTOWithClassRooms> addClassRoomToFaculty(@PathVariable Integer facultyId,
-                                                                          @PathVariable Integer classRoomId) {
+    @ApiOperation("Adding the 'Classroom' by 'id' to 'Faculty' by 'id'")
+    public ResponseEntity<FacultyDTOWithClassRooms> addClassRoomToFaculty(
+            @ApiParam(value = "The Faculty id", required = true) @PathVariable Integer facultyId,
+            @ApiParam(value = "The Classroom id", required = true) @PathVariable Integer classRoomId) {
         LOGGER.info(Messages.TRY_ADD_CLASSROOM_TO_FACULTY, facultyId, classRoomId);
         ClassRoom classRoom = classRoomService.getClassRoomById(classRoomId);
         if (classRoom.getFaculty() != null) {
@@ -173,8 +197,10 @@ public class FacultyController {
     }
 
     @PostMapping("/{facultyId}/remove-classroom/{classRoomId}")
-    public ResponseEntity<FacultyDTOWithClassRooms> removeClassRoomFromFaculty(@PathVariable Integer facultyId,
-                                                                               @PathVariable Integer classRoomId) {
+    @ApiOperation("Removing the 'Classroom' by 'id' from 'Faculty' by 'id'")
+    public ResponseEntity<FacultyDTOWithClassRooms> removeClassRoomFromFaculty(
+            @ApiParam(value = "The Faculty id", required = true) @PathVariable Integer facultyId,
+            @ApiParam(value = "The Classroom id", required = true) @PathVariable Integer classRoomId) {
         LOGGER.info(Messages.TRY_REMOVE_CLASSROOM_FROM_FACULTY, classRoomId, facultyId);
         ClassRoom classRoom = classRoomService.getClassRoomById(classRoomId);
         if (classRoom.getFaculty() == null) {
@@ -189,8 +215,10 @@ public class FacultyController {
     }
 
     @PostMapping("/{facultyId}/add-student/{studentId}")
-    public ResponseEntity<FacultyDTOWithStudents> addStudentToFaculty(@PathVariable Integer facultyId,
-                                                                      @PathVariable Integer studentId) {
+    @ApiOperation("Adding the 'Student' by 'id' to 'Faculty' by 'id'")
+    public ResponseEntity<FacultyDTOWithStudents> addStudentToFaculty(
+            @ApiParam(value = "The Faculty id", required = true) @PathVariable Integer facultyId,
+            @ApiParam(value = "The Student id", required = true) @PathVariable Integer studentId) {
         LOGGER.info(Messages.TRY_ADD_STUDENT_TO_FACULTY, facultyId, studentId);
         Student student = studentService.getStudentById(studentId);
         if (student.getFaculty() != null) {
@@ -206,8 +234,10 @@ public class FacultyController {
     }
 
     @PostMapping("/{facultyId}/remove-student/{studentId}")
-    public ResponseEntity<FacultyDTOWithStudents> removeStudentFromFaculty(@PathVariable Integer facultyId,
-                                                                           @PathVariable Integer studentId) {
+    @ApiOperation("Removing the 'Student' by 'id' from 'Faculty' by 'id'")
+    public ResponseEntity<FacultyDTOWithStudents> removeStudentFromFaculty(
+            @ApiParam(value = "The Faculty id", required = true) @PathVariable Integer facultyId,
+            @ApiParam(value = "The Student id", required = true) @PathVariable Integer studentId) {
         LOGGER.info(Messages.TRY_REMOVE_STUDENT_FROM_FACULTY, studentId, facultyId);
         Student student = studentService.getStudentById(studentId);
         if (student.getFaculty() == null) {

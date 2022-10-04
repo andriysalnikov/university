@@ -1,5 +1,8 @@
 package ua.com.foxminded.andriysalnikov.university.controller;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +30,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/students")
+@Api("Controller to work with 'Students'")
 public class StudentController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(StudentController.class);
@@ -41,6 +45,7 @@ public class StudentController {
     }
 
     @GetMapping
+    @ApiOperation("Getting the List of All 'Students'")
     public ResponseEntity<List<StudentDTO>> getAllStudents() {
         LOGGER.info(Messages.TRY_GET_ALL_STUDENTS);
         List<StudentDTO> studentDTOs = studentService.getAllStudentDTOs();
@@ -49,6 +54,7 @@ public class StudentController {
     }
 
     @GetMapping("/without-faculty")
+    @ApiOperation("Getting the List of All 'Students' without 'Faculty' ('Faculty' is null)")
     public ResponseEntity<List<StudentDTO>> getAllStudentsWithoutFaculty() {
         LOGGER.info(Messages.TRY_GET_ALL_STUDENTS_WITHOUT_FACULTY);
         List<StudentDTO> studentDTOs = studentService.getAllStudentDTOsWithoutFaculty();
@@ -57,7 +63,9 @@ public class StudentController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<StudentDTO> getStudentById(@PathVariable Integer id) {
+    @ApiOperation("Getting the 'Student' by 'id'")
+    public ResponseEntity<StudentDTO> getStudentById(
+            @ApiParam(value = "The Student id", required = true) @PathVariable Integer id) {
         LOGGER.info(Messages.TRY_GET_STUDENT_BY_ID, id);
         StudentDTO studentDTO = studentService.getStudentDTOById(id);
         LOGGER.info(Messages.OK_GET_STUDENT_BY_ID, id, studentDTO);
@@ -65,7 +73,9 @@ public class StudentController {
     }
 
     @GetMapping("/{id}/courses")
-    public ResponseEntity<StudentDTOWithCourses> getStudentByIdWithCourses(@PathVariable Integer id) {
+    @ApiOperation("Getting the 'Student' by 'id' with List of 'Courses'")
+    public ResponseEntity<StudentDTOWithCourses> getStudentByIdWithCourses(
+            @ApiParam(value = "The Student id", required = true) @PathVariable Integer id) {
         LOGGER.info(Messages.TRY_GET_STUDENT_BY_ID, id);
         StudentDTOWithCourses studentDTOWithCourses =
                 studentService.getStudentDTOByIdWithCourses(id);
@@ -74,7 +84,9 @@ public class StudentController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<HttpStatus> deleteStudent(@PathVariable Integer id) {
+    @ApiOperation("Deleting the 'Student' by 'id'")
+    public ResponseEntity<HttpStatus> deleteStudent(
+            @ApiParam(value = "The Student id", required = true) @PathVariable Integer id) {
         LOGGER.info(Messages.TRY_DELETE_STUDENT_BY_ID,id);
         studentService.deleteStudentById(id);
         LOGGER.info(Messages.OK_DELETE_STUDENT_BY_ID, id);
@@ -82,6 +94,7 @@ public class StudentController {
     }
 
     @PostMapping
+    @ApiOperation("Creating the 'Student'")
     public ResponseEntity<StudentDTO> createStudent(@Valid @RequestBody StudentCreateDTO studentCreateDTO) {
         LOGGER.info(Messages.TRY_CREATE_STUDENT);
         StudentDTO createdStudentDTO = studentService.createStudentDTO(studentCreateDTO);
@@ -90,7 +103,9 @@ public class StudentController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<StudentDTO> updateStudent(@PathVariable Integer id,
+    @ApiOperation("Updating the 'Student' by 'id'")
+    public ResponseEntity<StudentDTO> updateStudent(
+            @ApiParam(value = "The Student id", required = true) @PathVariable Integer id,
                                                     @Valid @RequestBody StudentCreateDTO studentCreateDTO) {
         LOGGER.info(Messages.TRY_UPDATE_STUDENT, studentCreateDTO);
         studentService.getStudentById(id);
@@ -100,8 +115,10 @@ public class StudentController {
     }
 
     @PostMapping("/{studentId}/add-course/{courseId}")
-    public ResponseEntity<StudentDTOWithCourses> addCourseToStudent(@PathVariable Integer studentId,
-                                                                    @PathVariable Integer courseId) {
+    @ApiOperation("Adding the 'Course' by 'id' to 'Student' by 'id'")
+    public ResponseEntity<StudentDTOWithCourses> addCourseToStudent(
+            @ApiParam(value = "The Student id", required = true) @PathVariable Integer studentId,
+            @ApiParam(value = "The Course id", required = true) @PathVariable Integer courseId) {
         LOGGER.info(Messages.TRY_ADD_COURSE_TO_STUDENT, studentId, courseId);
         Course course = courseService.getCourseById(courseId);
         Student student = studentService.getStudentByIdWithCourses(studentId);
@@ -114,8 +131,10 @@ public class StudentController {
     }
 
     @PostMapping("/{studentId}/remove-course/{courseId}")
-    public ResponseEntity<StudentDTOWithCourses> removeCourseFromStudent(@PathVariable Integer studentId,
-                                                                         @PathVariable Integer courseId) {
+    @ApiOperation("Removing the 'Course' by 'id' from 'Student' by 'id'")
+    public ResponseEntity<StudentDTOWithCourses> removeCourseFromStudent(
+            @ApiParam(value = "The Student id", required = true) @PathVariable Integer studentId,
+            @ApiParam(value = "The Course id", required = true) @PathVariable Integer courseId) {
         LOGGER.info(Messages.TRY_REMOVE_COURSE_FROM_STUDENT, courseId, studentId);
         Student student = studentService.getStudentByIdWithCourses(studentId);
         Course course = courseService.getCourseById(courseId);
