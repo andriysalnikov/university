@@ -1,5 +1,8 @@
 package ua.com.foxminded.andriysalnikov.university.controller;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +26,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/courses")
+@Api("Controller to work with 'Courses'")
 public class CourseController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CourseController.class);
@@ -35,6 +39,7 @@ public class CourseController {
     }
 
     @GetMapping
+    @ApiOperation("Getting the List of All 'Classrooms'")
     public ResponseEntity<List<CourseDTO>> getAllCourses() {
         LOGGER.info(Messages.TRY_GET_ALL_COURSES);
         List<CourseDTO> courseDTOs = courseService.getAllCourseDTOs();
@@ -43,6 +48,7 @@ public class CourseController {
     }
 
     @GetMapping("/without-teacher")
+    @ApiOperation("Getting the List of All 'Courses' without 'Teacher' ('Teacher' is null)")
     public ResponseEntity<List<CourseDTO>> getAllCoursesWithoutTeacher() {
         LOGGER.info(Messages.TRY_GET_ALL_COURSES_WITHOUT_TEACHER);
         List<CourseDTO> courseDTOs = courseService.getAllCourseDTOsWithoutTeacher();
@@ -51,6 +57,7 @@ public class CourseController {
     }
 
     @GetMapping("/without-faculty")
+    @ApiOperation("Getting the List of All 'Courses' without 'Faculty' ('Faculty' is null)")
     public ResponseEntity<List<CourseDTO>> getAllCoursesWithoutFaculty() {
         LOGGER.info(Messages.TRY_GET_ALL_COURSES_WITHOUT_FACULTY);
         List<CourseDTO> courseDTOs = courseService.getAllCourseDTOsWithoutFaculty();
@@ -59,7 +66,9 @@ public class CourseController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CourseDTO> getCourseById(@PathVariable Integer id) {
+    @ApiOperation("Getting the 'Course' by 'id'")
+    public ResponseEntity<CourseDTO> getCourseById(
+            @ApiParam(value = "The Course id", required = true) @PathVariable Integer id) {
         LOGGER.info(Messages.TRY_GET_COURSE_BY_ID, id);
         CourseDTO courseDTO = courseService.getCourseDTOById(id);
         LOGGER.info(Messages.OK_GET_COURSE_BY_ID, id, courseDTO);
@@ -67,7 +76,9 @@ public class CourseController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<HttpStatus> deleteCourse(@PathVariable Integer id) {
+    @ApiOperation("Deleting the 'Course' by 'id'")
+    public ResponseEntity<HttpStatus> deleteCourse(
+            @ApiParam(value = "The Course id", required = true) @PathVariable Integer id) {
         LOGGER.info(Messages.TRY_DELETE_COURSE_BY_ID,id);
         courseService.deleteCourseById(id);
         LOGGER.info(Messages.OK_DELETE_COURSE_BY_ID, id);
@@ -75,6 +86,7 @@ public class CourseController {
     }
 
     @PostMapping
+    @ApiOperation("Creating the 'Course'")
     public ResponseEntity<CourseDTO> createCourse(@Valid @RequestBody CourseCreateDTO courseCreateDTO) {
         LOGGER.info(Messages.TRY_CREATE_COURSE);
         CourseDTO createdCourseDTO =
@@ -84,7 +96,9 @@ public class CourseController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CourseDTO> updateCourse(@PathVariable Integer id,
+    @ApiOperation("Updating the 'Course' by 'id'")
+    public ResponseEntity<CourseDTO> updateCourse(
+            @ApiParam(value = "The Course id", required = true) @PathVariable Integer id,
                                                   @Valid @RequestBody CourseCreateDTO courseCreateDTO) {
         LOGGER.info(Messages.TRY_UPDATE_COURSE, courseCreateDTO);
         courseService.getCourseById(id);

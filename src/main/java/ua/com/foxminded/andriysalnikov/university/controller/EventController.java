@@ -1,5 +1,8 @@
 package ua.com.foxminded.andriysalnikov.university.controller;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +30,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/events")
+@Api("Controller to work with 'Events'")
 public class EventController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(EventController.class);
@@ -44,6 +48,7 @@ public class EventController {
     }
 
     @GetMapping
+    @ApiOperation("Getting the List of All 'Events'")
     public ResponseEntity<List<EventDTO>> getAllEvents() {
         LOGGER.info(Messages.TRY_GET_ALL_EVENTS);
         List<EventDTO> eventDTOs = eventService.getAllEventDTOs();
@@ -52,6 +57,7 @@ public class EventController {
     }
 
     @GetMapping("/{id}")
+    @ApiOperation("Getting the 'Event' by 'id'")
     public ResponseEntity<EventDTO> getEventById(@PathVariable Integer id) {
         LOGGER.info(Messages.TRY_GET_EVENT_BY_ID, id);
         EventDTO eventDTO = eventService.getEventDTOById(id);
@@ -60,6 +66,7 @@ public class EventController {
     }
 
     @DeleteMapping("/{id}")
+    @ApiOperation("Deleting the 'Event' by 'id'")
     public ResponseEntity<HttpStatus> deleteEvent(@PathVariable Integer id) {
         LOGGER.info(Messages.TRY_DELETE_EVENT_BY_ID,id);
         eventService.deleteEventById(id);
@@ -68,8 +75,10 @@ public class EventController {
     }
 
     @PostMapping("/course/{courseId}/classroom/{classRoomId}")
-    public ResponseEntity<EventDTO> createEvent(@PathVariable Integer courseId,
-                                                @PathVariable Integer classRoomId,
+    @ApiOperation("Creating the 'Event', using 'CourseId' and 'ClassroomId'")
+    public ResponseEntity<EventDTO> createEvent(
+            @ApiParam(value = "The Course id", required = true) @PathVariable Integer courseId,
+            @ApiParam(value = "The Classroom id", required = true) @PathVariable Integer classRoomId,
                                                 @Valid @RequestBody EventCreateDTO eventCreateDTO) {
         LOGGER.info(Messages.TRY_CREATE_EVENT);
         Course course = courseService.getCourseById(courseId);
@@ -80,8 +89,11 @@ public class EventController {
     }
 
     @PutMapping("/{id}/course/{courseId}/classroom/{classRoomId}")
-    public ResponseEntity<EventDTO> updateEvent(@PathVariable Integer id, @PathVariable Integer courseId,
-                                                @PathVariable Integer classRoomId,
+    @ApiOperation("Updating the 'Event' by 'id', using 'CourseId' and 'ClassroomId'")
+    public ResponseEntity<EventDTO> updateEvent(
+            @ApiParam(value = "The Event id", required = true) @PathVariable Integer id,
+            @ApiParam(value = "The Course id", required = true) @PathVariable Integer courseId,
+            @ApiParam(value = "The Classroom id", required = true) @PathVariable Integer classRoomId,
                                                 @Valid @RequestBody EventCreateDTO eventCreateDTO) {
         LOGGER.info(Messages.TRY_UPDATE_EVENT, eventCreateDTO);
         eventService.getEventById(id);

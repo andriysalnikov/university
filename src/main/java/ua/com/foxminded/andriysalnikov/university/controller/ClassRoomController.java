@@ -1,5 +1,8 @@
 package ua.com.foxminded.andriysalnikov.university.controller;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +26,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/classrooms")
+@Api("Controller to work with 'Classrooms'")
 public class ClassRoomController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ClassRoomController.class);
@@ -35,6 +39,7 @@ public class ClassRoomController {
     }
 
     @GetMapping
+    @ApiOperation("Getting the List of All 'Classrooms'")
     public ResponseEntity<List<ClassRoomDTO>> getAllClassRooms() {
         LOGGER.info(Messages.TRY_GET_ALL_CLASSROOMS);
         List<ClassRoomDTO> classRoomDTOs = classRoomService.getAllClassRoomDTOs();
@@ -43,6 +48,7 @@ public class ClassRoomController {
     }
 
     @GetMapping("/without-faculty")
+    @ApiOperation("Getting the List of All 'Classrooms' without 'Faculty' ('Faculty' is null)")
     public ResponseEntity<List<ClassRoomDTO>> getAllClassRoomsWithoutFaculty() {
         LOGGER.info(Messages.TRY_GET_ALL_CLASSROOMS_WITHOUT_FACULTY);
         List<ClassRoomDTO> classRoomDTOs = classRoomService.getAllClassRoomDTOsWithoutFaculty();
@@ -51,7 +57,9 @@ public class ClassRoomController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ClassRoomDTO> getClassRoomById(@PathVariable Integer id) {
+    @ApiOperation("Getting the 'Classroom' by 'id'")
+    public ResponseEntity<ClassRoomDTO> getClassRoomById(
+            @ApiParam(value = "The Classroom id", required = true) @PathVariable Integer id) {
         LOGGER.info(Messages.TRY_GET_CLASSROOM_BY_ID, id);
         ClassRoomDTO classRoomDTO = classRoomService.getClassRoomDTOById(id);
         LOGGER.info(Messages.OK_GET_CLASSROOM_BY_ID, id, classRoomDTO);
@@ -59,7 +67,9 @@ public class ClassRoomController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<HttpStatus> deleteClassRoom(@PathVariable Integer id) {
+    @ApiOperation("Deleting the 'Classroom' by 'id'")
+    public ResponseEntity<HttpStatus> deleteClassRoom(
+            @ApiParam(value = "The Classroom id", required = true) @PathVariable Integer id) {
         LOGGER.info(Messages.TRY_DELETE_CLASSROOM_BY_ID,id);
         classRoomService.deleteClassRoomById(id);
         LOGGER.info(Messages.OK_DELETE_CLASSROOM_BY_ID, id);
@@ -67,6 +77,7 @@ public class ClassRoomController {
     }
 
     @PostMapping
+    @ApiOperation("Creating the 'Classroom'")
     public ResponseEntity<ClassRoomDTO> createClassRoom(@Valid @RequestBody ClassRoomCreateDTO classRoomCreateDTO) {
         LOGGER.info(Messages.TRY_CREATE_CLASSROOM);
         ClassRoomDTO createdClassRoomDTO =
@@ -76,7 +87,9 @@ public class ClassRoomController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ClassRoomDTO> updateClassRoom(@PathVariable Integer id,
+    @ApiOperation("Updating the 'Classroom' by 'id'")
+    public ResponseEntity<ClassRoomDTO> updateClassRoom(
+            @ApiParam(value = "The Classroom id", required = true) @PathVariable Integer id,
                                                         @Valid @RequestBody ClassRoomCreateDTO classRoomCreateDTO) {
         LOGGER.info(Messages.TRY_UPDATE_CLASSROOM, classRoomCreateDTO);
         classRoomService.getClassRoomById(id);
