@@ -12,7 +12,7 @@
 
   <groupId>ua.com.foxminded.andriysalnikov</groupId>
   <artifactId>university</artifactId>
-  <version>0.2</version>
+  <version>0.9999</version>
   <name>university</name>
   <description>university</description>
   <properties>
@@ -50,11 +50,6 @@
     </dependency>
 
     <dependency>
-      <groupId>com.h2database</groupId>
-      <artifactId>h2</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
       <groupId>org.postgresql</groupId>
       <artifactId>postgresql</artifactId>
       <scope>runtime</scope>
@@ -71,12 +66,16 @@
       <scope>test</scope>
     </dependency>
     <dependency>
+      <groupId>com.h2database</groupId>
+      <artifactId>h2</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
       <groupId>io.rest-assured</groupId>
       <artifactId>rest-assured</artifactId>
       <version>4.5.1</version>
       <scope>test</scope>
     </dependency>
-
 
   </dependencies>
 
