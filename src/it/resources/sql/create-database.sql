@@ -1,0 +1,2 @@
+DROP SCHEMA IF EXISTS university CASCADE;
+CREATE SCHEMA university;

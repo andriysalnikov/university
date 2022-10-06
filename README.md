@@ -82,11 +82,15 @@ Add REST endpoints to your project. All UI functionality should be available in 
 
 ### Task 22 - Swagger
 Add Swagger documentation to your project. You can use 2 or 3 versions or ask your mentor.
-Go to your browser and type `http://localhost:8080/university/swagger-ui/` in address bar
+
+### Task 23 - Spring Boot Tests
+Write Integration(or/and System) tests using Spring Boot Test, H2 DB 
+(it is possible to use Database Rider)
 
 #### Tools that were used
 - Oracle JDK (11.0.16)
 - PostgreSQL (14.5)
+- Swagger (3.0.0)
 - Spring Boot (2.7.3)
   - Spring Web
   - Spring Data JPA
@@ -98,7 +102,8 @@ Go to your browser and type `http://localhost:8080/university/swagger-ui/` in ad
 - Clone or download repository
 - Initialize the database with `src/main/resources/create_database.sql`
 - Run `UniversityApplication.main`
-- Go to your browser and type `http://localhost:8080/university` in address bar
+- If you use version without REST API, go to your browser and type `http://localhost:8080/university` in address bar
+- If you use version with REST API and Swagger, go to your browser and type `http://localhost:8080/university/swagger-ui/` in address bar
 - Enjoy! 
 
 
