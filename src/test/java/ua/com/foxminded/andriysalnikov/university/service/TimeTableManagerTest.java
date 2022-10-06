@@ -9,7 +9,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import ua.com.foxminded.andriysalnikov.university.exceptions.ServiceException;
-import ua.com.foxminded.andriysalnikov.university.model.Teacher;
 import ua.com.foxminded.andriysalnikov.university.dto.TimeTable;
 import ua.com.foxminded.andriysalnikov.university.model.Event;
 import ua.com.foxminded.andriysalnikov.university.model.Student;
@@ -24,7 +23,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -72,27 +70,6 @@ class TimeTableManagerTest {
                         startDate, endDate, student));
     }
 
-    @ParameterizedTest
-    @MethodSource("provideForStudentOrStudentParametersAreNull")
-    void getTimeTableFromStartDateToEndDateByStudent_shouldThrowIllegalArgumentException_whenStudentOrStudentParametersAreNull(
-            Student student) {
-        LocalDate startDate = LocalDate.now();
-        LocalDate endDate = LocalDate.now();
-        assertThrows(ServiceException.class,
-                () -> timeTableManager.getTimeTableFromStartDateToEndDateByStudent(
-                        startDate, endDate, student));
-    }
-
-    @ParameterizedTest
-    @MethodSource("provideForTeacherOrTeacherParametersAreNull")
-    void getTimeTableFromStartDateToEndDateByTeacher_shouldThrowIllegalArgumentException_whenTeacherOrTeacherParametersAreNull(
-            Teacher teacher) {
-        LocalDate startDate = LocalDate.now();
-        LocalDate endDate = LocalDate.now();
-        assertThrows(ServiceException.class,
-                () -> timeTableManager.getTimeTableFromStartDateToEndDateByTeacher(
-                        startDate, endDate, teacher));
-    }
 
     private static Stream<Arguments> provideForOneOrBothDataArgumentsNull() {
         return Stream.of(
@@ -100,29 +77,6 @@ class TimeTableManagerTest {
                 Arguments.of(LocalDate.now(), null),
                 Arguments.of(null, null)
         );
-    }
-
-    private static Stream<Arguments> provideForStudentOrStudentParametersAreNull() {
-        Student student1 = new Student("First Name", null);
-        student1.setId(1);
-        Student student2 = new Student();
-        student2.setLastName("Last Name");
-        student2.setId(2);
-        return Stream.of(
-                Arguments.of((Student) null),
-                Arguments.of(student1),
-                Arguments.of(student2));
-    }
-
-    private static Stream<Arguments> provideForTeacherOrTeacherParametersAreNull() {
-        Teacher teacher1 = new Teacher("First Name", null);
-        teacher1.setId(1);
-        Teacher teacher2 = new Teacher(null, "Last Name");
-        teacher2.setId(2);
-        return Stream.of(
-                Arguments.of((Teacher) null),
-                Arguments.of(teacher1),
-                Arguments.of(teacher2));
     }
 
 }
